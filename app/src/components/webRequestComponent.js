@@ -8,7 +8,7 @@ class WebRequestComponent extends React.Component {
       .then((data) => console.log('This is your data', data));
   }
   render() {
-    return <h1></h1>;
+    return <h1>Check console...</h1>;
   }
 }
 export default WebRequestComponent;
