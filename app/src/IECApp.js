@@ -1,5 +1,5 @@
 import './IECApp.css';
-import WebRequestComponent from './components/webRequestComponent';
+import PopulationGrid from './components/populationGrid';
 function IECApp() {
   return (
     <div className="IECApp">
@@ -7,7 +7,7 @@ function IECApp() {
         <p>
           Welcome
         </p>
-        <WebRequestComponent />
+        <PopulationGrid />
 
       </header>
     </div>
