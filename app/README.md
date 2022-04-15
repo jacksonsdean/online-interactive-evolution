@@ -1,6 +1,6 @@
 ## Available Scripts
 
-In the project directory, you can run:
+In the app directory, you can run:
 
 ### `npm start`
 
