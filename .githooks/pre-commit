@@ -8,6 +8,7 @@
 # To enable this hook, rename this file to "pre-commit".
 
 echo "Running pre-commit hook"
+CI=true
 REPO_DIR=$(git rev-parse --show-toplevel)
 echo "REPO_DIR: $REPO_DIR"
 cp "$REPO_DIR/.githooks/pre-commit" "$REPO_DIR/.git/hooks/"
