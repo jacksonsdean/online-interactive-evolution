@@ -7,7 +7,7 @@
 #
 # To enable this hook, rename this file to "pre-commit".
 
-echo "running pre-commit hook"
+echo "Running pre-commit hook"
 
 if git rev-parse --verify HEAD >/dev/null 2>&1
 then
@@ -51,7 +51,7 @@ fi
 exec git diff-index --check --cached $against --
 
 # run npm tests
-echo "running npm test"
+echo "Running npm test"
 cd "${0%/*}/app"
 exec npm run ci
 exec npm run test-ci
