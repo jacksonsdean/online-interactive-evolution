@@ -35,7 +35,6 @@ class PopulationGrid extends React.Component {
 
     render() {
         // list of all the population ids
-        console.log(this.state.population_ids);
         return (<div>
             <ul>
             {this.state.population_ids.map(i => <li key={i}> <IndividualButton name={i}></IndividualButton> </li>)}
