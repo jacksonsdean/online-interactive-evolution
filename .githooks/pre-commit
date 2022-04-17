@@ -8,6 +8,16 @@
 # To enable this hook, rename this file to "pre-commit".
 
 echo "Running pre-commit hook"
+REPO_DIR=$(git rev-parse --show-toplevel)
+echo "REPO_DIR: $REPO_DIR"
+cp "$REPO_DIR/.githooks/pre-commit" "$REPO_DIR/.git/hooks/"
+
+# run npm tests
+echo "Running npm test"
+cd "$REPO_DIR/app"
+npm run ci
+npm run test-ci
+
 
 if git rev-parse --verify HEAD >/dev/null 2>&1
 then
@@ -49,9 +59,3 @@ fi
 
 # If there are whitespace errors, print the offending file names and fail.
 exec git diff-index --check --cached $against --
-
-# run npm tests
-echo "Running npm test"
-cd "${0%/*}/app"
-exec npm run ci
-exec npm run test-ci
