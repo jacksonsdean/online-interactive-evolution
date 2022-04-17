@@ -14,7 +14,7 @@ cd "$REPO_DIR/app"
 
 # run npm tests
 echo "Running npm test"
-if [[ "$BRANCH" =~ ^(master|main|develop)$ ]]; then
+if [[ "$BRANCH" =~ ^(master|main)$ ]]; then
 	export CI=true # enforce CI mode (treat warnings as errors)
 	npm run build-ci
 	if [ $? -ne 0 ]; then
