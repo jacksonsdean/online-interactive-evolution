@@ -22,7 +22,7 @@ afterEach(() => {
 });
 
 
-test('renders learn react link', () => {
+test('renders welcome text', () => {
   render(<IECApp />);
   const linkElement = screen.getByText(/Welcome/i);
   expect(linkElement).toBeInTheDocument();
