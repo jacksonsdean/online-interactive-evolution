@@ -9,7 +9,7 @@ build:
     - echo "Start building App"
     - cd app
     - npm install
-    - npm build
+    - npm run build
     - echo "Build successfully!"
 
 test:
@@ -19,6 +19,6 @@ test:
     - echo "Testing App"
     - cd app
     - npm install
-    - npm build
+    - npm run build
     - npm run test-ci
     - echo "Test successfully!"
