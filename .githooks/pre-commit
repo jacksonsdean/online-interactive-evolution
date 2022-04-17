@@ -52,6 +52,6 @@ exec git diff-index --check --cached $against --
 
 # run npm tests
 echo "running npm test"
-cd "$(dirname "$0")/app"
+cd "${0%/*}/app"
 exec npm run ci
 exec npm run test-ci
