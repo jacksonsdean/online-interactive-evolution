@@ -1,23 +1,32 @@
 #!/bin/bash
 #
-# An example hook script to verify what is about to be committed.
 # Called by "git commit" with no arguments.  The hook should
 # exit with non-zero status after issuing an appropriate message if
 # it wants to stop the commit.
 #
-# To enable this hook, rename this file to "pre-commit".
 
 echo "Running pre-commit hook"
-CI=true
 REPO_DIR=$(git rev-parse --show-toplevel)
-echo "REPO_DIR: $REPO_DIR"
+
+# copy this file to the git hooks directory
 cp "$REPO_DIR/.githooks/pre-commit" "$REPO_DIR/.git/hooks/"
 
 # run npm tests
 echo "Running npm test"
 cd "$REPO_DIR/app"
-npm run ci
+export CI=true # enforce CI mode (treat warnings as errors)
+
+npm run build-ci
+if [ $? -ne 0 ]; then
+  echo "npm run build-ci failed"
+  exit 1
+fi
+
 npm run test-ci
+if [ $? -ne 0 ]; then
+  echo "npm run test-ci failed"
+  exit 1
+fi
 
 
 if git rev-parse --verify HEAD >/dev/null 2>&1
