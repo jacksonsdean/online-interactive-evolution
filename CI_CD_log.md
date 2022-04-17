@@ -6,6 +6,6 @@
     - Commits on development branch trigger tests
     - Commits on main branch trigger both build and tests
 - Mirroring repository from GitHub to GitLab
-- GitLab runs CI/CD pipeline with tests, emails on failure
+- GitLab runs CI/CD pipeline with build and tests, emails on failure
 - Amazon Web Services (AWS) Amplify pulls from GitHub repo
-- AWS builds and deploys repo
+- AWS builds and deploys repo (main branch)
