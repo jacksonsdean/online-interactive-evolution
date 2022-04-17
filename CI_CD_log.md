@@ -10,3 +10,4 @@
 - GitLab runs CI/CD pipeline with build and tests, emails on failure
 - Amazon Web Services (AWS) Amplify pulls from GitHub repo
 - AWS builds and deploys repo (main branch)
+- Pull requests on main trigger a preview build on AWS
