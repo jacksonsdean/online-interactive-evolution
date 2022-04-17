@@ -1,5 +1,10 @@
 ## CI/CD Log
-- Githooks prevent broken code from being pushed
+- Two branches: main and development
+- Githooks prevent broken code from being pushed to main
+    - Both warnings and errors cause hooks to fail on main branch
+    - Only errors cause hooks to fail on development branch
+    - Commits on development branch trigger tests
+    - Commits on main branch trigger both build and tests
 - Mirroring repository from GitHub to GitLab
 - GitLab runs CI/CD pipeline with tests, emails on failure
 - Amazon Web Services (AWS) Amplify pulls from GitHub repo
