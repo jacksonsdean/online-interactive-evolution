@@ -12,7 +12,8 @@ class IndividualButton extends React.Component {
     render() {
         return (
             <button className="individual-button" onClick={this.props.onClick}>
-                <img src={this.props.image} alt={this.props.alt} />
+                {/* <img src={this.props.image} alt={this.props.alt} /> */}
+                {this.props.name}
             </button>
         )
     }
@@ -37,7 +38,7 @@ class PopulationGrid extends React.Component {
         console.log(this.state.population_ids);
         return (<div>
             <ul>
-            {this.state.population_ids.map(i => <li key={i}>{i}</li>)}
+            {this.state.population_ids.map(i => <li key={i}> <IndividualButton name={i}></IndividualButton> </li>)}
             </ul>
         </div>
         );
