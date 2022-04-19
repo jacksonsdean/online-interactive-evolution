@@ -1,6 +1,7 @@
 stages:
   - build
-  - test
+  - test-backend
+  - test-frontend
 
 build:
   stage: build
@@ -12,11 +13,20 @@ build:
     - npm run build
     - echo "Build successfully!"
 
-test:
+test-backend:
+  stage: test-backend
+  image: python3
+  script:
+    - echo "Testing backend"
+    - cd backend
+    - pip install -r requirements.txt
+    - python tests.py
+
+test-frontend:
   stage: test
   image: node
   script:
-    - echo "Testing App"
+    - echo "Testing frontend"
     - cd frontend
     - npm install
     - npm run build
