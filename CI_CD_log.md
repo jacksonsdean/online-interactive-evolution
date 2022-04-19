@@ -1,4 +1,4 @@
-## CI/CD Log
+# CI/CD Log
 - Two branches: main and development
 - Githooks prevent broken code from being pushed to main
     - Both warnings and errors cause hooks to fail on main branch
@@ -8,6 +8,11 @@
 - Main branch is periodically rebased with development branch
 - Mirroring repository from GitHub to GitLab
 - GitLab runs CI/CD pipeline with build and tests, emails on failure
+
+## Front-end
 - Amazon Web Services (AWS) Amplify pulls from GitHub repo
 - AWS builds and deploys repo (main branch)
 - Pull requests on main trigger a preview build on AWS
+
+## Back-end
+- GitHub Action pushes changes to the python server code to AWS
