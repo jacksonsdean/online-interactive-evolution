@@ -1,6 +1,6 @@
 ## Available Scripts
 
-In the app directory, you can run:
+In the frontend directory, you can run:
 
 ### `npm start`
 

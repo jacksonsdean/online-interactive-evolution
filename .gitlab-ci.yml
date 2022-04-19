@@ -1,23 +1,33 @@
 stages:
   - build
-  - test
+  - test-backend
+  - test-frontend
 
 build:
   stage: build
   image: node
   script:
     - echo "Start building App"
-    - cd app
+    - cd frontend
     - npm install
     - npm run build
     - echo "Build successfully!"
 
-test:
-  stage: test
+test-backend:
+  stage: test-backend
+  image: python
+  script:
+    - echo "Testing backend"
+    - cd backend
+    - pip install -r requirements.txt
+    - python tests.py
+
+test-frontend:
+  stage: test-frontend
   image: node
   script:
-    - echo "Testing App"
-    - cd app
+    - echo "Testing frontend"
+    - cd frontend
     - npm install
     - npm run build
     - npm run test-ci
