@@ -15,7 +15,7 @@ build:
 
 test-backend:
   stage: test-backend
-  image: python3
+  image: python
   script:
     - echo "Testing backend"
     - cd backend
