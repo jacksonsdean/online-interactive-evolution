@@ -13,7 +13,7 @@ cp "$REPO_DIR/.githooks/pre-commit" "$REPO_DIR/.git/hooks/"
 cd "$REPO_DIR/app"
 
 # run npm tests
-echo "Running npm test"
+echo "Running npm tests"
 if [[ "$BRANCH" =~ ^(master|main)$ ]]; then
 	export CI=true # enforce CI mode (treat warnings as errors)
 	npm run build-ci
@@ -29,6 +29,14 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+
+# run python tests
+echo "Running python tests"
+python -m unittest discover -s "$REPO_DIR" -p '*_tests.py'
+if [ $? -ne 0 ]; then
+  echo "python tests failed"
+  exit 1
+fi
 
 if git rev-parse --verify HEAD >/dev/null 2>&1
 then
