@@ -23,7 +23,7 @@ test-backend:
     - python tests.py
 
 test-frontend:
-  stage: test
+  stage: test-frontend
   image: node
   script:
     - echo "Testing frontend"
