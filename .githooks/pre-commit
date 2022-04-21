@@ -82,7 +82,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Running python tests"
-python -m unittest discover -s "$REPO_DIR" -p '*_tests.py'
+python -m unittest discover -s "$REPO_DIR" -p '*test.py'
 if [ $? -ne 0 ]; then
   echo "python tests failed"
   exit 1
