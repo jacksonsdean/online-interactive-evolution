@@ -21,6 +21,8 @@ test-backend:
     - cd backend
     - pip install -r requirements.txt
     - python tests.py
+    - echo "Testing backend code complexity"
+    - xenon --max-absolute B --max-modules A --max-average A
 
 test-frontend:
   stage: test-frontend

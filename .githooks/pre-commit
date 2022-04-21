@@ -8,12 +8,34 @@
 echo "Running pre-commit hook"
 REPO_DIR=$(git rev-parse --show-toplevel)
 
-# If there are whitespace errors, print the offending file names and fail.
-exec git diff-index --check --cached $against --
-
 # copy this file to the git hooks directory
 cp "$REPO_DIR/.githooks/pre-commit" "$REPO_DIR/.git/hooks/"
 cd "$REPO_DIR/frontend"
+
+
+if git rev-parse --verify HEAD >/dev/null 2>&1
+then
+	against=HEAD
+else
+	# Initial commit: diff against an empty tree object
+	against=$(git hash-object -t tree /dev/null)
+fi
+
+# If you want to allow non-ASCII filenames set this variable to true.
+allownonascii=$(git config --bool hooks.allownonascii)
+
+# Redirect output to stderr.
+exec 1>&2
+
+
+# If there are whitespace errors, print the offending file names and fail.
+echo "Checking for whitespace errors..."
+git diff-index --check --cached $against --
+if [ $? -ne 0 ]; then
+	echo "White space errors detected"
+	exit 1
+fi
+echo "No whitespace errors found."
 
 # run npm tests
 echo "Running npm tests"
@@ -33,8 +55,15 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-
 # run python tests
+echo "Testing python code complexity"
+
+xenon --max-absolute B --max-modules A --max-average A "$REPO_DIR/frontend"
+if [ $? -ne 0 ]; then
+  echo "xenon failed, reduce complexity"
+  exit 1
+fi
+
 echo "Running python tests"
 python -m unittest discover -s "$REPO_DIR" -p '*_tests.py'
 if [ $? -ne 0 ]; then
@@ -42,19 +71,6 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-if git rev-parse --verify HEAD >/dev/null 2>&1
-then
-	against=HEAD
-else
-	# Initial commit: diff against an empty tree object
-	against=$(git hash-object -t tree /dev/null)
-fi
-
-# If you want to allow non-ASCII filenames set this variable to true.
-allownonascii=$(git config --bool hooks.allownonascii)
-
-# Redirect output to stderr.
-exec 1>&2
 
 # Cross platform projects tend to avoid non-ASCII filenames; prevent
 # them from being added to the repository. We exploit the fact that the
@@ -79,4 +95,3 @@ If you know what you are doing you can disable this check using:
 EOF
 	exit 1
 fi
-
