@@ -7,6 +7,7 @@
 
 echo "Running pre-commit hook"
 REPO_DIR=$(git rev-parse --show-toplevel)
+NODE_ENV = "production"
 
 # copy this file to the git hooks directory
 cp "$REPO_DIR/.githooks/pre-commit" "$REPO_DIR/.git/hooks/"
