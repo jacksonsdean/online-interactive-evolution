@@ -1,0 +1,4 @@
+[BASIC]
+persistent=no
+# Good variable names which should always be accepted, separated by a comma
+good-names=i,j,k,_,pk,x,y,e
