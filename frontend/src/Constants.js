@@ -1,0 +1,1 @@
+export const API_URL = process.env.NODE_ENV == "production" ? "https://5c9gzxp0r0.execute-api.us-east-1.amazonaws.com/test/interactive-evolutionary-computation" : "https://vln9z6a7gi.execute-api.us-east-1.amazonaws.com/development/interactive-evolutionary-computation"
