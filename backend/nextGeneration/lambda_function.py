@@ -1,10 +1,10 @@
+"""Handler for Next Generation."""
 import json
 
-print('Loading function')
-
-
 def lambda_handler(event, context):
+    """Handle an incoming request from Next Generation."""
     ids = event["queryStringParameters"]['ids']
+    print(context)
     return {
             'statusCode': 200,
             'headers': {

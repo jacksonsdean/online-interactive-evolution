@@ -56,6 +56,18 @@ if [ $? -ne 0 ]; then
 fi
 
 # run python tests
+echo "Testing python code quality in backend"
+cd "$REPO_DIR/backend"
+pylint --fail-under=8 "."
+
+if [ $? -ne 0 ]; then
+  echo "pylint failed, check output."
+  exit 1
+
+fi
+
+cd "$REPO_DIR/"
+
 echo "Testing python code complexity in backend"
 
 xenon --max-absolute B --max-modules A --max-average A "$REPO_DIR/backend"
