@@ -3,3 +3,4 @@ matplotlib
 scikit-image
 tqdm
 xenon # CI tests for code complexity
+pylint # code quality
