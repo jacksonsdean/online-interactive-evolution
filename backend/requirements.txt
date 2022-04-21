@@ -2,3 +2,4 @@ numpy
 matplotlib
 scikit-image
 tqdm
+xenon # CI tests for code complexity
