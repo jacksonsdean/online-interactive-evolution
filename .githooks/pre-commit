@@ -7,7 +7,12 @@
 
 echo "Running pre-commit hook"
 REPO_DIR=$(git rev-parse --show-toplevel)
+if [[ "$BRANCH" =~ ^(master|main)$ ]]; then
+	REACT_APP_NODE_ENV = "production"
+else
+	REACT_APP_NODE_ENV = "development"
 
+fi
 # copy this file to the git hooks directory
 cp "$REPO_DIR/.githooks/pre-commit" "$REPO_DIR/.git/hooks/"
 cd "$REPO_DIR/frontend"

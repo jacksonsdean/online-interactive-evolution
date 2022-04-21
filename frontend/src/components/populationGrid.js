@@ -1,12 +1,6 @@
 import React from 'react';
-
-
-function to_ids(a){
-    var b = a.split(',').map(function(item) {
-        return parseInt(item, 10);
-    });
-    return b;
-}
+import {API_URL} from '../Constants';
+import {string_to_ids, ids_to_string, post} from '../util';
 
 class IndividualButton extends React.Component {
     render() {
@@ -27,10 +21,12 @@ class PopulationGrid extends React.Component {
     }
 
     componentDidMount() {
-        const apiUrl = 'https://5c9gzxp0r0.execute-api.us-east-1.amazonaws.com/test/interactive-evolutionary-computation?ids=1,2,3,4,5,10';
-        fetch(apiUrl)
+        const apiUrl = API_URL + "?ids="+ids_to_string([1, 2, 3]);
+        console.log(process.env.REACT_APP_NODE_ENV);
+        console.log(apiUrl)
+        post(apiUrl, {"TEST_POST": "TEST_POST"})
             .then((response) => response.json())
-            .then((data) => this.setState({ population_ids: to_ids(data) }));
+            .then((data) => this.setState({ population_ids: string_to_ids(data) }));
     }
 
     render() {

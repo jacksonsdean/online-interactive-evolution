@@ -1,0 +1,1 @@
+export const API_URL = process.env.REACT_APP_NODE_ENV === "production" ? "https://5c9gzxp0r0.execute-api.us-east-1.amazonaws.com/prod/next-gen" : "https://vln9z6a7gi.execute-api.us-east-1.amazonaws.com/development/next-gen"
