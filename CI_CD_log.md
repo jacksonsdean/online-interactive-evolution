@@ -10,6 +10,8 @@
 - GitLab runs CI/CD pipeline with build and tests, emails on failure
 
 ## Front-end
+- Pre-commit hook checks for code complexity using xenon (built on radon) and fails if complexity rating is worse than B (absolute) A (modules) or A (average)
+- Pre-commit hook checks for code quality using pylint and fails if complexity rating is worse 8.0
 - Amazon Web Services (AWS) Amplify pulls from GitHub repo
 - AWS builds and deploys repo (main branch)
 - Pull requests on main trigger a preview build on AWS
