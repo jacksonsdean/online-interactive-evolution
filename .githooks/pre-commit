@@ -8,12 +8,16 @@
 echo "Running pre-commit hook"
 REPO_DIR=$(git rev-parse --show-toplevel)
 
+# If there are whitespace errors, print the offending file names and fail.
+exec git diff-index --check --cached $against --
+
 # copy this file to the git hooks directory
 cp "$REPO_DIR/.githooks/pre-commit" "$REPO_DIR/.git/hooks/"
 cd "$REPO_DIR/frontend"
 
 # run npm tests
 echo "Running npm tests"
+npm i cross-env --save-dev
 if [[ "$BRANCH" =~ ^(master|main)$ ]]; then
 	export CI=true # enforce CI mode (treat warnings as errors)
 	npm run build-ci
@@ -76,5 +80,3 @@ EOF
 	exit 1
 fi
 
-# If there are whitespace errors, print the offending file names and fail.
-exec git diff-index --check --cached $against --
