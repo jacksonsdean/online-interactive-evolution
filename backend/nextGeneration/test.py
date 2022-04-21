@@ -1,6 +1,6 @@
 """Test cases for the lambda_function.py file."""
 import unittest
-from nextGeneration.lambda_function import lambda_handler
+from lambda_function import lambda_handler
 
 class TestLambdaFunction(unittest.TestCase):
     """Tests for Lambda function."""
