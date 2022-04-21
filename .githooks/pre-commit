@@ -56,11 +56,11 @@ if [ $? -ne 0 ]; then
 fi
 
 # run python tests
-echo "Testing python code complexity"
+echo "Testing python code complexity in backend"
 
-xenon --max-absolute B --max-modules A --max-average A "$REPO_DIR/frontend"
+xenon --max-absolute B --max-modules A --max-average A "$REPO_DIR/backend"
 if [ $? -ne 0 ]; then
-  echo "xenon failed, reduce complexity"
+  echo "xenon (radon) failed, reduce complexity."
   exit 1
 fi
 
