@@ -22,7 +22,7 @@ class PopulationGrid extends React.Component {
 
     componentDidMount() {
         const apiUrl = API_URL + "?ids="+ids_to_string([1, 2, 3]);
-        console.log(process.env.NODE_ENV);
+        console.log(process.env.REACT_APP_NODE_ENV);
         console.log(apiUrl)
         post(apiUrl, {"TEST_POST": "TEST_POST"})
             .then((response) => response.json())
