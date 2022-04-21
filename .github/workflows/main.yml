@@ -1,6 +1,8 @@
 name: deploy to lambda production
-on: [push]
-branches: main
+on:
+  push:
+    branches:
+      - main
 jobs:
   deploy_source:
     name: build and deploy lambda production
