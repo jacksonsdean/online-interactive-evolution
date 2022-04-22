@@ -3,8 +3,9 @@
 import matplotlib.pyplot as plt
 from skimage.color import hsv2rgb
 import numpy as np
+from activation_functions import identity
 from config import Config
-from cppn import CPPN
+from cppn import CPPN, Node, NodeType
 
 
 def show_images(imgs, color_mode="L", titles=[], height=10):
@@ -64,4 +65,28 @@ for i in range(10):
     image_data = cppn_color.get_image_data_fast_method(32,32)
     ims.append(image_data)
 show_images(ims, color_mode="RGB")
+plt.show()
+#%%
+node_genome = []
+id = 0
+layer = 0
+node_genome.append(Node(identity, NodeType.INPUT, id, layer)); id+=1
+node_genome.append(Node(identity, NodeType.INPUT, id, layer)); id+=1
+node_genome.append(Node(identity, NodeType.INPUT, id, layer)); id+=1
+node_genome.append(Node(identity, NodeType.HIDDEN, id, layer)); id+=1
+layer=2
+node_genome.append(Node(identity, NodeType.OUTPUT, id, layer)); id+=1
+node_genome.append(Node(identity, NodeType.OUTPUT, id, layer)); id+=1
+node_genome.append(Node(identity, NodeType.OUTPUT, id, layer)); id+=1
+layer=1
+node_genome.append(Node(identity, NodeType.HIDDEN, id, layer)); id+=1
+node_genome.append(Node(identity, NodeType.HIDDEN, id, layer)); id+=1
+
+config = Config()
+config.color_mode = "HSL"
+cppn = CPPN(config, nodes=node_genome)
+print(cppn.connection_genome)
+img = cppn.get_image_data_fast_method(32,32)
+print(img)
+show_image(img, color_mode="HSL")
 plt.show()
