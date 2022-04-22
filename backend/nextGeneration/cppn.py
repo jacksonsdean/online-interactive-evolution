@@ -29,6 +29,7 @@ class Node:
         return Node(identity, NodeType.HIDDEN, 0, 0)
 
     def __init__(self, activation, _type, _id, _layer=2) -> None:
+        print(type(activation))
         self.activation = activation
         self.id = _id
         self.type = _type
@@ -125,7 +126,7 @@ class Connection:
 class CPPN():
     """A CPPN Object with Nodes and Connections."""
 
-    pixel_inputs = np.zeros(0,0)
+    pixel_inputs = np.zeros((0,0))
 
     def __init__(self, config=None) -> None:
         self.image = None
@@ -231,7 +232,7 @@ class CPPN():
             eligible_nodes.extend(self.input_nodes())
         for node in eligible_nodes:
             if np.random.uniform(0,1) < prob_mutate_activation:
-                node.fn = choose_random_function()
+                node.activation = choose_random_function()
 
     def mutate_weights(self, weight_mutation_max, weight_mutation_probability):
         """
@@ -393,7 +394,7 @@ class CPPN():
         for i, inp in enumerate(inputs):
             # inputs are first N nodes
             self.node_genome[i].sum_input = inp
-            self.node_genome[i].output = self.node_genome[i].fn(inp)
+            self.node_genome[i].output = self.node_genome[i].activation(inp)
 
     def get_layer(self, layer_index):
         """Returns a list of nodes in the given layer."""
@@ -427,7 +428,7 @@ class CPPN():
                     self.enabled_connections())):
                     self.node_genome[i].sum_input += node_input.from_node.output * node_input.weight
 
-                self.node_genome[i].output = self.node_genome[i].fn(self.node_genome[i].sum_input)
+                self.node_genome[i].output = self.node_genome[i].activation(self.node_genome[i].sum_input)
 
         # always an output node
         output_layer = self.node_genome[self.config.num_inputs].layer
@@ -444,7 +445,7 @@ class CPPN():
                 for cx in node_inputs:
                     node.sum_input += cx.from_node.output * cx.weight
 
-                node.output = node.fn(node.sum_input)  # apply activation
+                node.output = node.activation(node.sum_input)  # apply activation
                 # node.output = np.clip(node.output, -1, 1) # clip output
 
         return [node.output for node in self.output_nodes()]
@@ -507,7 +508,7 @@ class CPPN():
         for i in range(self.config.num_inputs):
             # inputs are first N nodes
             self.node_genome[i].sum_inputs = CPPN.pixel_inputs[:,:, i]
-            self.node_genome[i].outputs = self.node_genome[i].fn( CPPN.pixel_inputs[:,:, i])
+            self.node_genome[i].outputs = self.node_genome[i].activation( CPPN.pixel_inputs[:,:, i])
 
         # always an output node
         output_layer = self.node_genome[self.config.num_inputs].layer
@@ -525,7 +526,7 @@ class CPPN():
                     inputs = cx.from_node.outputs * cx.weight
                     node.sum_inputs = node.sum_inputs + inputs
 
-                node.outputs = node.fn(node.sum_inputs)  # apply activation
+                node.outputs = node.activation(node.sum_inputs)  # apply activation
                 node.outputs = node.outputs.reshape((res_h, res_w))
                 # node.outputs = np.clip(node.outputs, -1, 1)
 
