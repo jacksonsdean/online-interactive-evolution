@@ -1,8 +1,17 @@
 """Contains activation functions for nodes of the CPPN."""
+import inspect
 import math
+import sys
 import numpy as np
 from scipy.special import expit
 from scipy import signal
+
+def get_all():
+    """Returns all activation functions."""
+    fns = inspect.getmembers(sys.modules["activation_functions"])
+    fns = [f[1] for f in fns if len(f)>1 and f[0] != "get_all"\
+        and isinstance(f[1], type(get_all))]
+    return fns
 
 def identity(x):
     """Returns the input value."""

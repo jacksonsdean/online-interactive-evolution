@@ -1,6 +1,6 @@
 """Stores configuration parameters for the CPPN."""
 import json
-from activation_functions import identity
+from activation_functions import identity, get_all
 from network_util import name_to_fn
 
 class Config:
@@ -16,7 +16,8 @@ class Config:
         self.prob_weight_reinit = 0.0
         self.prob_reenable_connection = 0.1
         self.init_connection_probability = 1
-        self.activations = [identity]
+        self.activations = get_all()
+        # self.activations = [identity]
 
         # DGNA: probability of adding a node is 0.5 and the
         # probability of adding a connection is 0.4.

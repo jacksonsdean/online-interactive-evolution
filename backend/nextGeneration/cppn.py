@@ -144,13 +144,13 @@ class CPPN():
                 Node(identity, NodeType.INPUT, self.get_new_node_id(), 0))
         for _ in range(self.config.num_inputs, self.config.num_inputs + self.config.num_outputs):
             if self.config.output_activation is None:
-                output_fn = choose_random_function()
+                output_fn = choose_random_function(self.config)
             else:
                 output_fn = self.config.output_activation
             self.node_genome.append(
                 Node(output_fn, NodeType.OUTPUT, self.get_new_node_id(), 2))
         for _ in range(self.config.num_inputs + self.config.num_outputs, total_node_count):
-            self.node_genome.append(Node(choose_random_function(), NodeType.HIDDEN,
+            self.node_genome.append(Node(choose_random_function(self.config), NodeType.HIDDEN,
                 self.get_new_node_id(), 1))
 
         # initialize connection genome
@@ -233,7 +233,7 @@ class CPPN():
             eligible_nodes.extend(self.input_nodes())
         for node in eligible_nodes:
             if np.random.uniform(0,1) < prob_mutate_activation:
-                node.activation = choose_random_function()
+                node.activation = choose_random_function(self.config)
 
     def mutate_weights(self, weight_mutation_max, weight_mutation_probability):
         """
@@ -288,7 +288,7 @@ class CPPN():
         if len(eligible_cxs) < 1:
             return
         old = np.random.choice(eligible_cxs)
-        new_node = Node(choose_random_function(),
+        new_node = Node(choose_random_function(self.config),
                         NodeType.HIDDEN, self.get_new_node_id())
         self.node_genome.append(new_node)  # add a new node between two nodes
         old.enabled = False  # disable old connection
