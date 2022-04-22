@@ -3,7 +3,7 @@
 import matplotlib.pyplot as plt
 from skimage.color import hsv2rgb
 import numpy as np
-from activation_functions import identity
+from activation_functions import gauss, identity, sawtooth, tanh
 from config import Config
 from cppn import CPPN, Node, NodeType
 
@@ -75,18 +75,18 @@ node_genome.append(Node(identity, NodeType.INPUT, id, layer)); id+=1
 node_genome.append(Node(identity, NodeType.INPUT, id, layer)); id+=1
 node_genome.append(Node(identity, NodeType.HIDDEN, id, layer)); id+=1
 layer=2
-node_genome.append(Node(identity, NodeType.OUTPUT, id, layer)); id+=1
-node_genome.append(Node(identity, NodeType.OUTPUT, id, layer)); id+=1
-node_genome.append(Node(identity, NodeType.OUTPUT, id, layer)); id+=1
+node_genome.append(Node(tanh, NodeType.OUTPUT, id, layer)); id+=1
+node_genome.append(Node(tanh, NodeType.OUTPUT, id, layer)); id+=1
+node_genome.append(Node(tanh, NodeType.OUTPUT, id, layer)); id+=1
 layer=1
-node_genome.append(Node(identity, NodeType.HIDDEN, id, layer)); id+=1
-node_genome.append(Node(identity, NodeType.HIDDEN, id, layer)); id+=1
+node_genome.append(Node(gauss, NodeType.HIDDEN, id, layer)); id+=1
+node_genome.append(Node(sawtooth, NodeType.HIDDEN, id, layer)); id+=1
 
 config = Config()
-config.color_mode = "HSL"
+config.color_mode = "RGB"
 cppn = CPPN(config, nodes=node_genome)
 print(cppn.connection_genome)
 img = cppn.get_image_data_fast_method(32,32)
 print(img)
-show_image(img, color_mode="HSL")
+show_image(img, color_mode="RGB")
 plt.show()
