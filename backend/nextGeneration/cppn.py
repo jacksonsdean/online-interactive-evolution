@@ -136,6 +136,7 @@ class CPPN():
             return
 
         self.config = config
+        print(config.color_mode)
         total_node_count = self.config.num_inputs + \
             self.config.num_outputs + self.config.hidden_nodes_at_start
 
