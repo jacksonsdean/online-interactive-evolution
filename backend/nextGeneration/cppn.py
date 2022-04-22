@@ -452,14 +452,14 @@ class CPPN():
 
         return [node.output for node in self.output_nodes()]
 
-    def get_image_data(self, res_x, res_y, color_mode):
+    def get_image_data(self, res_x, res_y):
         """Evaluate the network to get image data"""
         pixels = []
         for x in np.linspace(-.5, .5, res_x):
             for y in np.linspace(-.5, .5, res_y):
                 outputs = self.eval([x, y])
                 pixels.extend(outputs)
-        if len(color_mode)>2:
+        if len(self.config.color_mode)>2:
             pixels = np.reshape(pixels, (res_x, res_y, self.config.num_outputs))
         else:
             pixels = np.reshape(pixels, (res_x, res_y))
@@ -467,7 +467,7 @@ class CPPN():
         self.image = pixels
         return pixels
 
-    def get_image(self, res_x, res_y, color_mode, force_recalculate=False):
+    def get_image(self, res_x, res_y, force_recalculate=False):
         """Returns an image of the network."""
         if not force_recalculate and self.image is not None and\
             res_x == self.image.shape[0] and\
@@ -476,13 +476,13 @@ class CPPN():
 
         if self.config.allow_recurrent:
             # pixel by pixel (good for debugging)
-            self.image = self.get_image_data(res_x, res_y, color_mode)
+            self.image = self.get_image_data(res_x, res_y)
         else:
             # whole image at once (100s of times faster)
-            self.image = self.get_image_data_fast_method(res_x, res_y, color_mode)
+            self.image = self.get_image_data_fast_method(res_x, res_y)
         return self.image
 
-    def get_image_data_fast_method(self, res_h, res_w, color_mode):
+    def get_image_data_fast_method(self, res_h, res_w):
         """Evaluate the network to get image data in parallel"""
         if self.config.allow_recurrent:
             raise Exception("Fast method doesn't work with recurrent yet")
@@ -533,7 +533,7 @@ class CPPN():
                 # node.outputs = np.clip(node.outputs, -1, 1)
 
         outputs = [node.outputs for node in self.output_nodes()]
-        if len(color_mode)>2:
+        if len(self.config.color_mode)>2:
             outputs =  np.array(outputs).transpose(1, 2, 0) # move color axis to end
         else:
             outputs = np.reshape(outputs, (res_h, res_w))

@@ -39,7 +39,8 @@ class TestCPPN(unittest.TestCase):
         cppn = CPPN(config)
         image_data = cppn.get_image_data_fast_method(32,32,"L")
         self.assertEqual(image_data.shape, (32,32), "Image data is not correct shape")
-        print(image_data)
+        image_data = cppn.get_image_data_fast_method(32,32,"RGB")
+        self.assertEqual(image_data.shape, (32,32,3), "Image data is not correct shape")
 
 if __name__ == '__main__':
     unittest.main()
