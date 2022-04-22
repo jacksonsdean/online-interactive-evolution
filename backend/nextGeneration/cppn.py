@@ -155,7 +155,7 @@ class CPPN():
 
     def initialize_connection_genome(self):
         """Initializes the connection genome."""
-        if self.config.hidden_nodes_at_start == 0:
+        if len(self.hidden_nodes()) == 0:
             # connect all input nodes to all output nodes
             for input_node in self.input_nodes():
                 for output_node in self.output_nodes():
@@ -180,6 +180,7 @@ class CPPN():
                     if np.random.rand() < self.config.init_connection_probability:
                         self.connection_genome.append(Connection(
                             hidden_node, output_node, self.random_weight()))
+                            
     def initialize_node_genome(self):
         """Initializes the node genome."""
         total_node_count = self.n_inputs + \
