@@ -15,7 +15,7 @@ def lambda_handler(event, context):
                 },
                 'body': json.dumps(str(ids))
             }
-    except Exception as e:
+    except AttributeError as e:
         print(e)
         return {
                 'statusCode': 500,
