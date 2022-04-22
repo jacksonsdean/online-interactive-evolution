@@ -1,6 +1,6 @@
 """Stores configuration parameters for the CPPN."""
 import json
-from activation_functions import identity, get_all
+from activation_functions import get_all, tanh#,identity
 from network_util import name_to_fn
 
 class Config:
@@ -27,10 +27,10 @@ class Config:
         self.prob_mutate_weight = .35
         self.prob_add_connection = .1
         self.prob_add_node = .1
-        self.prob_remove_node = 0.0
+        self.prob_remove_node = 0.05
         self.prob_disable_connection = .3
 
-        self.output_activation = None
+        self.output_activation = tanh
 
         # DGNA/SGMA uses 1 or 2 so that patterns in the initial
         # generation would be nontrivial (Stanley, 2007).
@@ -43,8 +43,6 @@ class Config:
         # https://link.springer.com/content/pdf/10.1007/s10710-007-9028-8.pdf page 148
         self.use_input_bias = True # SNGA,
         self.use_radial_distance = True # bias towards radial symmetry
-        self.num_inputs = 4 # x,y,bias,d
-        self.num_outputs = len(self.color_mode) # one for each color channel
 
 
     def fns_to_strings(self):

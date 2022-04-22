@@ -37,12 +37,12 @@ def show_image(img, color_mode, ax = None):
     elif(color_mode == "HSL"):
         img = hsv2rgb(img)
         if(ax==None):
-            plt.imshow(img, vmin=0, vmax=1)
+            plt.imshow(img, vmin=-1, vmax=1)
         else:
             ax.imshow(img)
     else:
         if(ax==None):
-            plt.imshow(img, vmin=0, vmax=1)
+            plt.imshow(img, vmin=-1, vmax=1)
         else:
             ax.imshow(img)
             

@@ -127,7 +127,7 @@ class CPPN():
 
     pixel_inputs = np.zeros((0,0))
 
-    def __init__(self, config=None) -> None:
+    def __init__(self, config=None, nodes = None, connections = None) -> None:
         self.image = None
         self.node_genome = []  # inputs first, then outputs, then hidden
         self.connection_genome = []
@@ -135,26 +135,26 @@ class CPPN():
         if config is None:
             return
 
+        self.n_inputs = 2
+        self.n_outputs = len(config.color_mode)
+        if config.use_radial_distance:
+            self.n_inputs += 1
+        if config.use_input_bias:
+            self.n_inputs+=1
+
         self.config = config
-        print(config.color_mode)
-        total_node_count = self.config.num_inputs + \
-            self.config.num_outputs + self.config.hidden_nodes_at_start
 
-        for _ in range(self.config.num_inputs):
-            self.node_genome.append(
-                Node(identity, NodeType.INPUT, self.get_new_node_id(), 0))
-        for _ in range(self.config.num_inputs, self.config.num_inputs + self.config.num_outputs):
-            if self.config.output_activation is None:
-                output_fn = choose_random_function(self.config)
-            else:
-                output_fn = self.config.output_activation
-            self.node_genome.append(
-                Node(output_fn, NodeType.OUTPUT, self.get_new_node_id(), 2))
-        for _ in range(self.config.num_inputs + self.config.num_outputs, total_node_count):
-            self.node_genome.append(Node(choose_random_function(self.config), NodeType.HIDDEN,
-                self.get_new_node_id(), 1))
+        if nodes is None:
+            self.initialize_node_genome()
+        else:
+            self.node_genome = nodes
+        if connections is None:
+            self.initialize_connection_genome()
+        else:
+            self.connection_genome = connections
 
-        # initialize connection genome
+    def initialize_connection_genome(self):
+        """Initializes the connection genome."""
         if self.config.hidden_nodes_at_start == 0:
             # connect all input nodes to all output nodes
             for input_node in self.input_nodes():
@@ -180,6 +180,23 @@ class CPPN():
                     if np.random.rand() < self.config.init_connection_probability:
                         self.connection_genome.append(Connection(
                             hidden_node, output_node, self.random_weight()))
+    def initialize_node_genome(self):
+        """Initializes the node genome."""
+        total_node_count = self.n_inputs + \
+            self.n_outputs + self.config.hidden_nodes_at_start
+        for _ in range(self.n_inputs):
+            self.node_genome.append(
+                Node(identity, NodeType.INPUT, self.get_new_node_id(), 0))
+        for _ in range(self.n_inputs, self.n_inputs + self.n_outputs):
+            if self.config.output_activation is None:
+                output_fn = choose_random_function(self.config)
+            else:
+                output_fn = self.config.output_activation
+            self.node_genome.append(
+                Node(output_fn, NodeType.OUTPUT, self.get_new_node_id(), 2))
+        for _ in range(self.n_inputs + self.n_outputs, total_node_count):
+            self.node_genome.append(Node(choose_random_function(self.config), NodeType.HIDDEN,
+                self.get_new_node_id(), 1))
 
     def to_json(self):
         """Converts the CPPN to a json string."""
@@ -374,16 +391,16 @@ class CPPN():
 
     def input_nodes(self) -> list:
         """Returns a list of all input nodes."""
-        return self.node_genome[0:self.config.num_inputs]
+        return self.node_genome[0:self.n_inputs]
 
     def output_nodes(self) -> list:
         """Returns a list of all output nodes."""
-        return self.node_genome[self.config.num_inputs:self.config.num_inputs+\
-            self.config.num_outputs]
+        return self.node_genome[self.n_inputs:self.n_inputs+\
+            self.n_outputs]
 
     def hidden_nodes(self) -> list:
         """Returns a list of all hidden nodes."""
-        return self.node_genome[self.config.num_inputs+self.config.num_outputs:]
+        return self.node_genome[self.n_inputs+self.n_outputs:]
 
     def set_inputs(self, inputs):
         """Sets the input neurons outputs to the input values."""
@@ -423,7 +440,7 @@ class CPPN():
     def feed_forward(self):
         """Feeds forward the network."""
         if self.config.allow_recurrent:
-            for i in range(self.config.num_inputs):
+            for i in range(self.n_inputs):
                 # input nodes (handle recurrent)
                 for node_input in list(filter(lambda x,
                     index=i: x.to_node.id == self.node_genome[index].id,
@@ -434,7 +451,7 @@ class CPPN():
                     self.node_genome[i].activation(self.node_genome[i].sum_input)
 
         # always an output node
-        output_layer = self.node_genome[self.config.num_inputs].layer
+        output_layer = self.node_genome[self.n_inputs].layer
 
         for layer_index in range(1, output_layer+1):
             # hidden and output layers:
@@ -461,7 +478,7 @@ class CPPN():
                 outputs = self.eval([x, y])
                 pixels.extend(outputs)
         if len(self.config.color_mode)>2:
-            pixels = np.reshape(pixels, (res_x, res_y, self.config.num_outputs))
+            pixels = np.reshape(pixels, (res_x, res_y, self.n_outputs))
         else:
             pixels = np.reshape(pixels, (res_x, res_y))
 
@@ -493,7 +510,7 @@ class CPPN():
             # lazy init:
             x_vals = np.linspace(-.5, .5, res_w)
             y_vals = np.linspace(-.5, .5, res_h)
-            CPPN.pixel_inputs = np.zeros((res_h, res_w, self.config.num_inputs), dtype=np.float32)
+            CPPN.pixel_inputs = np.zeros((res_h, res_w, self.n_inputs), dtype=np.float32)
             for y in range(res_h):
                 for x in range(res_w):
                     this_pixel = [y_vals[y], x_vals[x]] # coordinates
@@ -508,13 +525,13 @@ class CPPN():
             # initialize outputs to 0:
             self.node_genome[i].outputs = np.zeros((res_h, res_w))
 
-        for i in range(self.config.num_inputs):
+        for i in range(self.n_inputs):
             # inputs are first N nodes
             self.node_genome[i].sum_inputs = CPPN.pixel_inputs[:,:, i]
             self.node_genome[i].outputs = self.node_genome[i].activation( CPPN.pixel_inputs[:,:, i])
 
         # always an output node
-        output_layer = self.node_genome[self.config.num_inputs].layer
+        output_layer = self.node_genome[self.n_inputs].layer
 
         for layer_index in range(1, output_layer+1):
             # hidden and output layers:
