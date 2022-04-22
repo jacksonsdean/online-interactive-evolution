@@ -29,7 +29,6 @@ class Node:
         return Node(identity, NodeType.HIDDEN, 0, 0)
 
     def __init__(self, activation, _type, _id, _layer=2) -> None:
-        print(type(activation))
         self.activation = activation
         self.id = _id
         self.type = _type
@@ -144,8 +143,10 @@ class CPPN():
             self.node_genome.append(
                 Node(identity, NodeType.INPUT, self.get_new_node_id(), 0))
         for _ in range(self.config.num_inputs, self.config.num_inputs + self.config.num_outputs):
-            output_fn = choose_random_function() if self.config.output_activation is None\
-                     else self.config.output_activation
+            if self.config.output_activation is None:
+                output_fn = choose_random_function()
+            else:
+                output_fn = self.config.output_activation
             self.node_genome.append(
                 Node(output_fn, NodeType.OUTPUT, self.get_new_node_id(), 2))
         for _ in range(self.config.num_inputs + self.config.num_outputs, total_node_count):
@@ -428,7 +429,8 @@ class CPPN():
                     self.enabled_connections())):
                     self.node_genome[i].sum_input += node_input.from_node.output * node_input.weight
 
-                self.node_genome[i].output = self.node_genome[i].activation(self.node_genome[i].sum_input)
+                self.node_genome[i].output =\
+                    self.node_genome[i].activation(self.node_genome[i].sum_input)
 
         # always an output node
         output_layer = self.node_genome[self.config.num_inputs].layer
