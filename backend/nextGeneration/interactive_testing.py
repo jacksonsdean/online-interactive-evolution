@@ -16,5 +16,5 @@ config.color_mode = "RGB"
 cppn_color = CPPN(config)
 image_data = cppn_color.get_image_data_fast_method(32,32)
 print(image_data.shape)
-plt.imshow(image_data, vmin = -1, vmax = 1)
+plt.imshow(image_data)
 plt.show()
