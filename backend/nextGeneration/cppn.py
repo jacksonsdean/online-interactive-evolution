@@ -126,11 +126,27 @@ class CPPN():
     """A CPPN Object with Nodes and Connections."""
 
     pixel_inputs = np.zeros((0,0))
+    @staticmethod
+    def initialize_inputs(res_h, res_w, use_radial_dist, use_bias, n_inputs):
+        """Initializes the pixel inputs."""
+        x_vals = np.linspace(-.5, .5, res_w)
+        y_vals = np.linspace(-.5, .5, res_h)
+        CPPN.pixel_inputs = np.zeros((res_h, res_w, n_inputs), dtype=np.float32)
+        for y in range(res_h):
+            for x in range(res_w):
+                this_pixel = [y_vals[y], x_vals[x]] # coordinates
+                if use_radial_dist:
+                    # d = sqrt(x^2 + y^2)
+                    this_pixel.append(math.sqrt(y_vals[y]**2 + x_vals[x]**2))
+                if use_bias:
+                    this_pixel.append(1.0)# bias = 1.0
+                CPPN.pixel_inputs[y][x] = this_pixel
 
     def __init__(self, config=None, nodes = None, connections = None) -> None:
         self.image = None
         self.node_genome = []  # inputs first, then outputs, then hidden
         self.connection_genome = []
+
 
         if config is None:
             return
@@ -180,7 +196,7 @@ class CPPN():
                     if np.random.rand() < self.config.init_connection_probability:
                         self.connection_genome.append(Connection(
                             hidden_node, output_node, self.random_weight()))
-                            
+
     def initialize_node_genome(self):
         """Initializes the node genome."""
         total_node_count = self.n_inputs + \
@@ -270,7 +286,7 @@ class CPPN():
         self.clamp_weights()
 
 
-    def add_connection(self, chance_to_reenable, allow_recurrent):
+    def add_connection(self):
         """Adds a connection to the CPPN."""
         for _ in range(20):  # try 20 times
             valid = True
@@ -281,14 +297,14 @@ class CPPN():
                 if cx.from_node == from_node and cx.to_node == to_node:
                     existing_cx = cx
             if existing_cx is not None:
-                if not existing_cx.enabled and np.random.rand() < chance_to_reenable:
+                if not existing_cx.enabled and np.random.rand() < self.config.prob_reenable_connection:
                     existing_cx.enabled = True     # re-enable the connection
                 break  # don't allow duplicates
 
             if from_node.layer == to_node.layer:
                 valid = False  # don't allow two nodes on the same layer to connect
 
-            if not allow_recurrent and from_node.layer > to_node.layer:
+            if not self.config.allow_recurrent and from_node.layer > to_node.layer:
                 valid = False  # invalid
 
             if valid:
@@ -446,9 +462,9 @@ class CPPN():
                 for node_input in list(filter(lambda x,
                     index=i: x.to_node.id == self.node_genome[index].id,
                     self.enabled_connections())):
-                    self.node_genome[i].sum_input += node_input.from_node.output * node_input.weight
+                    self.node_genome[i].sum_input += node_input.from_node.outputs * node_input.weight
 
-                self.node_genome[i].output =\
+                self.node_genome[i].outputs =\
                     self.node_genome[i].activation(self.node_genome[i].sum_input)
 
         # always an output node
@@ -459,12 +475,12 @@ class CPPN():
             layer = self.get_layer(layer_index)
             for node in layer:
                 node.sum_input = 0
-                node.output = 0
+                node.outputs = 0
                 node_inputs = list(
                     filter(lambda x, n=node: x.to_node.id == n.id,
                         self.enabled_connections()))  # cxs that end here
                 for cx in node_inputs:
-                    node.sum_input += cx.from_node.output * cx.weight
+                    node.sum_input += cx.from_node.outputs * cx.weight
 
                 node.output = node.activation(node.sum_input)  # apply activation
                 # node.output = np.clip(node.output, -1, 1) # clip output
@@ -503,53 +519,33 @@ class CPPN():
 
     def get_image_data_fast_method(self, res_h, res_w):
         """Evaluate the network to get image data in parallel"""
-        if self.config.allow_recurrent:
-            raise Exception("Fast method doesn't work with recurrent yet")
-
-        if CPPN.pixel_inputs is None or CPPN.pixel_inputs.shape[0] != res_h or\
-            CPPN.pixel_inputs.shape[1]!=res_w:
-            # lazy init:
-            x_vals = np.linspace(-.5, .5, res_w)
-            y_vals = np.linspace(-.5, .5, res_h)
-            CPPN.pixel_inputs = np.zeros((res_h, res_w, self.n_inputs), dtype=np.float32)
-            for y in range(res_h):
-                for x in range(res_w):
-                    this_pixel = [y_vals[y], x_vals[x]] # coordinates
-                    if self.config.use_radial_distance:
-                        # d = sqrt(x^2 + y^2)
-                        this_pixel.append(math.sqrt(y_vals[y]**2 + x_vals[x]**2))
-                    if self.config.use_input_bias:
-                        this_pixel.append(1.0)# bias = 1.0
-                    CPPN.pixel_inputs[y][x] = this_pixel
-
-        for i, _ in enumerate(self.node_genome):
-            # initialize outputs to 0:
-            self.node_genome[i].outputs = np.zeros((res_h, res_w))
-
-        for i in range(self.n_inputs):
-            # inputs are first N nodes
-            self.node_genome[i].sum_inputs = CPPN.pixel_inputs[:,:, i]
-            self.node_genome[i].outputs = self.node_genome[i].activation( CPPN.pixel_inputs[:,:, i])
+        if CPPN.pixel_inputs is None or CPPN.pixel_inputs.shape != (res_h,res_w):
+            # lazy initialization
+            CPPN.initialize_inputs(res_h, res_w,
+                self.config.use_radial_distance,
+                self.config.use_input_bias,
+                self.n_inputs)
 
         # always an output node
         output_layer = self.node_genome[self.n_inputs].layer
 
-        for layer_index in range(1, output_layer+1):
-            # hidden and output layers:
+        for layer_index in range(0, output_layer+1):
             layer = self.get_layer(layer_index)
-            for node in layer:
+            for i, node in enumerate(layer):
                 node_inputs = list(
                     filter(lambda x, n=node: x.to_node.id == n.id,
                         self.enabled_connections()))  # cxs that end here
 
                 node.sum_inputs = np.zeros((res_h, res_w), dtype=np.float32)
+                if layer_index == 0:
+
+                    node.sum_inputs += CPPN.pixel_inputs[:,:,min(i,self.n_inputs-1)]
                 for cx in node_inputs:
                     inputs = cx.from_node.outputs * cx.weight
                     node.sum_inputs = node.sum_inputs + inputs
 
                 node.outputs = node.activation(node.sum_inputs)  # apply activation
                 node.outputs = node.outputs.reshape((res_h, res_w))
-                # node.outputs = np.clip(node.outputs, -1, 1)
 
         outputs = [node.outputs for node in self.output_nodes()]
         if len(self.config.color_mode)>2:
@@ -573,4 +569,3 @@ class CPPN():
         self.connection_genome = [Connection(self.node_genome[c[0]],
             self.node_genome[c[1]], c[2], c[3]) for c in connections]
         self.update_node_layers()
-        # self.disable_invalid_connections()
