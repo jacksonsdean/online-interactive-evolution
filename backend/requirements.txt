@@ -5,3 +5,4 @@ scikit-image
 tqdm
 xenon # CI tests for code complexity
 pylint # code quality
+Flask # for local testing
