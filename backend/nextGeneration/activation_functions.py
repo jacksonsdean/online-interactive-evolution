@@ -8,7 +8,7 @@ from scipy import signal
 
 def get_all():
     """Returns all activation functions."""
-    fns = inspect.getmembers(sys.modules["activation_functions"])
+    fns = inspect.getmembers(sys.modules[__name__])
     fns = [f[1] for f in fns if len(f)>1 and f[0] != "get_all"\
         and isinstance(f[1], type(get_all))]
     return fns

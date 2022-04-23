@@ -3,8 +3,8 @@ from enum import IntEnum
 import math
 import json
 import numpy as np
-from activation_functions import identity
-from network_util import name_to_fn, choose_random_function
+from .activation_functions import identity
+from .network_util import name_to_fn, choose_random_function
 
 class NodeType(IntEnum):
     """Enum for the type of node."""
@@ -171,31 +171,19 @@ class CPPN():
 
     def initialize_connection_genome(self):
         """Initializes the connection genome."""
-        if len(self.hidden_nodes()) == 0:
-            # connect all input nodes to all output nodes
-            for input_node in self.input_nodes():
-                for output_node in self.output_nodes():
+        output_layer = self.node_genome[self.n_inputs].layer
+
+        for layer_index in range(0, output_layer):
+            layer_from = self.get_layer(layer_index)
+            for _, from_node in enumerate(layer_from):
+                layer_to = self.get_layer(layer_index+1)
+                for _, to_node in enumerate(layer_to):
                     new_cx = Connection(
-                            input_node, output_node, self.random_weight())
-                    self.connection_genome.append(new_cx)
-                    if np.random.rand() > self.config.init_connection_probability:
-                        new_cx.enabled = False
-        else:
-           # connect all input nodes to all hidden nodes
-            for input_node in self.input_nodes():
-                for hidden_node in self.hidden_nodes():
-                    new_cx = Connection(
-                        input_node, hidden_node, self.random_weight())
+                        from_node, to_node, self.random_weight())
                     self.connection_genome.append(new_cx)
                     if np.random.rand() > self.config.init_connection_probability:
                         new_cx.enabled = False
 
-           # connect all hidden nodes to all output nodes
-            for hidden_node in self.hidden_nodes():
-                for output_node in self.output_nodes():
-                    if np.random.rand() < self.config.init_connection_probability:
-                        self.connection_genome.append(Connection(
-                            hidden_node, output_node, self.random_weight()))
 
     def initialize_node_genome(self):
         """Initializes the node genome."""
