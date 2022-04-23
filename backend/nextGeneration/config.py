@@ -1,6 +1,6 @@
 """Stores configuration parameters for the CPPN."""
 import json
-from activation_functions import get_all, tanh#,identity
+from activation_functions import get_all, #tanh,identity
 from network_util import name_to_fn
 
 class Config:
