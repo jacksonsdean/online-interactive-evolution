@@ -61,9 +61,23 @@ if [ $? -ne 0 ]; then
 fi
 
 # run python tests
-echo "Testing python code quality in backend"
 cd "$REPO_DIR/backend"
-pylint --fail-under=8 "."
+
+if [[ -z "$VIRTUAL_ENV" ]]; then
+    echo "No VIRTUAL_ENV set"
+	python -m virualenv venv
+	cp venv/Scripts venv/bin # fix to make virtualenv cross-platform
+	source venv/bin/activate
+	pip install -r requirements.txt
+else
+    echo "VIRTUAL_ENV is set"
+	cp venv/Scripts venv/bin # fix to make virtualenv cross-platform
+	source venv/bin/activate
+	pip install -r requirements.txt
+fi
+
+echo "Testing python code quality in backend"
+python -m pylint --fail-under=8 --recursive=y ./nextGeneration ./interactive_testing.py ./local_test.py
 
 if [ $? -ne 0 ]; then
   echo "pylint failed, check output."
@@ -75,7 +89,7 @@ cd "$REPO_DIR/"
 
 echo "Testing python code complexity in backend"
 
-xenon --max-absolute B --max-modules A --max-average A "$REPO_DIR/backend"
+xenon --max-absolute B --max-modules A --max-average A -i "venv" "backend"
 if [ $? -ne 0 ]; then
   echo "xenon (radon) failed, reduce complexity."
   exit 1

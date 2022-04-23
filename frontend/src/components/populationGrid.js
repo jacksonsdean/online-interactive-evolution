@@ -1,6 +1,6 @@
 import React from 'react';
-import {API_URL} from '../Constants';
-import {string_to_ids, ids_to_string, post} from '../util';
+import { API_URL } from '../Constants';
+import { string_to_ids, ids_to_string, post } from '../util';
 
 class IndividualButton extends React.Component {
     render() {
@@ -21,19 +21,35 @@ class PopulationGrid extends React.Component {
     }
 
     componentDidMount() {
-        const apiUrl = API_URL + "?ids="+ids_to_string([1, 2, 3]);
+        const apiUrl = API_URL;
         console.log(process.env.REACT_APP_NODE_ENV);
         console.log(apiUrl)
-        post(apiUrl, {"TEST_POST": "TEST_POST"})
-            .then((response) => response.json())
-            .then((data) => this.setState({ population_ids: string_to_ids(data) }));
+        post(apiUrl, { ids: [1, 2, 3, 4] })
+            .then((response) => {
+                if (response.status === 200 ){
+                    return response.json()
+                }
+                else{
+                    console.log("Error: " + response.status);
+                    return Promise.reject(response.status);
+                }
+            }
+            )
+            .then((data) => {
+                if ("body" in data) {
+                    data =JSON.parse(data["body"]);
+                }
+                console.log(data);
+                const ids = JSON.parse(data)
+                this.setState({ population_ids: ids });
+            })
     }
 
     render() {
         // list of all the population ids
         return (<div>
             <ul>
-            {this.state.population_ids.map(i => <li key={i}> <IndividualButton name={i}></IndividualButton> </li>)}
+                {this.state.population_ids.map(i => <li key={i}> <IndividualButton name={i}></IndividualButton> </li>)}
             </ul>
         </div>
         );

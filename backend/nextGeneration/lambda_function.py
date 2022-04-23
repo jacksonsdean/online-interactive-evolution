@@ -4,8 +4,8 @@ import json
 def lambda_handler(event, context):
     """Handle an incoming request from Next Generation."""
     try:
-        ids = event["queryStringParameters"]['ids']
-        print(context)
+        ids = event['ids']
+        print("context:", context)
         return {
                 'statusCode': 200,
                 'headers': {

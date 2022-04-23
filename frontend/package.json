@@ -15,6 +15,7 @@
     "start": "react-scripts start",
     "start-dev": "cross-env REACT_APP_NODE_ENV=development react-scripts start",
     "start-prod": "cross-env REACT_APP_NODE_ENV=production react-scripts start",
+    "start-local": "cross-env REACT_APP_NODE_ENV=local react-scripts start",
     "build": "react-scripts build",
     "build-production": "cross-env REACT_APP_NODE_ENV=production react-scripts build",
     "build-development": "cross-env REACT_APP_NODE_ENV=development react-scripts build",
