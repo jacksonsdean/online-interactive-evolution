@@ -1,3 +1,4 @@
+import re
 from nextGeneration.lambda_function import lambda_handler
 from flask import Flask, request
 from flask_cors import CORS
@@ -9,7 +10,7 @@ CORS(app) # Allow cross-origin requests
 def test():
     """Handle an incoming request from Next Generation."""
     print("request:", request)
-    return lambda_handler({"queryStringParameters": {"ids": "1,2,3"}}, None)
+    return lambda_handler(request.get_json(), None)
 
 if __name__ == "__main__":
     app.run()
