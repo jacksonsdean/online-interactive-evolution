@@ -30,7 +30,7 @@ class Config:
         self.prob_remove_node = 0.05
         self.prob_disable_connection = .3
 
-        self.output_activation = tanh
+        self.output_activation = None
 
         # DGNA/SGMA uses 1 or 2 so that patterns in the initial
         # generation would be nontrivial (Stanley, 2007).
