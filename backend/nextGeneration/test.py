@@ -30,16 +30,22 @@ class TestCPPN(unittest.TestCase):
         config = Config()
         cppn = CPPN(config)
         self.assertIsInstance(cppn, CPPN, "CPPN is not an instance of CPPN")
-        length = config.num_inputs + config.num_outputs + config.hidden_nodes_at_start
+        length = cppn.n_inputs + cppn.n_outputs + config.hidden_nodes_at_start
         self.assertEqual(len(cppn.node_genome), length, "Node genome size is not correct")
 
     def test_eval_image(self):
         """Test creating an image from the CPPN"""
+        # test grayscale image shape
         config = Config()
+        config.color_mode = "L"
         cppn = CPPN(config)
-        image_data = cppn.get_image_data_fast_method(32,32,"L")
+        image_data = cppn.get_image_data_fast_method(32,32)
         self.assertEqual(image_data.shape, (32,32), "Image data is not correct shape")
-        image_data = cppn.get_image_data_fast_method(32,32,"RGB")
+
+        # test color image shape
+        config.color_mode = "RGB"
+        cppn = CPPN(config)
+        image_data = cppn.get_image_data_fast_method(32,32)
         self.assertEqual(image_data.shape, (32,32,3), "Image data is not correct shape")
 
 if __name__ == '__main__':

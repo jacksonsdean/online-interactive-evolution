@@ -3,8 +3,8 @@ from enum import IntEnum
 import math
 import json
 import numpy as np
-from .activation_functions import identity
-from .network_util import name_to_fn, choose_random_function
+from activation_functions import identity
+from network_util import name_to_fn, choose_random_function, is_valid_connection
 
 class NodeType(IntEnum):
     """Enum for the type of node."""
@@ -277,7 +277,6 @@ class CPPN():
     def add_connection(self):
         """Adds a connection to the CPPN."""
         for _ in range(20):  # try 20 times
-            valid = True
             [from_node, to_node] = np.random.choice(
                 self.node_genome, 2, replace=False)
             existing_cx = None
@@ -289,13 +288,7 @@ class CPPN():
                     existing_cx.enabled = True     # re-enable the connection
                 break  # don't allow duplicates
 
-            if from_node.layer == to_node.layer:
-                valid = False  # don't allow two nodes on the same layer to connect
-
-            if not self.config.allow_recurrent and from_node.layer > to_node.layer:
-                valid = False  # invalid
-
-            if valid:
+            if is_valid_connection(from_node, to_node, self.config):
                 # valid connection, add
                 new_cx = Connection(from_node, to_node, self.random_weight())
                 self.connection_genome.append(new_cx)
