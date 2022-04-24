@@ -9,8 +9,8 @@ def lambda_handler(event, context):
         ids = event['ids']
         print("context:", context)
         body = json.dumps(str(ids))
-    except AttributeError as e:
-        print(e)
+    except Exception as e:
+        print(type(e), e)
         body = json.dumps(f"{type(e)}: {e}")
 
     return {
