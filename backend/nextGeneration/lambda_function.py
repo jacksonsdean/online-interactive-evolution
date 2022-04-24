@@ -13,6 +13,7 @@ def lambda_handler(event, context):
         body = json.dumps(str(ids))
     except KeyError as e:
         print(type(e), e)
+        status = 500
         body = json.dumps(f"{type(e)}: {e}")
 
     return {
