@@ -7,7 +7,7 @@ def lambda_handler(event, context):
     status = 200
     try:
         print("event:", event)
-        ids = event['ids']
+        # ids = event['ids']
         print("context:", context)
         body = event
         # body = json.dumps(str(ids))
