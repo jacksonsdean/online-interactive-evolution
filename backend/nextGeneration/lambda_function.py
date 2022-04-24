@@ -11,7 +11,7 @@ def lambda_handler(event, context):
         ids = body_in['ids']
         print("context:", context)
         body = json.dumps(str(ids))
-    except KeyError as e:
+    except Exception as e:
         print(type(e), e)
         status = 500
         body = json.dumps(f"{type(e)}: {e}")
