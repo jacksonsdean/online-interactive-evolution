@@ -7,10 +7,10 @@ def lambda_handler(event, context):
     status = 200
     try:
         print("event:", event)
-        body_in = json.loads(event)
-        ids = body_in['ids']
+        ids = event['ids']
         print("context:", context)
-        body = json.dumps(str(ids))
+        body = event
+        # body = json.dumps(str(ids))
     except Exception as e:
         print(type(e), e)
         status = 500
