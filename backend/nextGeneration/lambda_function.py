@@ -9,7 +9,7 @@ def lambda_handler(event, context):
         ids = event['ids']
         print("context:", context)
         body = json.dumps(str(ids))
-    except Exception as e:
+    except KeyError as e:
         print(type(e), e)
         body = json.dumps(f"{type(e)}: {e}")
 
