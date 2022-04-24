@@ -6,7 +6,7 @@ def lambda_handler(event, context):
     body = None
     status = 200
     try:
-        ids = event['ids']
+        ids = event["body"]['ids']
         print("context:", context)
         body = json.dumps(str(ids))
     except KeyError as e:
