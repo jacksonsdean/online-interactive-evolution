@@ -2,6 +2,7 @@
 import sys
 sys.path.append('nextGeneration/')
 sys.path.append('./')
+import requests
 from multiprocessing import Process
 from local_test import run_server
 from nextGeneration.lambda_function import lambda_handler, HEADERS
@@ -62,8 +63,8 @@ class TestLocalServer(unittest.TestCase):
         server_response = False
         event = TEST_EVENT
         while timeout > 0 and not server_response:
-            response = lambda_handler(event, None)
-            server_response = response['statusCode'] == 200
+            response = requests.post("http://localhost:5000", json=event, headers=HEADERS)
+            server_response = response.status_code == 200
             time.sleep(1)
             timeout -= 1
 

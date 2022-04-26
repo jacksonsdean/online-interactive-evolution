@@ -13,18 +13,19 @@ class LocalServer(Flask):
         print("Local server starting")
         super().run(*args, **kwargs)
 
+server = LocalServer(__name__)
+@server.route('/', methods=['POST', 'GET'])
+def test():
+    """Handle an incoming request from Next Generation."""
+    print("request:", request)
+    return lambda_handler(request.get_json(), None)
 
 def run_server():
     """Create and run a local server for testing"""
-    server = LocalServer(__name__)
+    global server
     server.run()
 
 
-    @server.route('/', methods=['POST', 'GET'])
-    def test():
-        """Handle an incoming request from Next Generation."""
-        print("request:", request)
-        return lambda_handler(request.get_json(), None)
 
 
 if __name__ == "__main__":
