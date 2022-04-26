@@ -6,6 +6,9 @@ from network_util import name_to_fn
 class Config:
     """Stores configuration parameters for the CPPN."""
     def __init__(self) -> None:
+        self.population_size = 10
+        self.res_w = 28
+        self.res_h = 28
         self.color_mode = "L"
         self.do_crossover = True
         self.allow_recurrent = False
@@ -70,8 +73,8 @@ class Config:
         if isinstance(json_dict, dict):
             json_dict = json.loads(json_dict)
         self.fns_to_strings()
-        self.__dict__ = json_dict
-
+        for key, value in json_dict.items():
+            setattr(self, key, value)
         self.strings_to_fns()
 
     @staticmethod
@@ -79,7 +82,9 @@ class Config:
         """Creates a configuration from a json string."""
         if isinstance(json_str, str):
             json_str = json.loads(json_str)
+        print(json_str)
         config = Config()
-        config.__dict__ = json_str
+        for key, value in json_str.items():
+            setattr(config, key, value)
         config.strings_to_fns()
         return config

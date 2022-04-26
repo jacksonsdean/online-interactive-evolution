@@ -4,9 +4,10 @@ from flask_cors import CORS
 
 
 class LocalServer(Flask):
+    """A simple Flask server for testing the lambda_function.py file locally."""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        CORS(self)# Allow cross-origin requests
+        CORS(self) # Allow cross-origin requests
 
     def run(self, *args, **kwargs):
         print("Local server starting")

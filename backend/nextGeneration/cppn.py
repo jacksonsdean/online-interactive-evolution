@@ -41,8 +41,10 @@ class Node:
         self.type = int(self.type)
         self.id = int(self.id)
         self.layer = int(self.id)
-        self.sum_inputs = self.sum_inputs.tolist()
-        self.outputs = self.outputs.tolist()
+        if isinstance(self.sum_inputs, np.ndarray):
+            self.sum_inputs = self.sum_inputs.tolist()
+        if isinstance(self.outputs, np.ndarray):
+            self.outputs = self.outputs.tolist()
         try:
             self.activation = self.activation.__name__
         except AttributeError:
