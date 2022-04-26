@@ -20,7 +20,7 @@ test-backend:
     - echo "Testing backend"
     - cd backend
     - pip install -r requirements.txt
-    - python nextGeneration/test.py
+    - python test.py
     - echo "Testing backend code complexity"
     - xenon --max-absolute B --max-modules A --max-average A .
 
