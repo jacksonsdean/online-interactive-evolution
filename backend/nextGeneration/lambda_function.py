@@ -1,5 +1,6 @@
 """Handler for Next Generation."""
 import json
+import logging
 from config import Config
 from cppn import CPPN
 
@@ -35,10 +36,11 @@ def lambda_handler(event, context):
         if operation == 'reset':
             body = initial_population(config)
 
-    except Exception as e:
+    except Exception as e: # pylint: disable=broad-except
         print("ERROR while handling lambda:", type(e), e)
         status = 500
         body = json.dumps(f"error in lambda: {type(e)}: {e}")
+        logging.exception(e)
 
     return {
             'statusCode': status,
