@@ -27,18 +27,18 @@ def lambda_handler(event, context):
     """Handle an incoming request from Next Generation."""
     body = None
     status = 200
-    # try:
-    print("event:", event)
-    print("context:", context)
-    operation = event['operation']
-    config = Config.create_from_json(event['config'])
-    if operation == 'reset':
-        body = initial_population(config)
+    try:
+        print("event:", event)
+        print("context:", context)
+        operation = event['operation']
+        config = Config.create_from_json(event['config'])
+        if operation == 'reset':
+            body = initial_population(config)
 
-    # except Exception as e:
-        # print("ERROR while handling lambda:", type(e), e)
-        # status = 500
-        # body = json.dumps(f"{type(e)}: {e}")
+    except Exception as e:
+        print("ERROR while handling lambda:", type(e), e)
+        status = 500
+        body = json.dumps(f"error in lambda: {type(e)}: {e}")
 
     return {
             'statusCode': status,
