@@ -3,8 +3,7 @@ import inspect
 import math
 import sys
 import numpy as np
-from scipy.special import expit
-from scipy import signal
+# from scipy import signal
 
 def get_all():
     """Returns all activation functions."""
@@ -19,16 +18,16 @@ def identity(x):
 
 def sigmoid(x):
     """Returns the sigmoid of the input."""
-    return expit(x)
+    return 1/(1 + np.exp(-x))
 
 def tanh(x):
     """Returns the hyperbolic tangent of the input."""
     y = np.tanh(2.5*x)
     return y
 
-def sawtooth(x):
-    """Returns the sawtooth of the input."""
-    return signal.sawtooth(x*10)
+# def sawtooth(x):
+#     """Returns the sawtooth of the input."""
+#     return signal.sawtooth(x*10)
 
 def tanh_sig(x):
     """Returns the sigmoid of the hyperbolic tangent of the input."""
