@@ -1,5 +1,5 @@
 import React from 'react';
-import { API_URL } from '../Constants';
+import { API_URL, INITIAL_REQUEST } from '../Constants';
 import { post } from '../util';
 
 class IndividualButton extends React.Component {
@@ -17,14 +17,14 @@ class PopulationGrid extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { population_ids: ["Please wait.."] };
+        this.state = { population: [] };
     }
 
     componentDidMount() {
         const apiUrl = API_URL;
         console.log(process.env.REACT_APP_NODE_ENV);
         console.log(apiUrl)
-        post(apiUrl, { ids: [1, 2, 3, 4] })
+        post(apiUrl, INITIAL_REQUEST)
             .then((response) => {
                 if (response.status === 200 ){
                     return response.json()
@@ -40,16 +40,19 @@ class PopulationGrid extends React.Component {
                     data =JSON.parse(data["body"]);
                 }
                 console.log(data);
-                const ids = JSON.parse(data)
-                this.setState({ population_ids: ids });
+                const pop = JSON.parse(data)
+                this.setState({ population: pop });
             })
     }
 
     render() {
+        if (this.state.population.length == 0) {
+            return (<p>Please wait...</p>)
+        }
         // list of all the population ids
         return (<div>
             <ul>
-                {this.state.population_ids.map(i => <li key={i}> <IndividualButton name={i}></IndividualButton> </li>)}
+                {this.state.population.map(i => <li key={i}> <IndividualButton name={i}></IndividualButton> </li>)}
             </ul>
         </div>
         );
