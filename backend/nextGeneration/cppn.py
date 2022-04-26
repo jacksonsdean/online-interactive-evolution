@@ -41,10 +41,8 @@ class Node:
         self.type = int(self.type)
         self.id = int(self.id)
         self.layer = int(self.id)
-        if isinstance(self.sum_inputs, np.ndarray):
-            self.sum_inputs = self.sum_inputs.tolist()
-        if isinstance(self.outputs, np.ndarray):
-            self.outputs = self.outputs.tolist()
+        self.sum_inputs = []
+        self.outputs = []
         try:
             self.activation = self.activation.__name__
         except AttributeError:
@@ -208,7 +206,7 @@ class CPPN():
     def to_json(self):
         """Converts the CPPN to a json string."""
         return {"node_genome": [n.to_json() for n in self.node_genome], "connection_genome":\
-            [c.to_json() for c in self.connection_genome]}
+            [c.to_json() for c in self.connection_genome], "image": self.image.tolist()}
 
     def from_json(self, json_dict):
         """Constructs a CPPN from a json dict or string."""
