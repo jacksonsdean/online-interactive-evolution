@@ -23,6 +23,23 @@ def initial_population(config):
     json_data = json.dumps(population_json)
     return json_data
 
+def next_generation(config, population_data):
+    """Create the next generation."""
+    population = []
+
+    # create population
+    for individual in population_data:
+        population.append(CPPN.create_from_json(individual, config))
+    # mutate population
+    for individual in population:
+        individual.mutate()
+    # evaluate population
+    for individual in population:
+        individual.get_image_data_fast_method(config.res_h, config.res_w)
+    population_json = [individual.to_json() for individual in population]
+    json_data = json.dumps(population_json)
+    return json_data
+
 
 def lambda_handler(event, context):
     """Handle an incoming request from Next Generation."""
@@ -35,12 +52,17 @@ def lambda_handler(event, context):
         config = Config.create_from_json(event['config'])
         if operation == 'reset':
             body = initial_population(config)
+        if operation == 'next_gen':
+            raw_pop = event['population']
+
+            body = next_generation(config, raw_pop)
 
     except Exception as e: # pylint: disable=broad-except
         print("ERROR while handling lambda:", type(e), e)
         status = 500
         body = json.dumps(f"error in lambda: {type(e)}: {e}")
         logging.exception(e)
+        raise e
 
     return {
             'statusCode': status,

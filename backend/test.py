@@ -1,4 +1,5 @@
 """Test cases for the lambda_function.py file."""
+import json
 import sys
 sys.path.append('nextGeneration/')
 sys.path.append('./')
@@ -11,34 +12,46 @@ from nextGeneration.config import Config
 import time
 import unittest
 
+TEST_CONFIG = {"population_size": 10, "activations": ["identity"], "output_activation":"tanh"}
 
-TEST_EVENT = {
-    "operation": "reset", "config": {"population_size": 10, "activations": ["identity"], "output_activation":"tanh"},
+TEST_RESET_EVENT = {
+    "operation": "reset", "config": TEST_CONFIG,
+}
+
+TEST_POPULATION =\
+    [CPPN(Config.create_from_json(TEST_CONFIG)).to_json() for _ in range(TEST_CONFIG["population_size"])]
+
+TEST_NEXT_GEN_EVENT = {
+    "operation": "next_gen", "config": TEST_CONFIG, "population":TEST_POPULATION
 }
 
 
 class TestLambdaFunction(unittest.TestCase):
     """Tests for Lambda function."""
 
-    def test_lambda_function(self):
-        """Test the lambda_function."""
-        ...
-        # event = {"ids": "1,2,3"}
-        # context = None
-        # response = lambda_handler(event, context)
-
-        # Check the response status code
-        # self.assertEqual(response['statusCode'], 200, "Status code is not 200")
-        # self.assertDictEqual(response['headers'], HEADERS, "Incorrect headers received")
-        # self.assertEqual(response['body'], '"1,2,3"', "Incorrect body received") # TODO: Fix this test
-
     def test_initial_population(self):
-        """Test the creation of an initial population."""
-        event = TEST_EVENT
+        """Test the creation of an initial population in the lambda function."""
+        event = TEST_RESET_EVENT
         response = lambda_handler(event, None)
         self.assertEqual(response['statusCode'], 200, "Status code is not 200")
         self.assertDictEqual(response['headers'],
                              HEADERS, "Incorrect headers received")
+        response_genomes = json.loads(response['body'])
+        self.assertEqual(len(response_genomes),
+                         TEST_CONFIG['population_size'],
+                         "Incorrect number of CPPNs in response")
+
+    def test_next_gen(self):
+        """Test moving to the next generation in the lambda function."""
+        event = TEST_NEXT_GEN_EVENT
+        response = lambda_handler(event, None)
+        self.assertEqual(response['statusCode'], 200, "Status code is not 200")
+        self.assertDictEqual(response['headers'],
+                             HEADERS, "Incorrect headers received")
+        response_genomes = json.loads(response['body'])
+        self.assertEqual(len(response_genomes),
+                         TEST_CONFIG['population_size'],
+                         "Incorrect number of CPPNs in response")
 
 
 class TestLocalServer(unittest.TestCase):
@@ -61,7 +74,7 @@ class TestLocalServer(unittest.TestCase):
         self.server_process.start()
         timeout = 10  # wait for 10 seconds before failing
         server_response = False
-        event = TEST_EVENT
+        event = TEST_RESET_EVENT
         while timeout > 0 and not server_response:
             response = requests.post("http://localhost:5000", json=event, headers=HEADERS)
             server_response = response.status_code == 200

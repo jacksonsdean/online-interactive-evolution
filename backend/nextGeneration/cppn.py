@@ -56,6 +56,8 @@ class Node:
         self.__dict__ = json_dict
         self.type = NodeType(self.type)
         self.activation = name_to_fn(self.activation)
+        self.outputs = None
+        self.sum_inputs = None
         return self
 
 
@@ -146,6 +148,7 @@ class CPPN():
         self.image = None
         self.node_genome = []  # inputs first, then outputs, then hidden
         self.connection_genome = []
+        self.selected = False
 
 
         if config is None:
@@ -205,13 +208,14 @@ class CPPN():
 
     def to_json(self):
         """Converts the CPPN to a json string."""
+        img = self.image.tolist() if self.image is not None else None
         return {"node_genome": [n.to_json() for n in self.node_genome], "connection_genome":\
-            [c.to_json() for c in self.connection_genome], "image": self.image.tolist()}
+            [c.to_json() for c in self.connection_genome], "image": img, "selected": self.selected}
 
     def from_json(self, json_dict):
         """Constructs a CPPN from a json dict or string."""
         for k, v in json_dict.items():
-            self.__dict__[k] = v
+            setattr(self, k, v)
         for i, cx in enumerate(self.connection_genome):
             self.connection_genome[i] = Connection.create_from_json(cx)
         for i, n in enumerate(self.node_genome):
@@ -247,7 +251,7 @@ class CPPN():
             if connection.enabled:
                 yield connection
 
-    def mutate_activations(self, prob_mutate_activation):
+    def mutate_activations(self):
         """Mutates the activation functions of the nodes."""
         eligible_nodes = list(self.hidden_nodes())
         if self.config.output_activation is None:
@@ -255,24 +259,37 @@ class CPPN():
         if self.config.allow_input_activation_mutation:
             eligible_nodes.extend(self.input_nodes())
         for node in eligible_nodes:
-            if np.random.uniform(0,1) < prob_mutate_activation:
+            if np.random.uniform(0,1) < self.config.prob_mutate_activation:
                 node.activation = choose_random_function(self.config)
 
-    def mutate_weights(self, weight_mutation_max, weight_mutation_probability):
+    def mutate_weights(self):
         """
         Each connection weight is perturbed with a fixed probability by
         adding a floating point number chosen from a uniform distribution of
         positive and negative values """
 
         for connection in self.connection_genome:
-            if np.random.uniform(0, 1) < weight_mutation_probability:
-                connection.weight += np.random.uniform(-weight_mutation_max,
-                                               weight_mutation_max)
+            if np.random.uniform(0, 1) < self.config.prob_mutate_weight:
+                connection.weight += np.random.uniform(-self.config.weight_mutation_max,
+                                               self.config.weight_mutation_max)
             elif np.random.uniform(0, 1) < self.config.prob_weight_reinit:
                 connection.weight = self.random_weight()
 
         self.clamp_weights()
 
+    def mutate(self):
+        """Mutates the CPPN based on it's config."""
+        if(np.random.uniform(0,1) < self.config.prob_add_node):
+            self.add_node()
+        if(np.random.uniform(0,1) < self.config.prob_remove_node):
+            self.remove_node()
+        if(np.random.uniform(0,1) < self.config.prob_add_connection):
+            self.add_connection()
+        if(np.random.uniform(0,1) < self.config.prob_disable_connection):
+            self.disable_connection()
+
+        self.mutate_activations()
+        self.mutate_weights()
 
     def add_connection(self):
         """Adds a connection to the CPPN."""
@@ -522,8 +539,9 @@ class CPPN():
 
                     node.sum_inputs += CPPN.pixel_inputs[:,:,min(i,self.n_inputs-1)]
                 for cx in node_inputs:
-                    inputs = cx.from_node.outputs * cx.weight
-                    node.sum_inputs = node.sum_inputs + inputs
+                    if cx.from_node.outputs is not None:
+                        inputs = cx.from_node.outputs * cx.weight
+                        node.sum_inputs = node.sum_inputs + inputs
 
                 node.outputs = node.activation(node.sum_inputs)  # apply activation
                 node.outputs = node.outputs.reshape((res_h, res_w))
