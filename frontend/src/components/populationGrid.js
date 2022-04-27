@@ -37,11 +37,12 @@ class PopulationGrid extends React.Component {
             }
             )
             .then((data) => {
-                if ("body" in data) {
+                if ("body" in data && typeof data.body !== "object") {
                     data =JSON.parse(data["body"]);
                 }
                 console.log(data);
-                const pop = JSON.parse(data)
+                // const pop = JSON.parse(data)
+                const pop = data
                 this.setState({ population: pop });
             })
     }
