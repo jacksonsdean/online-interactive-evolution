@@ -1,9 +1,15 @@
 """To test the backend interactively"""
 #%%
+import json
+from multiprocessing import Process
+import time
 import matplotlib.pyplot as plt
+from nextGeneration.lambda_function import lambda_handler
+from local_test import run_server
+from test import TEST_RESET_EVENT
 from skimage.color import hsv2rgb
 import numpy as np
-from nextGeneration.activation_functions import gauss, identity, sawtooth, tanh
+from nextGeneration.activation_functions import gauss, identity, sin, tanh
 from nextGeneration.config import Config
 from nextGeneration.cppn import CPPN, Node, NodeType
 
@@ -74,7 +80,7 @@ node_genome.append(Node(tanh, NodeType.OUTPUT, id, layer)); id+=1
 node_genome.append(Node(tanh, NodeType.OUTPUT, id, layer)); id+=1
 layer=1
 node_genome.append(Node(gauss, NodeType.HIDDEN, id, layer)); id+=1
-node_genome.append(Node(sawtooth, NodeType.HIDDEN, id, layer)); id+=1
+node_genome.append(Node(sin, NodeType.HIDDEN, id, layer)); id+=1
 
 config = Config()
 config.color_mode = "RGB"
@@ -84,4 +90,25 @@ img = cppn.get_image_data_fast_method(32,32)
 show_image(img, color_mode="RGB")
 plt.show()
 #%%
+import requests
+
+# server_process = Process(target=run_server, args=())
+# server_process.start()
+timeout = 10  # wait for 10 seconds before failing
+server_response = False
+event = TEST_RESET_EVENT
+while timeout > 0 and not server_response:
+    response = requests.post("http://localhost:5000", json=event)
+    server_response = response.status_code == 200
+    time.sleep(1)
+    timeout -= 1
+imgs = []
+obj = response.json()["body"]
+config = Config.create_from_json(obj["config"])
+for indiv in obj["population"]:
+    cppn = CPPN.create_from_json(indiv, config)
+    img = cppn.get_image_data_fast_method(32,32)
+    imgs.append(img)
+show_images(imgs, color_mode="RGB")
+# server_process.terminate()  # kill test server
 

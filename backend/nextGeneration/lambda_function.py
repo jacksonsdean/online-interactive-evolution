@@ -20,7 +20,7 @@ def initial_population(config):
     for individual in population:
         individual.get_image_data_fast_method(config.res_h, config.res_w)
     population_json = [individual.to_json() for individual in population]
-    json_data = json.dumps(population_json)
+    json_data = {"config":config.to_json(), "population": population_json}
     return json_data
 
 def next_generation(config, population_data):
@@ -37,7 +37,7 @@ def next_generation(config, population_data):
     for individual in population:
         individual.get_image_data_fast_method(config.res_h, config.res_w)
     population_json = [individual.to_json() for individual in population]
-    json_data = json.dumps(population_json)
+    json_data = {"config":config.to_json(), "population": population_json}
     return json_data
 
 
