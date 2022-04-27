@@ -31,7 +31,7 @@ def name_to_fn(name)->callable:
         The function.
     """
     assert isinstance(name, str), f"name must be a string but is {type(name)}"
-    fns = inspect.getmembers(sys.modules["nextGeneration.activation_functions"])
+    fns = inspect.getmembers(sys.modules["activation_functions"])
     return fns[[f[0] for f in fns].index(name)][1]
 
 
