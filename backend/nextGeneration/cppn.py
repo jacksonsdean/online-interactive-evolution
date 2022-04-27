@@ -3,8 +3,8 @@ from enum import IntEnum
 import math
 import json
 import numpy as np
-from .activation_functions import identity
-from .network_util import name_to_fn, choose_random_function, is_valid_connection
+from activation_functions import identity
+from network_util import name_to_fn, choose_random_function, is_valid_connection
 
 class NodeType(IntEnum):
     """Enum for the type of node."""
