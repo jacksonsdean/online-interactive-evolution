@@ -2,6 +2,7 @@
 import inspect
 import random
 import sys
+import nextGeneration.activation_functions as af
 
 def is_valid_connection(from_node,to_node, config):
     """
@@ -31,7 +32,7 @@ def name_to_fn(name)->callable:
         The function.
     """
     assert isinstance(name, str), f"name must be a string but is {type(name)}"
-    fns = inspect.getmembers(sys.modules["activation_functions"])
+    fns = inspect.getmembers(sys.modules[af.__name__])
     return fns[[f[0] for f in fns].index(name)][1]
 
 

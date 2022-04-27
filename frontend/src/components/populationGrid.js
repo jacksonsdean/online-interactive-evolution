@@ -26,6 +26,7 @@ class PopulationGrid extends React.Component {
         console.log(apiUrl)
         post(apiUrl, INITIAL_REQUEST)
             .then((response) => {
+                console.log(response)
                 if (response.status === 200 ){
                     return response.json()
                 }
