@@ -42,7 +42,7 @@ class PopulationGrid extends React.Component {
                 }
                 console.log(data);
                 // const pop = JSON.parse(data)
-                const pop = data
+                const pop = data["population"];
                 this.setState({ population: pop });
             })
     }
