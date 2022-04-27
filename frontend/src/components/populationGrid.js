@@ -46,7 +46,7 @@ class PopulationGrid extends React.Component {
     }
 
     render() {
-        if (this.state.population.length == 0) {
+        if (this.state.population.length === 0) {
             return (<p>Please wait...</p>)
         }
         // list of all the population ids
