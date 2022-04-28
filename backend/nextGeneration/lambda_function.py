@@ -52,7 +52,7 @@ def lambda_handler(event, context):
     try:
         print("event:", event)
         print("context:", context)
-        data = event['body']
+        data = event['body'] if 'body' in event else event
         if isinstance(data, str):
             # load the data to a json object
             data = json.loads(data)
