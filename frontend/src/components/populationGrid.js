@@ -1,23 +1,40 @@
 import React from 'react';
 import { API_URL, INITIAL_REQUEST } from '../Constants';
 import { post } from '../util';
+import Grid  from './Grid';
+import styles from "./PopulationGrid.module.css";
 
 class IndividualButton extends React.Component {
+
+    constructor(props){
+        super(props)
+        this.state = {individual:props.individual}
+        this.clicked = this.clicked.bind(this)
+    }
+
+    clicked() {
+        this.props.individual.selected = !this.props.individual.selected
+        this.setState({individual:this.props.individual})
+    }
+
     render() {
+        const individual = this.props.individual;
         // create image from individual
-        const parsed = JSON.parse(this.props.individual.image)
+        const parsed = JSON.parse(individual.image)
         // create url from base64 string
         const url = "data:image/png;base64,"+parsed.join("")
+        console.log(individual.selected)
+        const selectionStyle = individual.selected ? styles.selected:styles.unselected
         return (
-            <button className="individual-button" onClick={this.props.onClick}>
-                {this.props.individual.name}
-                <img src={url} alt={this.props.individual.name} />
+            <button className={styles.individualButton + " " + selectionStyle} onClick={this.clicked}>
+                {individual.name}
+                <img className={styles.individualImg} src={url} alt={individual.name} />
             </button>
         )
     }
 }
 
-class PopulationGrid extends React.Component {
+class PopulationGrid extends Grid {
 
     constructor(props) {
         super(props);
@@ -58,10 +75,10 @@ class PopulationGrid extends React.Component {
             return (<p>Please wait...</p>)
         }
         // a grid of the population's individuals' images as buttons
-        return (<div>
-            <ul>
-                {this.state.population.map((obj, index)=> <li key={index}> <IndividualButton individual={obj}></IndividualButton> </li>)}
-            </ul>
+        return (<div className={styles.populationGrid}>
+            <Grid>
+                {this.state.population.map((obj, index)=> <IndividualButton key={index} individual={obj}></IndividualButton>)}
+            </Grid>
         </div>
         );
     }
