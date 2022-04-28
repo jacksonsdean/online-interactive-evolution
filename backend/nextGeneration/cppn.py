@@ -3,9 +3,13 @@ from enum import IntEnum
 import math
 import json
 import numpy as np
-from nextGeneration.activation_functions import identity
-from nextGeneration.network_util import name_to_fn, choose_random_function, is_valid_connection
-
+try:
+    from nextGeneration.activation_functions import identity
+    from nextGeneration.network_util import name_to_fn, choose_random_function, is_valid_connection
+except ModuleNotFoundError:
+    from activation_functions import identity
+    from network_util import name_to_fn, choose_random_function, is_valid_connection
+    
 class NodeType(IntEnum):
     """Enum for the type of node."""
     INPUT  = 0

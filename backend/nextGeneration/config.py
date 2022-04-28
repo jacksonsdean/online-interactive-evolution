@@ -1,7 +1,12 @@
 """Stores configuration parameters for the CPPN."""
 import json
-from nextGeneration.activation_functions import get_all #,tanh,identity
-from nextGeneration.network_util import name_to_fn
+
+try:
+    from activation_functions import get_all #,tanh,identity
+    from network_util import name_to_fn
+except ModuleNotFoundError:
+    from nextGeneration.activation_functions import get_all #,tanh,identity
+    from nextGeneration.network_util import name_to_fn
 
 class Config:
     """Stores configuration parameters for the CPPN."""

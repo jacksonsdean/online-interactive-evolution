@@ -1,8 +1,12 @@
 """Handler for Next Generation."""
 import json
 import logging
-from nextGeneration.config import Config
-from nextGeneration.cppn import CPPN
+try:
+    from config import Config
+    from cppn import CPPN
+except ModuleNotFoundError:
+    from nextGeneration.config import Config
+    from nextGeneration.cppn import CPPN
 
 HEADERS = {
                 "Access-Control-Allow-Headers": "Content-Type",

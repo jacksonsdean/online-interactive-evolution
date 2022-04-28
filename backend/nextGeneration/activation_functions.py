@@ -3,7 +3,6 @@ import inspect
 import math
 import sys
 import numpy as np
-# from scipy import signal
 
 def get_all():
     """Returns all activation functions."""

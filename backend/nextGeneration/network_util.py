@@ -2,7 +2,10 @@
 import inspect
 import random
 import sys
-import nextGeneration.activation_functions as af
+try:
+    import nextGeneration.activation_functions as af
+except ModuleNotFoundError:
+    import activation_functions as af
 
 def is_valid_connection(from_node,to_node, config):
     """
