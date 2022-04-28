@@ -49,28 +49,28 @@ def lambda_handler(event, context):
     """Handle an incoming request from Next Generation."""
     body = None
     status = 200
-    if event['httpMethod'] == 'OPTIONS':
-        body = {}
-    elif event['httpMethod'] == 'POST':
-        try:
-            print("event:", event)
-            print("context:", context)
-            data = event['body']
-            operation = data['operation']
-            config = Config.create_from_json(data['config'])
+    try:
+        print("event:", event)
+        print("context:", context)
+        data = event['body']
+        if isinstance(data, str):
+            # load the data to a json object
+            data = json.loads(data)
+        operation = data['operation']
 
-            if operation == 'reset':
-                body = initial_population(config)
-            if operation == 'next_gen':
-                raw_pop = data['population']
+        config = Config.create_from_json(data['config'])
 
-                body = next_generation(config, raw_pop)
+        if operation == 'reset':
+            body = initial_population(config)
+        if operation == 'next_gen':
+            raw_pop = data['population']
+            body = next_generation(config, raw_pop)
 
-        except Exception as e: # pylint: disable=broad-except
-            print("ERROR while handling lambda:", type(e), e)
-            status = 500
-            body = json.dumps(f"error in lambda: {type(e)}: {e}")
-            logging.exception(e)
+    except Exception as e: # pylint: disable=broad-except
+        print("ERROR while handling lambda:", type(e), e)
+        status = 500
+        body = json.dumps(f"error in lambda: {type(e)}: {e}")
+        logging.exception(e)
 
     return {
             'statusCode': status,
