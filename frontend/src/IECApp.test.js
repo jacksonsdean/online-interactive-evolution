@@ -24,6 +24,6 @@ afterEach(() => {
 
 test('renders welcome text', () => {
   render(<IECApp />);
-  const linkElement = screen.getByText(/Welcome/i);
+  const linkElement = screen.getByText(/Interactive Evolutionary Art/i);
   expect(linkElement).toBeInTheDocument();
 });
