@@ -65,7 +65,7 @@ def lambda_handler(event, context):
         if operation == 'next_gen':
             raw_pop = data['population']
             body = next_generation(config, raw_pop)
-
+        print("body:", body)
     except Exception as e: # pylint: disable=broad-except
         print("ERROR while handling lambda:", type(e), e)
         status = 500
