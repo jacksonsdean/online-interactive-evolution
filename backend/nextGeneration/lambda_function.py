@@ -1,4 +1,5 @@
 """Handler for Next Generation."""
+from email.policy import strict
 import io
 import json
 import logging
@@ -27,9 +28,12 @@ def evaluate_population(population, config)->str:
         # convert to RGB if not RGB
         if individual.image.mode != 'RGB':
             individual.image = individual.image.convert('RGB')
-        img_byte_arr = io.BytesIO()
-        individual.image.save(img_byte_arr, format='PNG')
-        individual.image = img_byte_arr.getvalue()
+        with io.BytesIO() as img_byte_arr:
+            individual.image.save(img_byte_arr, format='PNG')
+            img_byte_arr.seek(0)
+            serialized = json.dumps(img_byte_arr.read().decode('latin-1'))
+            individual.image = serialized
+            img_byte_arr.close()
 
     # convert to json
     population_json = [individual.to_json() for individual in population]
@@ -73,7 +77,7 @@ def lambda_handler(event, context):
         data = event['body'] if 'body' in event else event
         if isinstance(data, str):
             # load the data to a json object
-            data = json.loads(data)
+            data = json.loads(data, strict=False)
         operation = data['operation']
 
         config = Config.create_from_json(data['config'])

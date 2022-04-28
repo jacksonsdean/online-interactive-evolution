@@ -51,12 +51,12 @@ class Node:
             self.activation = self.activation.__name__
         except AttributeError:
             pass
-        return json.dumps(self.__dict__, sort_keys=True, indent=4)
+        return json.dumps(self.__dict__)
 
     def from_json(self, json_dict):
         """Constructs a node from a json dict or string."""
         if isinstance(json_dict, str):
-            json_dict = json.loads(json_dict)
+            json_dict = json.loads(json_dict, strict=False)
         self.__dict__ = json_dict
         self.type = NodeType(self.type)
         self.activation = name_to_fn(self.activation)
@@ -101,12 +101,12 @@ class Connection:
         self.innovation = int(self.innovation)
         self.from_node = self.from_node.to_json()
         self.to_node = self.to_node.to_json()
-        return json.dumps(self.__dict__, sort_keys=True, indent=4)
+        return json.dumps(self.__dict__)
 
     def from_json(self, json_dict):
         """Constructs a connection from a json dict or string."""
         if isinstance(json_dict, str):
-            json_dict = json.loads(json_dict)
+            json_dict = json.loads(json_dict, strict=False)
         self.__dict__ = json_dict
         self.from_node = Node.create_from_json(self.from_node)
         self.to_node = Node.create_from_json(self.to_node)
@@ -215,6 +215,7 @@ class CPPN():
         img = self.image
         if img is not None:
             img = list(img)
+            img = json.dumps(img)
         return {"node_genome": [n.to_json() for n in self.node_genome], "connection_genome":\
             [c.to_json() for c in self.connection_genome], "image": img, "selected": self.selected}
 
