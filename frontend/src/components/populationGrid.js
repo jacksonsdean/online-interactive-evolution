@@ -35,7 +35,8 @@ class PopulationGrid extends React.Component {
                     return Promise.reject(response.status);
                 }
             }
-            )
+            ).catch((error) => {
+                console.log("Error: " + error);})
             .then((data) => {
                 if ("body" in data && typeof data.body !== "object") {
                     data =JSON.parse(data["body"]);
