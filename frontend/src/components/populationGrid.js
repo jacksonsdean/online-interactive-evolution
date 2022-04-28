@@ -57,7 +57,7 @@ class PopulationGrid extends React.Component {
         // list of all the population ids
         return (<div>
             <ul>
-                {this.state.population.map(obj, index=> <li key={index}> <IndividualButton name={index} image={i["image"]}></IndividualButton> </li>)}
+                {this.state.population.map((obj, index)=> <li key={index}> <IndividualButton name={index} image={obj["image"]}></IndividualButton> </li>)}
             </ul>
         </div>
         );
