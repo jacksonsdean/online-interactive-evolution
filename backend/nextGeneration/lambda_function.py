@@ -47,13 +47,6 @@ def next_generation(config, population_data):
 
 def lambda_handler(event, context):
     """Handle an incoming request from Next Generation."""
-    if event["httpMethod"] == "OPTIONS":
-        # Handle preflight request
-        return {
-            "statusCode": 200,
-            "headers": HEADERS
-        }
-
     body = None
     status = 200
     try:
