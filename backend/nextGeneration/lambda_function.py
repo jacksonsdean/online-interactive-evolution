@@ -1,9 +1,11 @@
 """Handler for Next Generation."""
+import base64
 from email.policy import strict
 import io
 import json
 import logging
 from PIL import Image
+import numpy as np
 
 try:
     from config import Config
@@ -23,6 +25,11 @@ def evaluate_population(population, config)->str:
         # evaluate the CPPN
         individual.get_image_data_fast_method(config.res_h, config.res_w)
 
+        # normalize 0-255 and convert to ints
+        individual.image = individual.image / np.max(individual.image)
+        individual.image = individual.image * 255
+        individual.image = individual.image.astype(np.uint8)
+
         # convert from numpy to bytes
         individual.image = Image.fromarray(individual.image)
         # convert to RGB if not RGB
@@ -30,9 +37,8 @@ def evaluate_population(population, config)->str:
             individual.image = individual.image.convert('RGB')
         with io.BytesIO() as img_byte_arr:
             individual.image.save(img_byte_arr, format='PNG')
-            img_byte_arr.seek(0)
-            serialized = str(img_byte_arr.getvalue())[2:-1]
-            individual.image = serialized
+            im_b64 = base64.b64encode(img_byte_arr.getvalue()).decode("utf8")
+            individual.image = im_b64
             img_byte_arr.close()
 
     # convert to json

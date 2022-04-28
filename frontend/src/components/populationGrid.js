@@ -6,18 +6,16 @@ const concat = (xs, ys) => xs.concat(ys);
 
 class IndividualButton extends React.Component {
     render() {
-        console.log(JSON.parse(this.props.individual.image))
-        console.log(typeof(JSON.parse(this.props.individual.image)))
         // create image from individual
         const parsed = JSON.parse(this.props.individual.image)
-        const bytesArray = btoa(String.fromCharCode.apply(null, parsed))
-        console.log(bytesArray)
+        // create blob from bytes
+        const blob = new Blob([], { type: "image/png" });
+        // create url from blob
+        const url = "data:image/png;base64,"+parsed.join("")
         return (
             <button className="individual-button" onClick={this.props.onClick}>
                 {this.props.individual.name}
-                {/* {this.props.image} */}
-                <img src={"data:image/png;base64," + bytesArray } alt={this.props.individual.name} />
-                {/* <img src={URL.createObjectURL(blob)} alt={this.props.individual.name} /> */}
+                <img src={url} alt={this.props.individual.name} />
             </button>
         )
     }
