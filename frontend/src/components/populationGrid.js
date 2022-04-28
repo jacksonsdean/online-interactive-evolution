@@ -37,8 +37,8 @@ class PopulationGrid extends React.Component {
             }
             ).catch((error) => {
                 console.log("Error: " + error);})
-            .then((data) => {
-                if ("body" in data && typeof data.body !== "object") {
+                .then((data) => {
+                    if ("body" in data && typeof data.body !== "object") {
                     data =JSON.parse(data["body"]);
                 }
                 console.log(data);
@@ -46,10 +46,12 @@ class PopulationGrid extends React.Component {
                 const pop = data["population"];
                 this.setState({ population: pop });
             })
+            .catch((error) => {
+                console.log("Error: " + error);})
     }
 
     render() {
-        if (typeof(this.state.population) === 'undefined' || (this.state.population.length === 0) {
+        if (typeof(this.state.population) === 'undefined' || this.state.population.length === 0) {
             return (<p>Please wait...</p>)
         }
         // list of all the population ids
