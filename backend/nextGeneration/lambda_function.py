@@ -31,7 +31,7 @@ def evaluate_population(population, config)->str:
         with io.BytesIO() as img_byte_arr:
             individual.image.save(img_byte_arr, format='PNG')
             img_byte_arr.seek(0)
-            serialized = json.dumps(img_byte_arr.read().decode('latin-1'))
+            serialized = str(img_byte_arr.getvalue())[2:-1]
             individual.image = serialized
             img_byte_arr.close()
 

@@ -2,13 +2,23 @@ import React from 'react';
 import { API_URL, INITIAL_REQUEST } from '../Constants';
 import { post } from '../util';
 
+const concat = (xs, ys) => xs.concat(ys);
+
 class IndividualButton extends React.Component {
     render() {
+        console.log(JSON.parse(this.props.individual.image))
+        console.log(typeof(JSON.parse(this.props.individual.image)))
+        // create image from individual
+        const parsed = JSON.parse(this.props.individual.image)
+        const bytesArray = btoa(String.fromCharCode.apply(null, parsed))
+        console.log(imageStr)
+        console.log(bytesArray)
         return (
             <button className="individual-button" onClick={this.props.onClick}>
                 {this.props.individual.name}
                 {/* {this.props.image} */}
-                <img src={"data:image/png;base64," + this.props.individual.image} alt={this.props.individual.name} />
+                <img src={"data:image/png;base64," + imageStr } alt={this.props.individual.name} />
+                {/* <img src={URL.createObjectURL(blob)} alt={this.props.individual.name} /> */}
             </button>
         )
     }
