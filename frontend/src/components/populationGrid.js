@@ -42,7 +42,6 @@ class PopulationGrid extends React.Component {
                     data =JSON.parse(data["body"]);
                 }
                 console.log(data);
-                // const pop = JSON.parse(data)
                 const pop = data["population"];
                 this.setState({ population: pop });
             })
@@ -56,9 +55,10 @@ class PopulationGrid extends React.Component {
         }
         // list of all the population ids
         return (<div>
-            <ul>
+            {/* <ul>
                 {this.state.population.map(i => <li key={i}> <IndividualButton name={i}></IndividualButton> </li>)}
-            </ul>
+            </ul> */}
+            <p>{this.state.population.toString()}</p>
         </div>
         );
     }
