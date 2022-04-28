@@ -2,15 +2,11 @@ import React from 'react';
 import { API_URL, INITIAL_REQUEST } from '../Constants';
 import { post } from '../util';
 
-const concat = (xs, ys) => xs.concat(ys);
-
 class IndividualButton extends React.Component {
     render() {
         // create image from individual
         const parsed = JSON.parse(this.props.individual.image)
-        // create blob from bytes
-        const blob = new Blob([], { type: "image/png" });
-        // create url from blob
+        // create url from base64 string
         const url = "data:image/png;base64,"+parsed.join("")
         return (
             <button className="individual-button" onClick={this.props.onClick}>
