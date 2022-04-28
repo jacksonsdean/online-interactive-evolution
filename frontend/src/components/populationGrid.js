@@ -8,6 +8,7 @@ class IndividualButton extends React.Component {
             <button className="individual-button" onClick={this.props.onClick}>
                 {/* <img src={this.props.image} alt={this.props.alt} /> */}
                 {this.props.name}
+                {this.props.image}
             </button>
         )
     }
@@ -55,10 +56,9 @@ class PopulationGrid extends React.Component {
         }
         // list of all the population ids
         return (<div>
-            {/* <ul>
-                {this.state.population.map(i => <li key={i}> <IndividualButton name={i}></IndividualButton> </li>)}
-            </ul> */}
-            <p>{this.state.population.toString()}</p>
+            <ul>
+                {this.state.population.map(obj, index=> <li key={index}> <IndividualButton name={index} image={i["image"]}></IndividualButton> </li>)}
+            </ul>
         </div>
         );
     }
