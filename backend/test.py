@@ -45,7 +45,8 @@ class TestLambdaFunction(unittest.TestCase):
         self.assertEqual(response['statusCode'], 200, "Status code is not 200")
         self.assertDictEqual(response['headers'],
                              HEADERS, "Incorrect headers received")
-        response_genomes = response['body']["population"]
+        response = json.loads(response['body'])
+        response_genomes = response["population"]
         self.assertEqual(len(response_genomes),
                          TEST_CONFIG['population_size'],
                          "Incorrect number of CPPNs in response")
@@ -58,7 +59,8 @@ class TestLambdaFunction(unittest.TestCase):
         self.assertEqual(response['statusCode'], 200, "Status code is not 200")
         self.assertDictEqual(response['headers'],
                              HEADERS, "Incorrect headers received")
-        response_genomes = response['body']["population"]
+        response = json.loads(response['body'])
+        response_genomes = response["population"]
         self.assertEqual(len(response_genomes),
                          TEST_CONFIG['population_size'],
                          "Incorrect number of CPPNs in response")
