@@ -212,7 +212,9 @@ class CPPN():
 
     def to_json(self):
         """Converts the CPPN to a json string."""
-        img = self.image.tolist() if self.image is not None else None
+        img = self.image
+        if img is not None:
+            img = list(img)
         return {"node_genome": [n.to_json() for n in self.node_genome], "connection_genome":\
             [c.to_json() for c in self.connection_genome], "image": img, "selected": self.selected}
 

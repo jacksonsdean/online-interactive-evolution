@@ -6,9 +6,9 @@ class IndividualButton extends React.Component {
     render() {
         return (
             <button className="individual-button" onClick={this.props.onClick}>
-                {/* <img src={this.props.image} alt={this.props.alt} /> */}
-                {this.props.name}
-                {this.props.image}
+                {this.props.individual.name}
+                {/* {this.props.image} */}
+                <img src={"data:image/png;base64," + this.props.individual.image} alt={this.props.individual.name} />
             </button>
         )
     }
@@ -54,10 +54,10 @@ class PopulationGrid extends React.Component {
         if (typeof(this.state.population) === 'undefined' || this.state.population.length === 0) {
             return (<p>Please wait...</p>)
         }
-        // list of all the population ids
+        // a grid of the population's individuals' images as buttons
         return (<div>
             <ul>
-                {this.state.population.map((obj, index)=> <li key={index}> <IndividualButton name={index} image={obj["image"]}></IndividualButton> </li>)}
+                {this.state.population.map((obj, index)=> <li key={index}> <IndividualButton individual={obj}></IndividualButton> </li>)}
             </ul>
         </div>
         );

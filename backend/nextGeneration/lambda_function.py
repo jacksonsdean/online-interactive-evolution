@@ -1,6 +1,9 @@
 """Handler for Next Generation."""
+import io
 import json
 import logging
+from PIL import Image
+
 try:
     from config import Config
     from cppn import CPPN
@@ -14,6 +17,26 @@ HEADERS = {
                 "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
         }
 
+def evaluate_population(population, config)->str:
+    for individual in population:
+        # evaluate the CPPN
+        individual.get_image_data_fast_method(config.res_h, config.res_w)
+
+        # convert from numpy to bytes
+        individual.image = Image.fromarray(individual.image)
+        # convert to RGB if not RGB
+        if individual.image.mode != 'RGB':
+            individual.image = individual.image.convert('RGB')
+        img_byte_arr = io.BytesIO()
+        individual.image.save(img_byte_arr, format='PNG')
+        individual.image = img_byte_arr.getvalue()
+
+    # convert to json
+    population_json = [individual.to_json() for individual in population]
+    json_data = {"config":config.to_json(), "population": population_json}
+    json_data = json.dumps(json_data)
+    return json_data
+
 def initial_population(config):
     """Create the initial population."""
     population = []
@@ -21,11 +44,8 @@ def initial_population(config):
     for _ in range(config.population_size):
         population.append(CPPN(config))
     # evaluate population
-    for individual in population:
-        individual.get_image_data_fast_method(config.res_h, config.res_w)
-    population_json = [individual.to_json() for individual in population]
-    json_data = {"config":config.to_json(), "population": population_json}
-    json_data = json.dumps(json_data)
+    json_data = evaluate_population(population, config)
+
     return json_data
 
 def next_generation(config, population_data):
@@ -39,11 +59,7 @@ def next_generation(config, population_data):
     for individual in population:
         individual.mutate()
     # evaluate population
-    for individual in population:
-        individual.get_image_data_fast_method(config.res_h, config.res_w)
-    population_json = [individual.to_json() for individual in population]
-    json_data = {"config":config.to_json(), "population": population_json}
-    json_data = json.dumps(json_data)
+    json_data = evaluate_population(population, config)
     return json_data
 
 
