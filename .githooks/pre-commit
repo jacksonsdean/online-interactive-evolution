@@ -65,7 +65,7 @@ cd "$REPO_DIR/backend"
 
 if [[ -z "$VIRTUAL_ENV" ]]; then
     echo "No VIRTUAL_ENV set"
-	python -m virualenv venv
+	python -m virtualenv venv
 	cp -r venv/Scripts venv/bin # fix to make virtualenv cross-platform
 	source venv/bin/activate
 	pip install -r requirements.txt
