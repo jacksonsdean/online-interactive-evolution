@@ -24,9 +24,14 @@ def tanh(x):
     y = np.tanh(2.5*x)
     return y
 
-# def sawtooth(x):
-#     """Returns the sawtooth of the input."""
-#     return signal.sawtooth(x*10)
+def sawtooth(x):
+    """Returns the sawtooth of the input."""
+    period = 2
+    amplitude = 2
+    section = period // 4
+    x = np.linspace(0, amplitude, section+1)
+    mx = -x
+    return np.r_[x, x[-2::-1], mx[1:], mx[-2:0:-1]]
 
 def tanh_sig(x):
     """Returns the sigmoid of the hyperbolic tangent of the input."""
