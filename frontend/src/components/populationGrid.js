@@ -11,13 +11,12 @@ class IndividualButton extends React.Component {
         // create image from individual
         const parsed = JSON.parse(this.props.individual.image)
         const bytesArray = btoa(String.fromCharCode.apply(null, parsed))
-        console.log(imageStr)
         console.log(bytesArray)
         return (
             <button className="individual-button" onClick={this.props.onClick}>
                 {this.props.individual.name}
                 {/* {this.props.image} */}
-                <img src={"data:image/png;base64," + imageStr } alt={this.props.individual.name} />
+                <img src={"data:image/png;base64," + bytesArray } alt={this.props.individual.name} />
                 {/* <img src={URL.createObjectURL(blob)} alt={this.props.individual.name} /> */}
             </button>
         )
