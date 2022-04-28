@@ -57,6 +57,8 @@ print(np.min(image_data), np.max(image_data))
 
 plt.imshow(image_data, cmap='gray', vmin = -1, vmax = 1)
 plt.show()
+#%%
+
 config.color_mode = "RGB"
 config.num_outputs = 3
 ims = []
@@ -81,7 +83,6 @@ node_genome.append(Node(tanh, NodeType.OUTPUT, id, layer)); id+=1
 layer=1
 node_genome.append(Node(gauss, NodeType.HIDDEN, id, layer)); id+=1
 node_genome.append(Node(sin, NodeType.HIDDEN, id, layer)); id+=1
-
 config = Config()
 config.color_mode = "RGB"
 cppn = CPPN(config, nodes=node_genome)

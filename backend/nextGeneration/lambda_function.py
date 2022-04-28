@@ -50,14 +50,15 @@ def lambda_handler(event, context):
     body = None
     status = 200
     try:
-        print("event:", event)
-        print("context:", context)
-        operation = event['operation']
-        config = Config.create_from_json(event['config'])
+        # print("event:", event)
+        # print("context:", context)
+        data = event['body']
+        operation = data['operation']
+        config = Config.create_from_json(data['config'])
         if operation == 'reset':
             body = initial_population(config)
         if operation == 'next_gen':
-            raw_pop = event['population']
+            raw_pop = data['population']
 
             body = next_generation(config, raw_pop)
 

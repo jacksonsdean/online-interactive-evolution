@@ -9,7 +9,7 @@ try:
 except ModuleNotFoundError:
     from activation_functions import identity
     from network_util import name_to_fn, choose_random_function, is_valid_connection
-    
+
 class NodeType(IntEnum):
     """Enum for the type of node."""
     INPUT  = 0
@@ -37,16 +37,16 @@ class Node:
         self.id = _id
         self.type = _type
         self.layer = _layer
-        self.sum_inputs = np.zeros(1)
-        self.outputs = np.zeros(1)
+        self.sum_inputs = None
+        self.outputs = None
 
     def to_json(self):
         """Converts the node to a json string."""
         self.type = int(self.type)
         self.id = int(self.id)
         self.layer = int(self.id)
-        self.sum_inputs = []
-        self.outputs = []
+        self.sum_inputs = np.array([]).tolist()
+        self.outputs = np.array([]).tolist()
         try:
             self.activation = self.activation.__name__
         except AttributeError:
@@ -540,13 +540,12 @@ class CPPN():
 
                 node.sum_inputs = np.zeros((res_h, res_w), dtype=np.float32)
                 if layer_index == 0:
-
                     node.sum_inputs += CPPN.pixel_inputs[:,:,min(i,self.n_inputs-1)]
+
                 for cx in node_inputs:
-                    if cx.from_node.outputs is not None:
+                    if cx.from_node.outputs is not None and len(cx.from_node.outputs)>1:
                         inputs = cx.from_node.outputs * cx.weight
                         node.sum_inputs = node.sum_inputs + inputs
-
                 node.outputs = node.activation(node.sum_inputs)  # apply activation
                 node.outputs = node.outputs.reshape((res_h, res_w))
 
