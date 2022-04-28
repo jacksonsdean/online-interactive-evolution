@@ -540,12 +540,13 @@ class CPPN():
 
                 node.sum_inputs = np.zeros((res_h, res_w), dtype=np.float32)
                 if layer_index == 0:
-                    node.sum_inputs += CPPN.pixel_inputs[:,:,min(i,self.n_inputs-1)]
 
+                    node.sum_inputs += CPPN.pixel_inputs[:,:,min(i,self.n_inputs-1)]
                 for cx in node_inputs:
-                    if cx.from_node.outputs is not None and len(cx.from_node.outputs)>1:
+                    if cx.from_node.outputs is not None:
                         inputs = cx.from_node.outputs * cx.weight
                         node.sum_inputs = node.sum_inputs + inputs
+
                 node.outputs = node.activation(node.sum_inputs)  # apply activation
                 node.outputs = node.outputs.reshape((res_h, res_w))
 
