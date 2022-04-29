@@ -61,7 +61,9 @@ def initial_population(config):
 def next_generation(config, population_data):
     """Create the next generation."""
     population = []
-
+    if population_data is None or len(population_data) == 0:
+        # return an initial population
+        return initial_population(config)
     # create population
     for individual in population_data:
         population.append(CPPN.create_from_json(individual, config))

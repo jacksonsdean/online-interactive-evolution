@@ -222,6 +222,7 @@ class CPPN():
     def from_json(self, json_dict):
         """Constructs a CPPN from a json dict or string."""
         if isinstance(json_dict, str):
+            print("parsing:", json_dict)
             json_dict = json.loads(json_dict, strict=False)
         for k, v in json_dict.items():
             setattr(self, k, v)
