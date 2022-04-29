@@ -67,6 +67,7 @@ def next_generation(config, population_data):
     # create population
     for individual in population_data:
         population.append(CPPN.create_from_json(individual, config))
+
     # build list of selected individuals
     selected = list(filter(lambda x: x.selected, population))
 
@@ -101,8 +102,9 @@ def lambda_handler(event, context):
     body = None
     status = 200
     try:
-        logging.debug(f"event: {event}")
-        logging.debug(f"context: {context}")
+        logging.debug("event: %s" % event)
+        logging.debug("context: %s" % context)
+
         data = event['body'] if 'body' in event else event
         if isinstance(data, str):
             # load the data to a json object
