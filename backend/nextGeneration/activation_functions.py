@@ -88,6 +88,10 @@ def sawtooth(t, width=1):
     np.place(y, mask3, (math.pi * (wsub + 1) - tsub) / (math.pi * (1 - wsub)))
     return y
 
+def relu(x):
+    """Returns the rectified linear unit of the input."""
+    return x * (x > 0)
+
 def tanh_sig(x):
     """Returns the sigmoid of the hyperbolic tangent of the input."""
     return sigmoid(tanh(x))
