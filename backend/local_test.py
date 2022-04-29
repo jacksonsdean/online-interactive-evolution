@@ -20,9 +20,8 @@ def test():
     return lambda_handler(request.get_json(), None)
 
 def run_server():
-    """Create and run a local server for testing"""
-    global server
-    server.run()
+    """Run a local server for testing"""
+    server.run(host='0.0.0.0',port=5000)
 
 if __name__ == "__main__":
     run_server()

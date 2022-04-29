@@ -69,12 +69,22 @@ def next_generation(config, population_data):
         population.append(CPPN.create_from_json(individual, config))
     # build list of selected individuals
     selected = list(filter(lambda x: x.selected, population))
-    # mutate selected
+
+    # replace the unselected individuals with new individuals
     for index, _ in enumerate(population):
         if not population[index].selected:
-            # replace with a mutated version of a random selected individual
-            random_parent = np.random.choice(selected)
-            population[index] = copy.deepcopy(random_parent) # make a copy
+            do_crossover = config.do_crossover and np.random.random() < .15
+            if do_crossover:
+                # crossover two selected individuals
+                parent1 = np.random.choice(selected)
+                parent2 = np.random.choice(selected)
+                population[index] = parent1.crossover(parent2)
+            else:
+                # replace with a mutated version of a random selected individual
+                random_parent = np.random.choice(selected)
+                population[index] = copy.deepcopy(random_parent) # make a copy
+
+            # mutate
             population[index].mutate()
             population[index].selected = False # deselect
 

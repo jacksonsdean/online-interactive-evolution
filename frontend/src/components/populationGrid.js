@@ -53,10 +53,15 @@ class PopulationGrid extends Grid {
         if ("body" in data && typeof data.body !== "object") {
             data = JSON.parse(data["body"]);
         }
-        console.log(data);
+        if (data.error) {
+            console.log(data.error)
+            return;
+        }
         const pop = data["population"];
-
-        // sort by selected
+        if (pop === 'undefined' || pop.length === 0) {
+           return
+        }
+        // put selected individuals in front
         pop.sort((a, b) => {
             if (a.selected && !b.selected) {
                 return -1;
@@ -71,7 +76,6 @@ class PopulationGrid extends Grid {
         for (let i = 0; i < pop.length; i++) {
             pop[i].selected = false;
         }
-        console.log(pop);
         this.setState({ population: pop, loading: false });
     }
 

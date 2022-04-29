@@ -4,10 +4,14 @@ from enum import IntEnum
 import math
 import json
 import numpy as np
+
+
 try:
+    from nextGeneration.network_util import get_matching_connections, find_node_with_id
     from nextGeneration.activation_functions import identity
     from nextGeneration.network_util import name_to_fn, choose_random_function, is_valid_connection
 except ModuleNotFoundError:
+    from network_util import get_matching_connections, find_node_with_id
     from activation_functions import identity
     from network_util import name_to_fn, choose_random_function, is_valid_connection
 
@@ -235,8 +239,8 @@ class CPPN():
             self.node_genome[i] = Node.create_from_json(n)
 
         for cx in self.connection_genome:
-            cx.from_node = self.node_genome[cx.from_node.id]
-            cx.to_node = self.node_genome[cx.to_node.id]
+            cx.from_node = find_node_with_id(self.node_genome, cx.from_node.id)
+            cx.to_node = find_node_with_id(self.node_genome, cx.to_node.id)
 
         self.update_node_layers()
         CPPN.initialize_inputs(self.config.res_h, self.config.res_w,
@@ -581,17 +585,49 @@ class CPPN():
         self.image = outputs
         return outputs
 
-    def reset_activations(self):
-        """Reset activations to 0"""
-        for node in self.node_genome:
-            node.outputs = np.zeros((self.config.train_image.shape[0],
-                self.config.train_image.shape[1]), dtype=np.float16)
-            node.sum_inputs = np.zeros((self.config.train_image.shape[0],
-                self.config.train_image.shape[1]), dtype=np.float16)
+    def crossover(self, other_parent):
+        """Crossover with another CPPN using the method in Stanley and Miikkulainen (2007)."""
+        child = CPPN(self.config) # create child
 
-    def construct_from_lists(self, nodes, connections):
-        """Construct a network from lists of nodes and connections"""
-        self.node_genome = [Node(name_to_fn(n[0]), NodeType(n[1]), i) for i, n in enumerate(nodes)]
-        self.connection_genome = [Connection(self.node_genome[c[0]],
-            self.node_genome[c[1]], c[2], c[3]) for c in connections]
-        self.update_node_layers()
+        # disjoint/excess genes are inherited from first parent
+        child.node_genome = copy.deepcopy(self.node_genome)
+        child.connection_genome = copy.deepcopy(self.connection_genome)
+
+        # line up by innovation number and find matches
+        child.connection_genome.sort(key=lambda x: x.innovation)
+        matching1, matching2 = get_matching_connections(
+            self.connection_genome, other_parent.connection_genome)
+
+        for match_index, _ in enumerate(matching1):
+            child_cx = child.connection_genome[[x.innovation\
+                for x in child.connection_genome].index(
+                matching1[match_index].innovation)]
+
+            # Matching genes are inherited randomly
+            inherit_from_parent_1 = np.random.rand() < .5
+            if inherit_from_parent_1:
+                child_cx.weight = matching1[match_index].weight
+                new_from = copy.deepcopy(matching1[match_index].from_node)
+                new_to = copy.deepcopy(matching1[match_index].to_node)
+            else:
+                child_cx.weight = matching2[match_index].weight
+                new_from = copy.deepcopy(matching2[match_index].from_node)
+                new_to = copy.deepcopy(matching2[match_index].to_node)
+
+            # assign new nodes and connections
+            child_cx.from_node = new_from
+            child_cx.to_node = new_to
+            existing = find_node_with_id(child.node_genome, new_from.id)
+            index_existing = child.node_genome.index(existing)
+            child.node_genome[index_existing] = new_from
+            existing = find_node_with_id(child.node_genome, new_to.id)
+            index_existing = child.node_genome.index(existing)
+            child.node_genome[index_existing] = new_to
+
+            if(not matching1[match_index].enabled or not matching2[match_index].enabled):
+                if np.random.rand() < 0.75:  # 0.75 from Stanley/Miikulainen 2007
+                    child.connection_genome[match_index].enabled = False
+
+        child.update_node_layers()
+
+        return child

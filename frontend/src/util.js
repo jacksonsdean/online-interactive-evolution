@@ -23,12 +23,10 @@ export function nextGeneration(currentPopulation, config) {
     for (let i = 0; i < population.length; i++) {
         population[i].image = 'undefined'
     }
-    console.log(currentPopulation)
     postData.population = population
     postData.config = config
     return new Promise((resolve, reject) => {
         post(API_URL, postData).then((response) => {
-            console.log(response)
             if (response.status === 200) {
                 resolve(response.json())
             }
@@ -49,7 +47,6 @@ export function initialPopulation(config) {
     postData.config = config
     return new Promise((resolve, reject) => {
         post(API_URL, postData).then((response) => {
-            console.log(response)
             if (response.status === 200) {
                 resolve(response.json())
             }

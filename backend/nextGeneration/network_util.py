@@ -44,3 +44,33 @@ def choose_random_function(config) -> callable:
     """Chooses a random activation function from the activation function module."""
     random_fn = random.choice(config.activations)
     return random_fn
+
+
+def get_disjoint_connections(this_cxs, other_innovation):
+    """returns connections in this_cxs that do not share an innovation number with a
+        connection in other_innovation"""
+    if(len(this_cxs) == 0 or len(other_innovation) == 0):
+        return []
+    return [t_cx for t_cx in this_cxs if (t_cx.innovation not in other_innovation and t_cx.innovation < other_innovation[-1])]
+
+
+def get_excess_connections(this_cxs, other_innovation):
+    """returns connections in this_cxs that share an innovation number with a
+        connection in other_innovation"""
+    if(len(this_cxs) == 0 or len(other_innovation) == 0):
+        return []
+    return [t_cx for t_cx in this_cxs if (t_cx.innovation not in other_innovation and t_cx.innovation > other_innovation[-1])]
+
+def get_matching_connections(cxs_1, cxs_2):
+    """returns connections in cxs_1 that share an innovation number with a connection in cxs_2
+       and     connections in cxs_2 that share an innovation number with a connection in cxs_1"""
+    return sorted([c1 for c1 in cxs_1 if c1.innovation in [c2.innovation for c2 in cxs_2]], key=lambda x: x.innovation),\
+        sorted([c2 for c2 in cxs_2 if c2.innovation in [
+               c1.innovation for c1 in cxs_1]], key=lambda x: x.innovation)
+
+def find_node_with_id(nodes, id):
+    """Returns the node with the given id from the list of nodes"""
+    for node in nodes:
+        if node.id == id:
+            return node
+    return None
