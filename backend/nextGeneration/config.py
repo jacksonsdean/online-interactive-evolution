@@ -86,7 +86,6 @@ class Config:
         """Creates a configuration from a json string."""
         if isinstance(json_str, str):
             json_str = json.loads(json_str)
-        print(json_str)
         config = Config()
         for key, value in json_str.items():
             setattr(config, key, value)

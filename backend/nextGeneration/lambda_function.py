@@ -91,8 +91,8 @@ def lambda_handler(event, context):
     body = None
     status = 200
     try:
-        print("event:", event)
-        print("context:", context)
+        logging.debug(f"event: {event}")
+        logging.debug(f"context: {context}")
         data = event['body'] if 'body' in event else event
         if isinstance(data, str):
             # load the data to a json object

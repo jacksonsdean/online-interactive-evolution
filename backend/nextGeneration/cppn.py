@@ -1,4 +1,5 @@
 """Contains the CPPN, Node, and Connection classes."""
+import copy
 from enum import IntEnum
 import math
 import json
@@ -32,7 +33,7 @@ class Node:
         """Returns an empty node."""
         return Node(identity, NodeType.HIDDEN, 0, 0)
 
-    def __init__(self, activation, _type, _id, _layer=2) -> None:
+    def __init__(self, activation, _type, _id, _layer=999) -> None:
         self.activation = activation
         self.id = _id
         self.type = _type
@@ -127,7 +128,7 @@ class Connection:
         return self.__repr__()
     def __repr__(self):
         return f"([{self.from_node.id}->{self.to_node.id}]"+\
-            f"I:{self.innovation} W:{self.weight:3f})"
+            f"I:{self.innovation} W:{self.weight:3f} E:{self.enabled} R:{self.is_recurrent})"
 
 
 class CPPN():
@@ -218,8 +219,11 @@ class CPPN():
         if img is not None:
             img = list(img)
             img = json.dumps(img)
-        return {"node_genome": [n.to_json() for n in self.node_genome], "connection_genome":\
-            [c.to_json() for c in self.connection_genome], "image": img, "selected": self.selected}
+        # make copies to keep the CPPN intact
+        copy_of_nodes = copy.deepcopy(self.node_genome)
+        copy_of_connections = copy.deepcopy(self.connection_genome)
+        return {"node_genome": [n.to_json() for n in copy_of_nodes], "connection_genome":\
+            [c.to_json() for c in copy_of_connections], "image": img, "selected": self.selected}
 
     def from_json(self, json_dict):
         """Constructs a CPPN from a json dict or string."""
@@ -333,7 +337,7 @@ class CPPN():
             return
         old = np.random.choice(eligible_cxs)
         new_node = Node(choose_random_function(self.config),
-                        NodeType.HIDDEN, self.get_new_node_id())
+                        NodeType.HIDDEN, self.get_new_node_id(), 999)
         self.node_genome.append(new_node)  # add a new node between two nodes
         old.enabled = False  # disable old connection
 
@@ -341,20 +345,16 @@ class CPPN():
         # new node is given a weight of one and the connection between
         # the new node and the last node in the chain
         # is given the same weight as the connection being split
-
         self.connection_genome.append(Connection(
             self.node_genome[old.from_node.id],
             self.node_genome[new_node.id],
-            self.random_weight()))
+            1.0))
 
-        # shouldn't be necessary
-        self.connection_genome[-1].from_node = self.node_genome[old.from_node.id]
-        self.connection_genome[-1].to_node = self.node_genome[new_node.id]
         self.connection_genome.append(Connection(
-            self.node_genome[new_node.id],     self.node_genome[old.to_node.id], old.weight))
+            self.node_genome[new_node.id],
+            self.node_genome[old.to_node.id],
+            old.weight))
 
-        self.connection_genome[-1].from_node = self.node_genome[new_node.id]
-        self.connection_genome[-1].to_node = self.node_genome[old.to_node.id]
 
         self.update_node_layers()
 
@@ -388,7 +388,7 @@ class CPPN():
         cx.enabled = False
 
     def update_node_layers(self) -> int:
-        """Update the node layers."""
+        """Update the node layers using  recursive algorithm."""
         # layer = number of edges in longest path between this node and input
         def get_node_to_input_len(current_node, current_path=0, longest_path=0, attempts=0):
             if attempts > 1000:
@@ -396,11 +396,12 @@ class CPPN():
                 return longest_path
             # use recursion to find longest path
             if current_node.type == NodeType.INPUT:
+                # stop at input nodes
                 return current_path
-            all_inputs = [
+            inputs_to_this_node = [
                 cx for cx in self.connection_genome if\
                     not cx.is_recurrent and cx.to_node.id == current_node.id]
-            for inp_cx in all_inputs:
+            for inp_cx in inputs_to_this_node:
                 this_len = get_node_to_input_len(
                     inp_cx.from_node, current_path+1, attempts+1)
                 if this_len >= longest_path:
@@ -409,10 +410,12 @@ class CPPN():
 
         highest_hidden_layer = 1
         for node in self.hidden_nodes():
+            # calculate the layer of this node
             node.layer = get_node_to_input_len(node)
             highest_hidden_layer = max(node.layer, highest_hidden_layer)
 
         for node in self.output_nodes():
+            # output nodes are always in the highest layer
             node.layer = highest_hidden_layer+1
 
     def input_nodes(self) -> list:
@@ -446,6 +449,14 @@ class CPPN():
         for node in self.node_genome:
             if node.layer == layer_index:
                 yield node
+
+    def get_layers(self):
+        """Returns a list of lists of nodes in each layer."""
+        output_layer = self.node_genome[self.n_inputs].layer
+        layers = [[] for _ in range(output_layer+1)]
+        for node in self.node_genome:
+            layers[node.layer].append(node)
+        return layers
 
     def clamp_weights(self):
         """Clamps all weights to the range [-max_weight, max_weight]."""
