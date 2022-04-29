@@ -6,9 +6,25 @@ export function post(url, data) {
 }
 
 export function nextGeneration(currentPopulation, config) {
+    let at_least_one_selected = false;
+    for (let i = 0; i < currentPopulation.length; i++) {
+        if (currentPopulation[i].selected) {
+            at_least_one_selected = true;
+            break;
+        }
+    }
+    if (!at_least_one_selected) {
+        return Promise.reject("No individuals selected");
+    }
     const postData = POST_FORMAT
     postData.operation = NEXT_GEN_OPERATION
-    postData.population = JSON.stringify(currentPopulation)
+    let population = JSON.parse(JSON.stringify(currentPopulation)); // clone
+    // clear out images
+    for (let i = 0; i < population.length; i++) {
+        population[i].image = 'undefined'
+    }
+    console.log(currentPopulation)
+    postData.population = population
     postData.config = config
     return new Promise((resolve, reject) => {
         post(API_URL, postData).then((response) => {

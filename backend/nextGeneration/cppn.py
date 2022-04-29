@@ -99,8 +99,10 @@ class Connection:
     def to_json(self):
         """Converts the connection to a json string."""
         self.innovation = int(self.innovation)
-        self.from_node = self.from_node.to_json()
-        self.to_node = self.to_node.to_json()
+        if isinstance(self.from_node, Node):
+            self.from_node = self.from_node.to_json()
+        if isinstance(self.to_node, Node):
+            self.to_node = self.to_node.to_json()
         return json.dumps(self.__dict__)
 
     def from_json(self, json_dict):
@@ -216,6 +218,11 @@ class CPPN():
         if img is not None:
             img = list(img)
             img = json.dumps(img)
+        print()
+        print()
+        print()
+        print()
+        print(self.selected)
         return {"node_genome": [n.to_json() for n in self.node_genome], "connection_genome":\
             [c.to_json() for c in self.connection_genome], "image": img, "selected": self.selected}
 
@@ -226,6 +233,7 @@ class CPPN():
             json_dict = json.loads(json_dict, strict=False)
         for k, v in json_dict.items():
             setattr(self, k, v)
+        self.selected = json_dict["selected"]
         for i, cx in enumerate(self.connection_genome):
             self.connection_genome[i] = Connection.create_from_json(cx)
         for i, n in enumerate(self.node_genome):
