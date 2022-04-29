@@ -96,6 +96,30 @@ def tanh_sig(x):
     """Returns the sigmoid of the hyperbolic tangent of the input."""
     return sigmoid(tanh(x))
 
+def pulse(x):
+    """Return the pulse fn of the input."""
+    return 2*(x % 1 < .5) -1
+
+
+def hat(x):
+    """Returns the hat function of the input."""
+    try:
+        x = 1.0 - np.abs(x)
+        x= np.clip(x, 0, 1)
+        return x
+    except Exception as e:
+        print(e)
+        return max(0.0, 1 - abs(x)) # not arrays
+
+def round_activation(x):
+    """return round(x)"""
+    return np.round(x) # arrays
+
+
+def elu(x):
+    """Returns the exponential linear unit of the input."""
+    return [xi if xi > 0.0 else math.exp(xi) - 1 for xi in x] # array
+
 def sin(x):
     """Returns the sine of the input."""
     y =  np.sin(x*math.pi)
