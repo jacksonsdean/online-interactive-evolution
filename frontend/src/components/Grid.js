@@ -3,11 +3,6 @@ import * as React from "react";
 import styles from "./Grid.module.css";
 
 class Grid extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const isRow = this.props.row || !this.column;
 

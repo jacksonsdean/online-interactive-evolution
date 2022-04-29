@@ -1,14 +1,12 @@
 """To test the backend interactively"""
 #%%
 import json
+import numpy as np
 from multiprocessing import Process
 import time
 import matplotlib.pyplot as plt
-from nextGeneration.lambda_function import lambda_handler
-from local_test import run_server
-from test import TEST_RESET_EVENT
 from skimage.color import hsv2rgb
-import numpy as np
+from test import TEST_RESET_EVENT
 from nextGeneration.activation_functions import gauss, identity, sin, tanh
 from nextGeneration.config import Config
 from nextGeneration.cppn import CPPN, Node, NodeType
@@ -19,7 +17,7 @@ def show_images(imgs, color_mode="L", titles=[], height=10):
     fig = plt.figure(figsize=(20, height))
     for i, image in enumerate(imgs):
         ax = fig.add_subplot(num_imgs//5 +1, 5, i+1)
-        if(len(titles)> 0):
+        if len(titles)> 0:
             ax.set_title(titles[i])
         else:
             ax.set_title(f"{i}")
@@ -31,20 +29,20 @@ def show_image(img, color_mode, ax = None):
     plt.xticks([])
     plt.yticks([])
     plt.tight_layout()
-    if(color_mode == 'L'):
-        if(ax==None):
+    if color_mode == 'L':
+        if ax==None:
             plt.imshow(img, cmap=plt.get_cmap('gray'), vmin=-1, vmax=1)
         else:
             ax.imshow(img, cmap=plt.get_cmap('gray'), vmin=-1, vmax=1)
 
-    elif(color_mode == "HSL"):
+    elif color_mode == "HSL":
         img = hsv2rgb(img)
-        if(ax==None):
+        if ax==None:
             plt.imshow(img, cmap=plt.get_cmap('gray'), vmin=-1, vmax=1)
         else:
             ax.imshow(img)
     else:
-        if(ax==None):
+        if ax==None:
             plt.imshow(img,cmap=plt.get_cmap('gray'), vmin=-1, vmax=1)
         else:
             ax.imshow(img)
@@ -70,19 +68,19 @@ show_images(ims, color_mode="RGB")
 plt.show()
 #%%
 node_genome = []
-id = 0
+curr_id = 0
 layer = 0
-node_genome.append(Node(identity, NodeType.INPUT, id, layer)); id+=1
-node_genome.append(Node(identity, NodeType.INPUT, id, layer)); id+=1
-node_genome.append(Node(identity, NodeType.INPUT, id, layer)); id+=1
-node_genome.append(Node(identity, NodeType.HIDDEN, id, layer)); id+=1
+node_genome.append(Node(identity, NodeType.INPUT, curr_id, layer)); curr_id+=1
+node_genome.append(Node(identity, NodeType.INPUT, curr_id, layer)); curr_id+=1
+node_genome.append(Node(identity, NodeType.INPUT, curr_id, layer)); curr_id+=1
+node_genome.append(Node(identity, NodeType.HIDDEN, curr_id, layer)); curr_id+=1
 layer=2
-node_genome.append(Node(tanh, NodeType.OUTPUT, id, layer)); id+=1
-node_genome.append(Node(tanh, NodeType.OUTPUT, id, layer)); id+=1
-node_genome.append(Node(tanh, NodeType.OUTPUT, id, layer)); id+=1
+node_genome.append(Node(tanh, NodeType.OUTPUT, curr_id, layer)); curr_id+=1
+node_genome.append(Node(tanh, NodeType.OUTPUT, curr_id, layer)); curr_id+=1
+node_genome.append(Node(tanh, NodeType.OUTPUT, curr_id, layer)); curr_id+=1
 layer=1
-node_genome.append(Node(gauss, NodeType.HIDDEN, id, layer)); id+=1
-node_genome.append(Node(sin, NodeType.HIDDEN, id, layer)); id+=1
+node_genome.append(Node(gauss, NodeType.HIDDEN, curr_id, layer)); curr_id+=1
+node_genome.append(Node(sin, NodeType.HIDDEN, curr_id, layer)); curr_id+=1
 config = Config()
 config.color_mode = "RGB"
 cppn = CPPN(config, nodes=node_genome)
@@ -112,4 +110,3 @@ for indiv in obj["population"]:
     imgs.append(img)
 show_images(imgs, color_mode="RGB")
 # server_process.terminate()  # kill test server
-

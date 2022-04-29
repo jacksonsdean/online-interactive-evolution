@@ -63,7 +63,7 @@ def sawtooth(t, width=1):
         ytype = t.dtype.char
     else:
         ytype = 'd'
-    y = np.zeros(t.shape, ytype)
+    y = np.zeros(t.shape, dtype=t.dtype)
 
     # width must be between 0 and 1 inclusive
     mask1 = (w > 1) | (w < 0)

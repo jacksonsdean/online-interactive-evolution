@@ -134,13 +134,13 @@ class Connection:
 class CPPN():
     """A CPPN Object with Nodes and Connections."""
 
-    pixel_inputs = np.zeros((0,0))
+    pixel_inputs = np.zeros((0,0), dtype=np.float16)
     @staticmethod
     def initialize_inputs(res_h, res_w, use_radial_dist, use_bias, n_inputs):
         """Initializes the pixel inputs."""
         x_vals = np.linspace(-.5, .5, res_w)
         y_vals = np.linspace(-.5, .5, res_h)
-        CPPN.pixel_inputs = np.zeros((res_h, res_w, n_inputs), dtype=np.float32)
+        CPPN.pixel_inputs = np.zeros((res_h, res_w, n_inputs), dtype=np.float16)
         for y in range(res_h):
             for x in range(res_w):
                 this_pixel = [y_vals[y], x_vals[x]] # coordinates
@@ -151,22 +151,18 @@ class CPPN():
                     this_pixel.append(1.0)# bias = 1.0
                 CPPN.pixel_inputs[y][x] = this_pixel
 
-    def __init__(self, config=None, nodes = None, connections = None) -> None:
+    def __init__(self, config, nodes = None, connections = None) -> None:
         self.image = None
         self.node_genome = []  # inputs first, then outputs, then hidden
         self.connection_genome = []
         self.selected = False
 
-
-        if config is None:
-            return
-
-        self.n_inputs = 2
-        self.n_outputs = len(config.color_mode)
+        self.n_inputs = 2 # x, y
         if config.use_radial_distance:
             self.n_inputs += 1
         if config.use_input_bias:
             self.n_inputs+=1
+        self.n_outputs = len(config.color_mode)
 
         self.config = config
 
@@ -178,6 +174,8 @@ class CPPN():
             self.initialize_connection_genome()
         else:
             self.connection_genome = connections
+
+
 
     def initialize_connection_genome(self):
         """Initializes the connection genome."""
@@ -241,6 +239,10 @@ class CPPN():
             cx.to_node = self.node_genome[cx.to_node.id]
 
         self.update_node_layers()
+        CPPN.initialize_inputs(self.config.res_h, self.config.res_w,
+                self.config.use_radial_distance,
+                self.config.use_input_bias,
+                self.n_inputs)
 
     @staticmethod
     def create_from_json(json_dict, config):
@@ -396,6 +398,7 @@ class CPPN():
                 return longest_path
             # use recursion to find longest path
             if current_node.type == NodeType.INPUT:
+                current_node.layer = 0
                 # stop at input nodes
                 return current_path
             inputs_to_this_node = [
@@ -420,16 +423,15 @@ class CPPN():
 
     def input_nodes(self) -> list:
         """Returns a list of all input nodes."""
-        return self.node_genome[0:self.n_inputs]
+        return list(filter(lambda n: n.type == NodeType.INPUT, self.node_genome))
 
     def output_nodes(self) -> list:
         """Returns a list of all output nodes."""
-        return self.node_genome[self.n_inputs:self.n_inputs+\
-            self.n_outputs]
+        return list(filter(lambda n: n.type == NodeType.OUTPUT, self.node_genome))
 
     def hidden_nodes(self) -> list:
         """Returns a list of all hidden nodes."""
-        return self.node_genome[self.n_inputs+self.n_outputs:]
+        return list(filter(lambda n: n.type == NodeType.HIDDEN, self.node_genome))
 
     def set_inputs(self, inputs):
         """Sets the input neurons outputs to the input values."""
@@ -452,9 +454,10 @@ class CPPN():
 
     def get_layers(self):
         """Returns a list of lists of nodes in each layer."""
-        output_layer = self.node_genome[self.n_inputs].layer
-        layers = [[] for _ in range(output_layer+1)]
+        layers = {}
         for node in self.node_genome:
+            if node.layer not in layers:
+                layers[node.layer] = []
             layers[node.layer].append(node)
         return layers
 
@@ -537,10 +540,11 @@ class CPPN():
             self.image = self.get_image_data_fast_method(res_x, res_y)
         return self.image
 
-    def get_image_data_fast_method(self, res_h, res_w):
+    def get_image_data_fast_method(self):
         """Evaluate the network to get image data in parallel"""
+        # initialize inputs if resolution changed
+        res_h, res_w = self.config.res_h, self.config.res_w
         if CPPN.pixel_inputs is None or CPPN.pixel_inputs.shape != (res_h,res_w):
-            # lazy initialization
             CPPN.initialize_inputs(res_h, res_w,
                 self.config.use_radial_distance,
                 self.config.use_input_bias,
@@ -556,10 +560,10 @@ class CPPN():
                     filter(lambda x, n=node: x.to_node.id == n.id,
                         self.enabled_connections()))  # cxs that end here
 
-                node.sum_inputs = np.zeros((res_h, res_w), dtype=np.float32)
+                node.sum_inputs = np.zeros((res_h, res_w), dtype=np.float16)
                 if layer_index == 0:
-
                     node.sum_inputs += CPPN.pixel_inputs[:,:,min(i,self.n_inputs-1)]
+
                 for cx in node_inputs:
                     if cx.from_node.outputs is not None:
                         inputs = cx.from_node.outputs * cx.weight
@@ -580,9 +584,9 @@ class CPPN():
         """Reset activations to 0"""
         for node in self.node_genome:
             node.outputs = np.zeros((self.config.train_image.shape[0],
-                self.config.train_image.shape[1]))
+                self.config.train_image.shape[1]), dtype=np.float16)
             node.sum_inputs = np.zeros((self.config.train_image.shape[0],
-                self.config.train_image.shape[1]))
+                self.config.train_image.shape[1]), dtype=np.float16)
 
     def construct_from_lists(self, nodes, connections):
         """Construct a network from lists of nodes and connections"""

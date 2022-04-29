@@ -33,11 +33,6 @@ class IndividualButton extends React.Component {
 }
 
 class NextGenerationButton extends React.Component {
-
-    constructor(props) {
-        super(props)
-    }
-
     render() {
         return (
             <button className={styles.nextGenButton + " " + (this.props.loading ? styles.loading:"")} onClick={this.props.onClick} disabled={this.props.loading}>

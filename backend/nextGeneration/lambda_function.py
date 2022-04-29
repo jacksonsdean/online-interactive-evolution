@@ -23,7 +23,7 @@ HEADERS = {
 def evaluate_population(population, config)->str:
     for individual in population:
         # evaluate the CPPN
-        individual.get_image_data_fast_method(config.res_h, config.res_w)
+        individual.get_image_data_fast_method()
 
         # normalize 0-255 and convert to ints
         individual.image = individual.image / np.max(individual.image)
@@ -111,7 +111,7 @@ def lambda_handler(event, context):
         print("ERROR while handling lambda:", type(e), e)
         status = 500
         body = json.dumps(f"error in lambda: {type(e)}: {e}")
-        logging.exception(e)
+        logging.exception(e) # okay to disable broad-except
 
     return {
             'statusCode': status,
