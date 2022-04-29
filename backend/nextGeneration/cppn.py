@@ -510,34 +510,35 @@ class CPPN():
 
         return [node.output for node in self.output_nodes()]
 
-    def get_image_data(self, res_x, res_y):
+    def get_image_data(self):
         """Evaluate the network to get image data"""
+        res_h, res_w = self.config.res_h, self.config.res_w
         pixels = []
-        for x in np.linspace(-.5, .5, res_x):
-            for y in np.linspace(-.5, .5, res_y):
+        for x in np.linspace(-.5, .5, res_w):
+            for y in np.linspace(-.5, .5, res_h):
                 outputs = self.eval([x, y])
                 pixels.extend(outputs)
         if len(self.config.color_mode)>2:
-            pixels = np.reshape(pixels, (res_x, res_y, self.n_outputs))
+            pixels = np.reshape(pixels, (res_w, res_h, self.n_outputs))
         else:
-            pixels = np.reshape(pixels, (res_x, res_y))
+            pixels = np.reshape(pixels, (res_w, res_h))
 
         self.image = pixels
         return pixels
 
-    def get_image(self, res_x, res_y, force_recalculate=False):
+    def get_image(self, force_recalculate=False):
         """Returns an image of the network."""
         if not force_recalculate and self.image is not None and\
-            res_x == self.image.shape[0] and\
-            res_y == self.image.shape[1]:
+            self.config.res_h == self.image.shape[0] and\
+            self.config.res_w == self.image.shape[1]:
             return self.image
 
         if self.config.allow_recurrent:
             # pixel by pixel (good for debugging)
-            self.image = self.get_image_data(res_x, res_y)
+            self.image = self.get_image_data()
         else:
             # whole image at once (100s of times faster)
-            self.image = self.get_image_data_fast_method(res_x, res_y)
+            self.image = self.get_image_data_fast_method()
         return self.image
 
     def get_image_data_fast_method(self):
