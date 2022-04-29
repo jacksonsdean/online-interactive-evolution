@@ -69,6 +69,13 @@ class TestLambdaFunction(unittest.TestCase):
                          TEST_CONFIG['population_size'],
                          "Incorrect number of CPPNs in response")
 
+        for genome in response_genomes:
+            print(genome["selected"])
+            print()
+
+
+        self.assertTrue(response_genomes[0]["selected"], "First CPPN is not selected")
+
 
 class TestLocalServer(unittest.TestCase):
     """Tests for the local testing server
@@ -86,7 +93,6 @@ class TestLocalServer(unittest.TestCase):
 
     def test_local_server(self):
         """Test the local server"""
-        return
         self.server_process = Process(target=run_server, args=())
         self.server_process.start()
         timeout = 10  # wait for 10 seconds before failing

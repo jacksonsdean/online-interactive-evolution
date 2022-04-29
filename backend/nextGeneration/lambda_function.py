@@ -1,5 +1,6 @@
 """Handler for Next Generation."""
 import base64
+import copy
 import io
 import json
 import logging
@@ -65,17 +66,15 @@ def next_generation(config, population_data):
         return initial_population(config)
     # create population
     for individual in population_data:
-        print("individual:", individual)
         population.append(CPPN.create_from_json(individual, config))
     # build list of selected individuals
     selected = list(filter(lambda x: x.selected, population))
-
     # mutate selected
     for index, _ in enumerate(population):
         if not population[index].selected:
             # replace with a mutated version of a random selected individual
             random_parent = np.random.choice(selected)
-            population[index] = random_parent
+            population[index] = copy.deepcopy(random_parent) # make a copy
             population[index].mutate()
             population[index].selected = False # deselect
 
@@ -106,9 +105,6 @@ def lambda_handler(event, context):
             body = initial_population(config)
         if operation == 'next_gen':
             raw_pop = data['population']
-            for i in raw_pop:
-                print(i["connection_genome"])
-                print("-"*20)
             body = next_generation(config, raw_pop)
 
     except Exception as e: # pylint: disable=broad-except

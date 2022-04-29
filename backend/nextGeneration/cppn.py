@@ -218,22 +218,15 @@ class CPPN():
         if img is not None:
             img = list(img)
             img = json.dumps(img)
-        print()
-        print()
-        print()
-        print()
-        print(self.selected)
         return {"node_genome": [n.to_json() for n in self.node_genome], "connection_genome":\
             [c.to_json() for c in self.connection_genome], "image": img, "selected": self.selected}
 
     def from_json(self, json_dict):
         """Constructs a CPPN from a json dict or string."""
         if isinstance(json_dict, str):
-            print("parsing:", json_dict)
             json_dict = json.loads(json_dict, strict=False)
         for k, v in json_dict.items():
             setattr(self, k, v)
-        self.selected = json_dict["selected"]
         for i, cx in enumerate(self.connection_genome):
             self.connection_genome[i] = Connection.create_from_json(cx)
         for i, n in enumerate(self.node_genome):
