@@ -25,12 +25,11 @@ class Config:
         self.prob_reenable_connection = 0.1
         self.init_connection_probability = 1
         self.activations = get_all()
-        # self.activations = [identity]
 
-        # DGNA: probability of adding a node is 0.5 and the
-        # probability of adding a connection is 0.4.
-        # SGNA: probability of adding a node is 0.05 and the
-        #  probability of adding a connection is 0.04.
+        """DGNA: the probability of adding a node is 0.5 and the
+        probability of adding a connection is 0.4.
+        SGNA: probability of adding a node is 0.05 and the
+         probability of adding a connection is 0.04."""
         self.prob_mutate_activation = .1
         self.prob_mutate_weight = .35
         self.prob_add_connection = .1
