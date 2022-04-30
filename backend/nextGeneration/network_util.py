@@ -36,6 +36,8 @@ def name_to_fn(name) -> callable:
         The function.
     """
     assert isinstance(name, str), f"name must be a string but is {type(name)}"
+    if name == "":
+        return None
     fns = inspect.getmembers(sys.modules[af.__name__])
     return fns[[f[0] for f in fns].index(name)][1]
 

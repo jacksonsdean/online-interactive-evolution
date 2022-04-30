@@ -115,10 +115,18 @@ def round_activation(x):
     """return round(x)"""
     return np.round(x) # arrays
 
+def abs_activation(x):
+    """Returns the absolute value of the input."""
+    return np.abs(x)
+
+def sqr(x):
+    """Return the square of the input."""
+    return np.square(x)
+
 
 def elu(x):
     """Returns the exponential linear unit of the input."""
-    return [xi if xi > 0.0 else math.exp(xi) - 1 for xi in x] # array
+    return np.where(x > 0, x, np.exp(x) - 1)
 
 def sin(x):
     """Returns the sine of the input."""
