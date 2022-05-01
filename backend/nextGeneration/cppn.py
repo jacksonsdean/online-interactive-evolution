@@ -6,12 +6,13 @@ import json
 import numpy as np
 
 
+
 try:
-    from nextGeneration.network_util import get_matching_connections, find_node_with_id
+    from nextGeneration.network_util import get_matching_connections, find_node_with_id, feed_forward_layers
     from nextGeneration.activation_functions import identity
     from nextGeneration.network_util import name_to_fn, choose_random_function, is_valid_connection
 except ModuleNotFoundError:
-    from network_util import get_matching_connections, find_node_with_id
+    from network_util import get_matching_connections, find_node_with_id, feed_forward_layers
     from activation_functions import identity
     from network_util import name_to_fn, choose_random_function, is_valid_connection
 
@@ -299,7 +300,7 @@ class CPPN():
         self.clamp_weights()
 
     def mutate(self):
-        """Mutates the CPPN based on it's config."""
+        """Mutates the CPPN based on its config."""
         if(np.random.uniform(0,1) < self.config.prob_add_node):
             self.add_node()
         if(np.random.uniform(0,1) < self.config.prob_remove_node):
@@ -311,6 +312,18 @@ class CPPN():
 
         self.mutate_activations()
         self.mutate_weights()
+        self.update_node_layers()
+        self.disable_invalid_connections()
+
+    def disable_invalid_connections(self):
+        return
+        """Disables connections that are not compatible with the current configuration."""
+        for connection in self.connection_genome:
+            if connection.enabled:
+                if not is_valid_connection(connection.from_node, connection.to_node, self.config):
+                    print(f"Disabling invalid connection {connection.from_node.id} -> {connection.to_node.id}")
+                    connection.enabled = False
+
 
     def add_connection(self):
         """Adds a connection to the CPPN."""
@@ -394,36 +407,18 @@ class CPPN():
         cx.enabled = False
 
     def update_node_layers(self) -> int:
-        """Update the node layers using  recursive algorithm."""
-        # layer = number of edges in longest path between this node and input
-        def get_node_to_input_len(current_node, current_path=0, longest_path=0, attempts=0):
-            if attempts > 1000:
-                print("ERROR: infinite recursion while updating node layers")
-                return longest_path
-            # use recursion to find longest path
-            if current_node.type == NodeType.INPUT:
-                current_node.layer = 0
-                # stop at input nodes
-                return current_path
-            inputs_to_this_node = [
-                cx for cx in self.connection_genome if\
-                    not cx.is_recurrent and cx.to_node.id == current_node.id]
-            for inp_cx in inputs_to_this_node:
-                this_len = get_node_to_input_len(
-                    inp_cx.from_node, current_path+1, attempts+1)
-                if this_len >= longest_path:
-                    longest_path = this_len
-            return longest_path
+        """Update the node layers."""
+        connections = [(c.from_node.id, c.to_node.id) for c in self.enabled_connections()]
+        inputs = [n.id for n in self.input_nodes()]
+        outputs = [n.id for n in self.output_nodes()]
+        layers = feed_forward_layers(inputs, outputs, connections)
 
-        highest_hidden_layer = 1
-        for node in self.hidden_nodes():
-            # calculate the layer of this node
-            node.layer = get_node_to_input_len(node)
-            highest_hidden_layer = max(node.layer, highest_hidden_layer)
-
-        for node in self.output_nodes():
-            # output nodes are always in the highest layer
-            node.layer = highest_hidden_layer+1
+        for _, node in enumerate(self.input_nodes()):
+            node.layer = 0
+        for layer_index, layer in enumerate(layers):
+            for _, node_id in enumerate(layer):
+                node = find_node_with_id(self.node_genome, node_id)
+                node.layer = layer_index + 1
 
     def input_nodes(self) -> list:
         """Returns a list of all input nodes."""
@@ -475,6 +470,12 @@ class CPPN():
                 cx.weight = self.config.max_weight
             if cx.weight < -self.config.max_weight:
                 cx.weight = -self.config.max_weight
+
+    def reset_activations(self):
+        """Resets all node activations to zero."""
+        for node in self.node_genome:
+            node.sum_inputs = np.zeros((self.config.res_h, self.config.res_w), dtype= CPPN.pixel_inputs.dtype)
+            node.outputs = np.zeros((self.config.res_h, self.config.res_w), dtype= CPPN.pixel_inputs.dtype)
 
     def eval(self, inputs):
         """Evaluates the CPPN."""
@@ -555,6 +556,7 @@ class CPPN():
                 self.config.use_input_bias,
                 self.n_inputs)
 
+        self.reset_activations()
         # always an output node
         output_layer = self.node_genome[self.n_inputs].layer
 
@@ -577,13 +579,19 @@ class CPPN():
                 node.outputs = node.activation(node.sum_inputs)  # apply activation
                 node.outputs = node.outputs.reshape((res_h, res_w))
 
-        outputs = [node.outputs for node in self.output_nodes()]
+        outputs = np.array([np.array(node.outputs) for node in self.output_nodes()])
         if len(self.config.color_mode)>2:
             outputs =  np.array(outputs).transpose(1, 2, 0) # move color axis to end
         else:
             outputs = np.reshape(outputs, (res_h, res_w))
+
         self.image = outputs
-        return outputs
+
+         # normalize from -1 through 1 to 0 through 255 and convert to ints
+        self.image = (((self.image - np.min(self.image)) * 255) / (np.max(self.image) - np.min(self.image)))
+        self.image = self.image.astype(np.uint8)
+
+        return self.image
 
     def crossover(self, other_parent):
         """Crossover with another CPPN using the method in Stanley and Miikkulainen (2007)."""

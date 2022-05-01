@@ -4,6 +4,7 @@ import copy
 import io
 import json
 import logging
+import random
 from PIL import Image
 import numpy as np
 
@@ -24,11 +25,6 @@ def evaluate_population(population, config)->str:
     for individual in population:
         # evaluate the CPPN
         individual.get_image_data_fast_method()
-
-        # normalize 0-255 and convert to ints
-        individual.image = individual.image / np.max(individual.image)
-        individual.image = individual.image * 255
-        individual.image = individual.image.astype(np.uint8)
 
         # convert from numpy to bytes
         individual.image = Image.fromarray(individual.image)
@@ -113,6 +109,10 @@ def lambda_handler(event, context):
 
         config = Config.create_from_json(data['config'])
 
+        # use the seed from the config
+        random.seed(int(config.seed))
+        np.random.seed(int(config.seed))
+        print(config.seed)
         if operation == 'reset':
             body = initial_population(config)
         if operation == 'next_gen':
