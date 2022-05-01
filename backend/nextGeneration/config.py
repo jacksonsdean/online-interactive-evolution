@@ -8,13 +8,13 @@ except ModuleNotFoundError:
     from nextGeneration.activation_functions import get_all #,tanh,identity
     from nextGeneration.network_util import name_to_fn
 
-class Config:
+class   Config:
     """Stores configuration parameters for the CPPN."""
     def __init__(self) -> None:
         self.population_size = 10
         self.res_w = 28
         self.res_h = 28
-        self.color_mode = "L"
+        self.color_mode = "RGB"
         self.do_crossover = True
         self.allow_recurrent = False
         self.max_weight = 3.0
@@ -25,6 +25,7 @@ class Config:
         self.prob_reenable_connection = 0.1
         self.init_connection_probability = 1
         self.activations = get_all()
+        self.seed = None
 
         """DGNA: the probability of adding a node is 0.5 and the
         probability of adding a connection is 0.4.
@@ -32,10 +33,10 @@ class Config:
          probability of adding a connection is 0.04."""
         self.prob_mutate_activation = .1
         self.prob_mutate_weight = .35
-        self.prob_add_connection = .1
-        self.prob_add_node = .1
-        self.prob_remove_node = 0.05
-        self.prob_disable_connection = .3
+        self.prob_add_connection = .4
+        self.prob_add_node = .4
+        self.prob_remove_node = 0.1
+        self.prob_disable_connection = .25
 
         self.output_activation = None
 
