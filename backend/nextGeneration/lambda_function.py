@@ -24,7 +24,7 @@ HEADERS = {
 def evaluate_population(population, config)->str:
     for individual in population:
         # evaluate the CPPN
-        individual.get_image_data_fast_method()
+        individual.get_image()
 
         # convert from numpy to bytes
         individual.image = Image.fromarray(individual.image)

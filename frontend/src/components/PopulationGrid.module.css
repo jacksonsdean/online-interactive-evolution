@@ -74,3 +74,12 @@
   border-radius: 50%;
   animation: spinner 1.5s linear infinite;
 }
+
+.controlPanel{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  height:10vh;
+}

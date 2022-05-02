@@ -5,16 +5,14 @@ import math
 import json
 import numpy as np
 
-
-
 try:
-    from nextGeneration.network_util import get_matching_connections, find_node_with_id, feed_forward_layers
     from nextGeneration.activation_functions import identity
-    from nextGeneration.network_util import name_to_fn, choose_random_function, is_valid_connection
+    from nextGeneration.graph_util import name_to_fn, choose_random_function, is_valid_connection
+    from nextGeneration.graph_util import get_matching_connections, find_node_with_id, feed_forward_layers
 except ModuleNotFoundError:
-    from network_util import get_matching_connections, find_node_with_id, feed_forward_layers
     from activation_functions import identity
-    from network_util import name_to_fn, choose_random_function, is_valid_connection
+    from graph_util import get_matching_connections, find_node_with_id, feed_forward_layers
+    from graph_util import name_to_fn, choose_random_function, is_valid_connection
 
 class NodeType(IntEnum):
     """Enum for the type of node."""
@@ -139,13 +137,13 @@ class Connection:
 class CPPN():
     """A CPPN Object with Nodes and Connections."""
 
-    pixel_inputs = np.zeros((0,0), dtype=np.float16)
+    pixel_inputs = np.zeros((0,0))
     @staticmethod
     def initialize_inputs(res_h, res_w, use_radial_dist, use_bias, n_inputs):
         """Initializes the pixel inputs."""
         x_vals = np.linspace(-.5, .5, res_w)
         y_vals = np.linspace(-.5, .5, res_h)
-        CPPN.pixel_inputs = np.zeros((res_h, res_w, n_inputs), dtype=np.float16)
+        CPPN.pixel_inputs = np.zeros((res_h, res_w, n_inputs))
         for y in range(res_h):
             for x in range(res_w):
                 this_pixel = [y_vals[y], x_vals[x]] # coordinates
@@ -316,7 +314,6 @@ class CPPN():
         self.disable_invalid_connections()
 
     def disable_invalid_connections(self):
-        return
         """Disables connections that are not compatible with the current configuration."""
         for connection in self.connection_genome:
             if connection.enabled:
@@ -408,10 +405,7 @@ class CPPN():
 
     def update_node_layers(self) -> int:
         """Update the node layers."""
-        connections = [(c.from_node.id, c.to_node.id) for c in self.enabled_connections()]
-        inputs = [n.id for n in self.input_nodes()]
-        outputs = [n.id for n in self.output_nodes()]
-        layers = feed_forward_layers(inputs, outputs, connections)
+        layers = feed_forward_layers(self)
 
         for _, node in enumerate(self.input_nodes()):
             node.layer = 0
@@ -452,7 +446,7 @@ class CPPN():
                 yield node
 
     def get_layers(self):
-        """Returns a list of lists of nodes in each layer."""
+        """Returns a dictionary of lists of nodes in each layer."""
         layers = {}
         for node in self.node_genome:
             if node.layer not in layers:
@@ -515,8 +509,33 @@ class CPPN():
 
         return [node.output for node in self.output_nodes()]
 
-    def get_image_data(self):
-        """Evaluate the network to get image data"""
+    def get_image(self, force_recalculate=False):
+        """Returns an image of the network."""
+        # decide if we need to recalculate the image
+        recalculate = False
+        recalculate = recalculate or force_recalculate
+        if isinstance(self.image, np.ndarray):
+            recalculate = recalculate or self.config.res_h == self.image.shape[0]
+            recalculate = recalculate or self.config.res_w == self.image.shape[1]
+        else:
+            # no cached image
+            recalculate = True
+        if not recalculate:
+            # return the cached image
+            return self.image
+
+        if self.config.allow_recurrent:
+            # pixel by pixel (good for debugging/recurrent)
+            self.image = self.get_image_data_serial()
+        else:
+            # whole image at once (100x faster)
+            self.image = self.get_image_data_parallel()
+        return self.image
+
+    def get_image_data_serial(self):
+        """Evaluate the network to get image data by processing each pixel
+        serially. Much slower than the parallel method, but required if the
+        network has recurrent connections."""
         res_h, res_w = self.config.res_h, self.config.res_w
         pixels = []
         for x in np.linspace(-.5, .5, res_w):
@@ -531,45 +550,39 @@ class CPPN():
         self.image = pixels
         return pixels
 
-    def get_image(self, force_recalculate=False):
-        """Returns an image of the network."""
-        if not force_recalculate and self.image is not None and\
-            self.config.res_h == self.image.shape[0] and\
-            self.config.res_w == self.image.shape[1]:
-            return self.image
-
-        if self.config.allow_recurrent:
-            # pixel by pixel (good for debugging)
-            self.image = self.get_image_data()
-        else:
-            # whole image at once (100s of times faster)
-            self.image = self.get_image_data_fast_method()
-        return self.image
-
-    def get_image_data_fast_method(self):
+    def get_image_data_parallel(self):
         """Evaluate the network to get image data in parallel"""
-        # initialize inputs if resolution changed
         res_h, res_w = self.config.res_h, self.config.res_w
         if CPPN.pixel_inputs is None or CPPN.pixel_inputs.shape != (res_h,res_w):
+            # initialize inputs if the resolution changed
             CPPN.initialize_inputs(res_h, res_w,
                 self.config.use_radial_distance,
                 self.config.use_input_bias,
                 self.n_inputs)
 
+        # reset the activations to 0 before evaluating
         self.reset_activations()
-        # always an output node
-        output_layer = self.node_genome[self.n_inputs].layer
 
-        for layer_index in range(0, output_layer+1):
-            layer = self.get_layer(layer_index)
-            for i, node in enumerate(layer):
+        layers = feed_forward_layers(self) # get layers
+        layers.insert(0, [n.id for n in self.input_nodes()]) # add input nodes as first layer
+
+        for layer in layers:
+            # iterate over layers
+            for node_index, node_id in enumerate(layer):
+                # iterate over nodes in layer
+                
+                node = find_node_with_id(self.node_genome, node_id) # the current node
+
+                # find incoming connections
                 node_inputs = list(
                     filter(lambda x, n=node: x.to_node.id == n.id,
                         self.enabled_connections()))  # cxs that end here
 
-                node.sum_inputs = np.zeros((res_h, res_w), dtype=np.float16)
-                if layer_index == 0:
-                    node.sum_inputs += CPPN.pixel_inputs[:,:,min(i,self.n_inputs-1)]
+                # initialize the sum_inputs for this node
+                node.sum_inputs = np.zeros((res_h, res_w))
+                if node.type == NodeType.INPUT:
+                    # add pixel inputs to input layer
+                    node.sum_inputs += CPPN.pixel_inputs[:,:,node_index]
 
                 for cx in node_inputs:
                     if cx.from_node.outputs is not None:
@@ -577,7 +590,6 @@ class CPPN():
                         node.sum_inputs = node.sum_inputs + inputs
 
                 node.outputs = node.activation(node.sum_inputs)  # apply activation
-                node.outputs = node.outputs.reshape((res_h, res_w))
 
         outputs = np.array([np.array(node.outputs) for node in self.output_nodes()])
         if len(self.config.color_mode)>2:
@@ -587,12 +599,18 @@ class CPPN():
 
         self.image = outputs
 
-         # normalize from -1 through 1 to 0 through 255 and convert to ints
-        self.image = (((self.image - np.min(self.image)) * 255) / (np.max(self.image) - np.min(self.image)))
-        self.image = self.image.astype(np.uint8)
-
+        self.normalize_image()
+        
         return self.image
-
+    
+    def normalize_image(self):
+        """Normalize from -1 through 1 to 0 through 255 and convert to ints"""
+        max_value = np.max(self.image)
+        min_value = np.min(self.image)
+        self.image-= min_value
+        self.image *=255
+        self.image /= (max_value - min_value)
+        self.image = self.image.astype(np.uint8)
     def crossover(self, other_parent):
         """Crossover with another CPPN using the method in Stanley and Miikkulainen (2007)."""
         child = CPPN(self.config) # create child
@@ -607,6 +625,8 @@ class CPPN():
             self.connection_genome, other_parent.connection_genome)
 
         for match_index, _ in enumerate(matching1):
+            if match_index >= len(matching2):
+                continue # skip to avoid out of bounds
             child_cx = child.connection_genome[[x.innovation\
                 for x in child.connection_genome].index(
                 matching1[match_index].innovation)]
@@ -625,12 +645,19 @@ class CPPN():
             # assign new nodes and connections
             child_cx.from_node = new_from
             child_cx.to_node = new_to
-            existing = find_node_with_id(child.node_genome, new_from.id)
-            index_existing = child.node_genome.index(existing)
-            child.node_genome[index_existing] = new_from
-            existing = find_node_with_id(child.node_genome, new_to.id)
-            index_existing = child.node_genome.index(existing)
-            child.node_genome[index_existing] = new_to
+            try:
+                existing = find_node_with_id(child.node_genome, new_from.id)
+                index_existing = child.node_genome.index(existing)
+                child.node_genome[index_existing] = new_from
+            except ValueError:
+                pass # skip if the node wasn't found
+            
+            try:
+                existing = find_node_with_id(child.node_genome, new_to.id)
+                index_existing = child.node_genome.index(existing)
+                child.node_genome[index_existing] = new_to
+            except ValueError:
+                pass # skip if the node wasn't found
 
             if(not matching1[match_index].enabled or not matching2[match_index].enabled):
                 if np.random.rand() < 0.75:  # 0.75 from Stanley/Miikulainen 2007

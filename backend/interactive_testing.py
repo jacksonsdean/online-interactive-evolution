@@ -10,6 +10,8 @@ from test import TEST_RESET_EVENT
 from nextGeneration.activation_functions import gauss, identity, sin, tanh
 from nextGeneration.config import Config
 from nextGeneration.cppn import CPPN, Node, NodeType
+from backend.nextGeneration.graph_util import feed_forward_layers
+from visualize import visualize_network
 
 def show_images(imgs, color_mode="L", titles=[], height=10):
     """Show an array of images in a grid"""
@@ -31,26 +33,26 @@ def show_image(img, color_mode, ax = None):
     plt.tight_layout()
     if color_mode == 'L':
         if ax==None:
-            plt.imshow(img, cmap=plt.get_cmap('gray'), vmin=-1, vmax=1)
+            plt.imshow(img, cmap=plt.get_cmap('gray'), vmin=0, vmax=255)
         else:
-            ax.imshow(img, cmap=plt.get_cmap('gray'), vmin=-1, vmax=1)
+            ax.imshow(img, cmap=plt.get_cmap('gray'), vmin=0, vmax=255)
 
     elif color_mode == "HSL":
         img = hsv2rgb(img)
         if ax==None:
-            plt.imshow(img, cmap=plt.get_cmap('gray'), vmin=-1, vmax=1)
+            plt.imshow(img, cmap=plt.get_cmap('gray'), vmin=0, vmax=255)
         else:
             ax.imshow(img)
     else:
         if ax==None:
-            plt.imshow(img,cmap=plt.get_cmap('gray'), vmin=-1, vmax=1)
+            plt.imshow(img,cmap=plt.get_cmap('gray'), vmin=0, vmax=255)
         else:
             ax.imshow(img)
 
 #%%
 config = Config()
 cppn = CPPN(config)
-image_data = cppn.get_image_data_fast_method(32,32)
+image_data = cppn.get_image_data_fast_method()
 print(np.min(image_data), np.max(image_data))
 
 plt.imshow(image_data, cmap='gray', vmin = -1, vmax = 1)
@@ -62,7 +64,7 @@ config.num_outputs = 3
 ims = []
 for i in range(10):
     cppn_color = CPPN(config)
-    image_data = cppn_color.get_image_data_fast_method(32,32)
+    image_data = cppn_color.get_image_data_fast_method()
     ims.append(image_data)
 show_images(ims, color_mode="RGB")
 plt.show()
@@ -85,7 +87,7 @@ config = Config()
 config.color_mode = "RGB"
 cppn = CPPN(config, nodes=node_genome)
 print(cppn.connection_genome)
-img = cppn.get_image_data_fast_method(32,32)
+img = cppn.get_image_data_fast_method()
 show_image(img, color_mode="RGB")
 plt.show()
 #%%
@@ -106,7 +108,25 @@ obj = response.json()["body"]
 config = Config.create_from_json(obj["config"])
 for indiv in obj["population"]:
     cppn = CPPN.create_from_json(indiv, config)
-    img = cppn.get_image_data_fast_method(32,32)
+    img = cppn.get_image_data_fast_method()
     imgs.append(img)
 show_images(imgs, color_mode="RGB")
 # server_process.terminate()  # kill test server
+
+
+#%%
+config = Config()
+config.color_mode = "RGB"
+cppn = CPPN(config)
+for _ in range(50):
+    cppn.mutate()
+visualize_network(cppn, visualize_disabled=True)
+img = cppn.get_image_data_fast_method()
+show_image(img, config.color_mode)
+connections = [(cx.from_node, cx.to_node) for cx in cppn.enabled_connections()]
+
+layers = feed_forward_layers(cppn.input_nodes(), cppn.output_nodes(), connections)
+for i, layer in enumerate(layers):
+    print("Layer", i)
+    for node in layer:
+        print("\t",node.id, node.type, node.activation)

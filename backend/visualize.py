@@ -4,7 +4,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
 
-from nextGeneration.network_util import required_for_output
+from backend.nextGeneration.graph_util import required_for_output
 
 
 def draw_nodes(graph, pos, node_labels, node_size):
@@ -20,7 +20,7 @@ def draw_nodes(graph, pos, node_labels, node_size):
                                label=node_labels, node_shape=shape, nodelist=nodes)
 
 
-def add_edges_to_graph(individual, visualize_disabled, graph, pos):
+def add_edges_to_graph(individual, visualize_disabled, graph, pos, required):
     """Add edges to the graph
     Args:
         individual (CPPN): The CPPN to visualize
@@ -34,9 +34,7 @@ def add_edges_to_graph(individual, visualize_disabled, graph, pos):
     connections = individual.connection_genome
     max_weight = individual.config.max_weight
     edge_labels = {}
-    required = required_for_output(individual.input_nodes(), individual.output_nodes(),
-                [(cx.from_node, cx.to_node) for cx in individual.enabled_connections()])
-    required = required.union(individual.input_nodes())
+ 
     for cx in connections:
         if(not visualize_disabled and (not cx.enabled or np.isclose(cx.weight, 0))):
             continue
@@ -55,7 +53,7 @@ def add_edges_to_graph(individual, visualize_disabled, graph, pos):
     return edge_labels
 
 
-def draw_edges(individual, graph, pos, show_weights, node_size, edge_labels):
+def draw_edges(graph, pos, show_weights, node_size, edge_labels):
     """Draw edges on the graph"""
 
     edge_styles = set((s[2] for s in graph.edges(data='style')))
@@ -163,6 +161,12 @@ def visualize_network(individual, visualize_disabled=False, show_weights=False):
     plt.subplots_adjust(left=0, bottom=0, right=1.25,
                         top=1.25, wspace=0, hspace=0)
 
+
+
+    required = required_for_output(individual.input_nodes(), individual.output_nodes(),
+                [(cx.from_node, cx.to_node) for cx in individual.enabled_connections()])
+    required = required.union(individual.input_nodes())
+
     # nodes:
     add_nodes_to_graph(individual, node_labels, graph, visualize_disabled)
 
@@ -182,8 +186,8 @@ def visualize_network(individual, visualize_disabled=False, show_weights=False):
 
     # edges:
     edge_labels = add_edges_to_graph(
-        individual, visualize_disabled, graph, pos)
-    draw_edges(individual, graph, pos, show_weights, node_size, edge_labels)
+        individual, visualize_disabled, graph, pos, required)
+    draw_edges( graph, pos, show_weights, node_size, edge_labels)
 
     nx.draw_networkx_labels(graph, pos, labels=node_labels)
     plt.tight_layout()

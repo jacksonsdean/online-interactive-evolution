@@ -140,7 +140,7 @@ def required_for_output(inputs, outputs, connections):
 
 
 
-def feed_forward_layers(inputs, outputs, connections):
+def feed_forward_layers(individual):
     """
     Collect the layers whose members can be evaluated in parallel in a feed-forward network.
     :param inputs: list of the network input nodes
@@ -150,8 +150,13 @@ def feed_forward_layers(inputs, outputs, connections):
     Returns a list of layers, with each layer consisting of a set of node identifiers.
     Note that the returned layers do not contain nodes whose output is ultimately
     never used to compute the final network output.
-    From: https://neat-python.readthedocs.io/en/latest/_modules/graphs.html
+
+    Modified from: https://neat-python.readthedocs.io/en/latest/_modules/graphs.html
     """
+
+    connections = [(c.from_node.id, c.to_node.id) for c in individual.enabled_connections()]
+    inputs = [n.id for n in individual.input_nodes()]
+    outputs = [n.id for n in individual.output_nodes()]
 
     required = required_for_output(inputs, outputs, connections)
 

@@ -3,10 +3,10 @@ import json
 
 try:
     from activation_functions import get_all #,tanh,identity
-    from network_util import name_to_fn
+    from graph_util import name_to_fn
 except ModuleNotFoundError:
     from nextGeneration.activation_functions import get_all #,tanh,identity
-    from nextGeneration.network_util import name_to_fn
+    from nextGeneration.graph_util import name_to_fn
 
 class   Config:
     """Stores configuration parameters for the CPPN."""
