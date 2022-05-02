@@ -155,11 +155,6 @@ class PopulationGrid extends Grid {
 
     /* Handles the save images button */
     saveImagesClicked() {
-        this.history.push(this.state.population) // put current population in history
-        if(this.history.length > MAX_HISTORY) {
-            this.history.shift() // remove oldest population from history
-        }
-
         this.setState({ loading: true });
         saveIndividuals(this.state.population, this.config).then((data) => {
             if ("body" in data && typeof data.body !== "object") {
@@ -188,7 +183,6 @@ class PopulationGrid extends Grid {
             console.log(err)
             this.failedToast("Saving images failed. Try selecting fewer at once.")
 
-            this.history.pop() // remove last population from history
             this.setState({ population: this.state.population, loading: false });
         })
     }
