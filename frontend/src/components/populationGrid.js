@@ -10,7 +10,7 @@ class FailedToast extends React.Component {
     render() {
         return (
             <div>
-               <p>{this.props.text}</p>
+               {this.props.text}
             </div>
         );
     }
@@ -82,7 +82,7 @@ class SaveImagesButton extends React.Component {
 }
 
 class PopulationGrid extends Grid {
-    failedToast = (text) => toast(<FailedToast text={text}/>, { type: "warning", autoClose: 2000, position: "top-right", closeButton: true, hideProgressBar: false, closeOnClick: true, pauseOnHover: true });
+    failedToast = (text) => toast(<FailedToast text={text}/>, { type: "warning", autoClose: 4000});
 
     constructor(props) {
         super(props);
