@@ -23,6 +23,6 @@ afterEach(() => {
 
 test('renders population grid', () => {
   render(<PopulationGrid />);
-  const linkElement = screen.getByText(/Please wait../i);
+  const linkElement = screen.getByTestId(/spinner/i);
   expect(linkElement).toBeInTheDocument();
 });

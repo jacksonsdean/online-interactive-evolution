@@ -5,7 +5,7 @@ function IECApp() {
     <div className="IECApp">
       <header className="IECApp-header">
         <p>
-          Welcome
+          Interactive Evolutionary Art
         </p>
         <PopulationGrid />
 
