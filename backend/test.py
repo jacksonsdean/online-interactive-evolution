@@ -3,7 +3,6 @@ import unittest
 import time
 
 import numpy as np
-from visualize import visualize_network
 from nextGeneration.activation_functions import identity
 from nextGeneration.config import Config
 from nextGeneration.cppn import CPPN, Connection, Node, NodeType
@@ -130,19 +129,19 @@ class TestCPPN(unittest.TestCase):
         config.color_mode = "L" # test grayscale image shape
         config.res_h, config.res_w = 32, 32
         cppn = CPPN(config)
-        image_data = cppn.get_image_data_fast_method()
+        image_data = cppn.get_image()
         self.assertEqual(image_data.shape, (32, 32),
                          "Image data is not correct shape")
-        self.assertEqual(image_data.dtype, np.float16,
+        self.assertEqual(image_data.dtype, np.uint8,
                             "Image data is not correct dtype")
 
 
         config.color_mode = "RGB" # test color image shape
         cppn = CPPN(config)
-        image_data = cppn.get_image_data_fast_method()
+        image_data = cppn.get_image()
         self.assertEqual(image_data.shape, (32, 32, 3),
                          "Image data is not correct shape")
-        self.assertEqual(image_data.dtype, np.float16,
+        self.assertEqual(image_data.dtype, np.uint8,
                             "Image data is not correct dtype")
 
     def test_update_node_layers(self):
@@ -208,8 +207,8 @@ class TestCPPN(unittest.TestCase):
             self.assertEqual(cx1.to_node.id, cx2.to_node.id,
                              "Connection genome has connection with wrong output node")
 
-        img1 = cppn.get_image_data_fast_method()
-        img2 = cppn_from_json.get_image_data_fast_method()
+        img1 = cppn.get_image()
+        img2 = cppn_from_json.get_image()
         self.assertEqual(img1.shape, img2.shape,
                          "Image data has wrong shape after serialization")
         self.assertEqual(img1.dtype, img2.dtype,

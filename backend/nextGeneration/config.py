@@ -1,5 +1,6 @@
 """Stores configuration parameters for the CPPN."""
 import json
+from random import random
 
 try:
     from activation_functions import get_all #,tanh,identity
@@ -27,7 +28,7 @@ class   Config:
         self.prob_reenable_connection = 0.1
         self.init_connection_probability = 1
         self.activations = get_all()
-        self.seed = None
+        self.seed = random() * 10000
         self.prob_crossover = .25
 
         """DGNA: the probability of adding a node is 0.5 and the
