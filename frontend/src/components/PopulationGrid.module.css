@@ -75,13 +75,13 @@
     border-radius: 50%;
   }
   50% {
-    border: 10px solid #34c6f3;
+    border: 10px solid #d3f5ff;
     border-top: 10px solid #383636; /* Black */
-    border-radius: 50%;
+    border-radius: 45%;
   }
   100% {
     transform: rotate(360deg);
-    border: 10px solid #ffffff;
+    border: 10px solid rgb(0, 140, 255);
     border-top: 10px solid #383636; /* Black */
     border-radius: 50%;
   }

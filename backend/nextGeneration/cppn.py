@@ -47,7 +47,7 @@ class Node:
         self.outputs = None
 
     def activate(self, incoming_connections):
-        """Activates the node."""
+        """Activates the node given a list of connections that end here."""
         for cx in incoming_connections:
             if cx.from_node.outputs is not None:
                 inputs = cx.from_node.outputs * cx.weight
@@ -88,8 +88,7 @@ class Node:
 class Connection:
     """
     Represents a connection between two nodes.
-    connection            e.g.  2->5,  1->4
-    innovation_number            0      1
+
     where innovation number is the same for all of same connection
     i.e. 2->5 and 2->5 have same innovation number, regardless of individual
     """
@@ -146,21 +145,25 @@ class Connection:
         return self.__repr__()
     def __repr__(self):
         return f"([{self.from_node.id}->{self.to_node.id}]"+\
-            f"I:{self.innovation})"
-        # return f"([{self.from_node.id}->{self.to_node.id}]"+\
-            # f"I:{self.innovation} W:{self.weight:3f} E:{self.enabled} R:{self.is_recurrent})"
+            f"I:{self.innovation} W:{self.weight:3f} E:{self.enabled} R:{self.is_recurrent})"
 
 
 class CPPN():
     """A CPPN Object with Nodes and Connections."""
 
-    pixel_inputs = np.zeros((0, 0, 0)) # res_h, res_w, n_inputs
+    pixel_inputs = np.zeros((0, 0, 0)) # (res_h, res_w, n_inputs)
     @staticmethod
     def initialize_inputs(res_h, res_w, use_radial_dist, use_bias, n_inputs):
         """Initializes the pixel inputs."""
+
+        # Pixel coordinates are linear from -.5 to .5
         x_vals = np.linspace(-.5, .5, res_w)
         y_vals = np.linspace(-.5, .5, res_h)
+
+        # initialize to 0s
         CPPN.pixel_inputs = np.zeros((res_h, res_w, n_inputs))
+
+        # assign values:
         for y in range(res_h):
             for x in range(res_w):
                 this_pixel = [y_vals[y], x_vals[x]] # coordinates
@@ -168,10 +171,11 @@ class CPPN():
                     # d = sqrt(x^2 + y^2)
                     this_pixel.append(math.sqrt(y_vals[y]**2 + x_vals[x]**2))
                 if use_bias:
-                    this_pixel.append(1.0)# bias = 1.0
+                    this_pixel.append(1.0) # bias = 1.0
                 CPPN.pixel_inputs[y][x] = this_pixel
 
     def __init__(self, config, nodes = None, connections = None) -> None:
+        self.config = config
         self.image = None
         self.node_genome = []  # inputs first, then outputs, then hidden
         self.connection_genome = []
@@ -179,12 +183,11 @@ class CPPN():
 
         self.n_inputs = 2 # x, y
         if config.use_radial_distance:
-            self.n_inputs += 1
+            self.n_inputs += 1 # x, y, d
         if config.use_input_bias:
-            self.n_inputs+=1
-        self.n_outputs = len(config.color_mode)
+            self.n_inputs+=1 # x, y, d?, bias
 
-        self.config = config
+        self.n_outputs = len(config.color_mode) # RGB (3), HSV(3), L(1)
 
         if nodes is None:
             self.initialize_node_genome()
@@ -194,8 +197,6 @@ class CPPN():
             self.initialize_connection_genome()
         else:
             self.connection_genome = connections
-
-
 
     def initialize_connection_genome(self):
         """Initializes the connection genome."""
@@ -211,7 +212,6 @@ class CPPN():
                     self.connection_genome.append(new_cx)
                     if np.random.rand() > self.config.init_connection_probability:
                         new_cx.enabled = False
-
 
     def initialize_node_genome(self):
         """Initializes the node genome."""
@@ -316,13 +316,13 @@ class CPPN():
 
     def mutate(self):
         """Mutates the CPPN based on its config."""
-        if(np.random.uniform(0,1) < self.config.prob_add_node):
+        if np.random.uniform(0,1) < self.config.prob_add_node:
             self.add_node()
-        if(np.random.uniform(0,1) < self.config.prob_remove_node):
+        if np.random.uniform(0,1) < self.config.prob_remove_node:
             self.remove_node()
-        if(np.random.uniform(0,1) < self.config.prob_add_connection):
+        if np.random.uniform(0,1) < self.config.prob_add_connection:
             self.add_connection()
-        if(np.random.uniform(0,1) < self.config.prob_disable_connection):
+        if np.random.uniform(0,1) < self.config.prob_disable_connection:
             self.disable_connection()
 
         self.mutate_activations()
@@ -335,69 +335,90 @@ class CPPN():
         for connection in self.connection_genome:
             if connection.enabled:
                 if not is_valid_connection(connection.from_node, connection.to_node, self.config):
-                    print(f"Disabling invalid connection {connection.from_node.id} -> {connection.to_node.id}")
                     connection.enabled = False
 
 
     def add_connection(self):
         """Adds a connection to the CPPN."""
-        for _ in range(20):  # try 20 times
+        for _ in range(20):  # try 20 times max
             [from_node, to_node] = np.random.choice(
                 self.node_genome, 2, replace=False)
+
+            # look to see if this connection already exists
             existing_cx = None
             for cx in self.connection_genome:
                 if cx.from_node == from_node and cx.to_node == to_node:
                     existing_cx = cx
-            if existing_cx is not None:
-                if not existing_cx.enabled and np.random.rand() < self.config.prob_reenable_connection:
-                    existing_cx.enabled = True     # re-enable the connection
-                break  # don't allow duplicates
 
+            # if it does exist and it is disabled, there is a chance to reenable
+            if existing_cx is not None:
+                if not existing_cx.enabled:
+                    if np.random.rand() < self.config.prob_reenable_connection:
+                        existing_cx.enabled = True # re-enable the connection
+                break  # don't allow duplicates, don't enable more than one connection
+
+            # else if it doesn't exist, check if it is valid
             if is_valid_connection(from_node, to_node, self.config):
                 # valid connection, add
                 new_cx = Connection(from_node, to_node, self.random_weight())
                 self.connection_genome.append(new_cx)
                 self.update_node_layers()
-                break
+                break # found a valid connection, don't add more than one
 
-        # failed to find a valid connection, don't add
+            # else failed to find a valid connection, don't add and try again
 
     def add_node(self):
-        """Adds a node to the CPPN."""
+        """Adds a node to the CPPN.
+            Looks for an eligible connection to split, add the node in the middle
+            of the connection.
+        """
+        # only add nodes in the middle of non-recurrent connections
         eligible_cxs = [
             cx for cx in self.connection_genome if not cx.is_recurrent]
-        if len(eligible_cxs) < 1:
-            return
-        old = np.random.choice(eligible_cxs)
+
+        if len(eligible_cxs) == 0:
+            return # there are no eligible connections, don't add a node
+
+        # choose a random eligible connection
+        old_connection = np.random.choice(eligible_cxs)
+
+        # create the new node
         new_node = Node(choose_random_function(self.config),
                         NodeType.HIDDEN, self.get_new_node_id(), 999)
         self.node_genome.append(new_node)  # add a new node between two nodes
-        old.enabled = False  # disable old connection
+
+        # disable old connection
+        old_connection.enabled = False
 
         # The connection between the first node in the chain and the
         # new node is given a weight of one and the connection between
         # the new node and the last node in the chain
         # is given the same weight as the connection being split
         self.connection_genome.append(Connection(
-            self.node_genome[old.from_node.id],
+            self.node_genome[old_connection.from_node.id],
             self.node_genome[new_node.id],
             1.0))
 
         self.connection_genome.append(Connection(
             self.node_genome[new_node.id],
-            self.node_genome[old.to_node.id],
-            old.weight))
+            self.node_genome[old_connection.to_node.id],
+            old_connection.weight))
 
 
-        self.update_node_layers()
+        self.update_node_layers() # update the layers of the nodes
 
     def remove_node(self):
-        """Removes a node from the CPPN."""
-        # This is a bit of a buggy mess
+        """Removes a node from the CPPN.
+            Only hidden nodes are eligible to be removed.
+        """
+
         hidden = self.hidden_nodes()
-        if len(hidden) < 1:
-            return
+        if len(hidden) == 0:
+            return # no eligible nodes, don't remove a node
+
+        # choose a random node
         node_id_to_remove = np.random.choice([n.id for n in hidden], 1)[0]
+
         for cx in self.connection_genome[::-1]:
             if node_id_to_remove in [cx.from_node.id, cx.to_node.id]:
                 self.connection_genome.remove(cx)
@@ -406,11 +427,8 @@ class CPPN():
                 self.node_genome.remove(node)
                 break
 
-        for _, cx in enumerate(self.connection_genome):
-            cx.innovation = Connection.get_innovation(
-                cx.from_node, cx.to_node)  # definitely wrong
         self.update_node_layers()
-        # self.disable_invalid_connections()
+        self.disable_invalid_connections()
 
     def disable_connection(self):
         """Disables a connection."""
