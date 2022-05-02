@@ -38,7 +38,7 @@ export function nextGeneration(currentPopulation, config, failedToast) {
         }
     }
     if (!at_least_one_selected) {
-        failedToast("Next generation failed, try again.")
+        failedToast("No individuals selected")
 
         // don't send empty request
         return Promise.reject("No individuals selected");

@@ -10,7 +10,6 @@ class FailedToast extends React.Component {
     render() {
         return (
             <div>
-               <h3>Failed</h3>
                <p>{this.props.text}</p>
             </div>
         );
