@@ -136,10 +136,11 @@ class PopulationGrid extends Grid {
         }
 
         this.setState({ loading: true });
-        nextGeneration(this.state.population, this.config).then((data) => {
+        nextGeneration(this.state.population, this.config, this.failedToast).then((data) => {
             this.handleNewData(data)
         }).catch((err) => {
             console.log(err)
+
             this.history.pop() // remove last population from history
             this.setState({ population: this.state.population, loading: false });
         })
@@ -161,6 +162,7 @@ class PopulationGrid extends Grid {
                 data = JSON.parse(data["body"]);
             }
             if (data.error) {
+                this.failedToast("Saving images failed. Try selecting fewer at once.")
                 console.log(data.error)
                 return;
             }

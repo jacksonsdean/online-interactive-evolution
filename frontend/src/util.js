@@ -27,7 +27,7 @@ function receivePostReponse(response) {
 
 /* gets a new population from the server, given the current population
  and the configuration */
-export function nextGeneration(currentPopulation, config) {
+export function nextGeneration(currentPopulation, config, failedToast) {
 
     // ensure that at least one individual is selected
     let at_least_one_selected = false;
@@ -38,6 +38,8 @@ export function nextGeneration(currentPopulation, config) {
         }
     }
     if (!at_least_one_selected) {
+        failedToast("Next generation failed, try again.")
+
         // don't send empty request
         return Promise.reject("No individuals selected");
     }
