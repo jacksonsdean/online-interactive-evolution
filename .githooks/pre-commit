@@ -77,7 +77,7 @@ else
 fi
 
 echo "Testing python code quality in backend"
-python -m pylint --fail-under=8 --recursive=y ./nextGeneration ./interactive_testing.py ./local_test.py ./test.py
+python -m pylint --fail-under=8 --recursive=y ./nextGeneration ./interactive_testing.py ./local_test_server.py ./test.py
 
 if [ $? -ne 0 ]; then
   echo "pylint failed, check output."
