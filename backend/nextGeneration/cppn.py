@@ -9,10 +9,12 @@ try:
     from nextGeneration.activation_functions import identity
     from nextGeneration.graph_util import name_to_fn, choose_random_function, is_valid_connection
     from nextGeneration.graph_util import get_matching_connections, find_node_with_id, feed_forward_layers
+    from nextGeneration.graph_util import get_incoming_connections
 except ModuleNotFoundError:
     from activation_functions import identity
     from graph_util import get_matching_connections, find_node_with_id, feed_forward_layers
     from graph_util import name_to_fn, choose_random_function, is_valid_connection
+    from graph_util import get_incoming_connections
 
 class NodeType(IntEnum):
     """Enum for the type of node."""
@@ -43,6 +45,19 @@ class Node:
         self.layer = _layer
         self.sum_inputs = None
         self.outputs = None
+
+    def activate(self, incoming_connections):
+        """Activates the node."""
+        for cx in incoming_connections:
+            if cx.from_node.outputs is not None:
+                inputs = cx.from_node.outputs * cx.weight
+                self.sum_inputs = self.sum_inputs + inputs
+
+        self.outputs = self.activation(self.sum_inputs)  # apply activation
+
+    def initialize_sum(self, initial_sum):
+        """Activates the node."""
+        self.sum_inputs = initial_sum
 
     def to_json(self):
         """Converts the node to a json string."""
@@ -139,7 +154,7 @@ class Connection:
 class CPPN():
     """A CPPN Object with Nodes and Connections."""
 
-    pixel_inputs = np.zeros((0,0))
+    pixel_inputs = np.zeros((0, 0, 0)) # res_h, res_w, n_inputs
     @staticmethod
     def initialize_inputs(res_h, res_w, use_radial_dist, use_bias, n_inputs):
         """Initializes the pixel inputs."""
@@ -572,26 +587,21 @@ class CPPN():
             # iterate over layers
             for node_index, node_id in enumerate(layer):
                 # iterate over nodes in layer
-                
                 node = find_node_with_id(self.node_genome, node_id) # the current node
 
+
                 # find incoming connections
-                node_inputs = list(
-                    filter(lambda x, n=node: x.to_node.id == n.id,
-                        self.enabled_connections()))  # cxs that end here
+                node_inputs = get_incoming_connections(self, node)
 
-                # initialize the sum_inputs for this node
-                node.sum_inputs = np.zeros((res_h, res_w))
+                # initialize the node's sum_inputs
                 if node.type == NodeType.INPUT:
-                    # add pixel inputs to input layer
-                    node.sum_inputs += CPPN.pixel_inputs[:,:,node_index]
+                    starting_input = CPPN.pixel_inputs[:,:,node_index]
+                else:
+                    starting_input = np.zeros((res_h, res_w))
 
-                for cx in node_inputs:
-                    if cx.from_node.outputs is not None:
-                        inputs = cx.from_node.outputs * cx.weight
-                        node.sum_inputs = node.sum_inputs + inputs
-
-                node.outputs = node.activation(node.sum_inputs)  # apply activation
+                node.initialize_sum(starting_input)
+                # initialize the sum_inputs for this node
+                node.activate(node_inputs)
 
         outputs = np.array([np.array(node.outputs) for node in self.output_nodes()])
 
@@ -603,9 +613,9 @@ class CPPN():
         self.image = outputs
 
         self.normalize_image()
-        
+
         return self.image
-    
+
     def normalize_image(self):
         """Normalize from -1 through 1 to 0 through 255 and convert to ints"""
         self.image = np.clip(self.image, -1, 1)

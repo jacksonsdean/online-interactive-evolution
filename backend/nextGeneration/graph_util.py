@@ -63,6 +63,7 @@ def get_excess_connections(this_cxs, other_innovation):
         return []
     return [t_cx for t_cx in this_cxs if (t_cx.innovation not in other_innovation and t_cx.innovation > other_innovation[-1])]
 
+
 def get_matching_connections(cxs_1, cxs_2):
     """returns connections in cxs_1 that share an innovation number with a connection in cxs_2
        and     connections in cxs_2 that share an innovation number with a connection in cxs_1"""
@@ -70,12 +71,14 @@ def get_matching_connections(cxs_1, cxs_2):
         sorted([c2 for c2 in cxs_2 if c2.innovation in [
                c1.innovation for c1 in cxs_1]], key=lambda x: x.innovation)
 
+
 def find_node_with_id(nodes, id):
     """Returns the node with the given id from the list of nodes"""
     for node in nodes:
         if node.id == id:
             return node
     return None
+
 
 def get_ids_from_individual(individual):
     """Gets the ids from a given individual
@@ -88,13 +91,21 @@ def get_ids_from_individual(individual):
     """
     inputs = [n.id for n in individual.input_nodes()]
     outputs = [n.id for n in individual.output_nodes()]
-    connections = [(c.from_node.id, c.to_node.id) for c in individual.enabled_connections()]
+    connections = [(c.from_node.id, c.to_node.id)
+                   for c in individual.enabled_connections()]
     return inputs, outputs, connections
+
 
 def get_candidate_nodes(s, connections):
     """Find candidate nodes c for the next layer.  These nodes should connect
     a node in s to a node not in s."""
     return set(b for (a, b) in connections if a in s and b not in s)
+
+
+def get_incoming_connections(individual, node):
+    """Given an individual and a node, returns the connections in individual that end at the node"""
+    return list(filter(lambda x, n=node: x.to_node.id == n.id,
+               individual.enabled_connections()))  # cxs that end here
 
 ###############################################################################################
 # Methods below are from the NEAT-Python package https://github.com/CodeReclaimers/neat-python/
@@ -155,7 +166,6 @@ def required_for_output(inputs, outputs, connections):
         s = s.union(t)
 
     return required
-
 
 
 def feed_forward_layers(individual):

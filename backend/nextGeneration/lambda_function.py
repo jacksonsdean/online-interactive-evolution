@@ -46,6 +46,31 @@ def evaluate_population(population, config)->str:
     json_data = json.dumps(json_data)
     return json_data
 
+def selection_procedure(config, population, selected):
+    """Creates a new population given the selected individuals in-place
+
+    Args:
+        config (Config): The configuration for evolution
+        population (list[CPPN]): The current population
+        selected (list[CPPN]): The selected individuals
+    """
+    for index, _ in enumerate(population):
+        if not population[index].selected:
+            do_crossover = config.do_crossover and np.random.random() < config.prob_crossover
+            if do_crossover:
+                # crossover two selected individuals
+                parent1 = np.random.choice(selected)
+                parent2 = np.random.choice(selected)
+                population[index] = parent1.crossover(parent2)
+            else:
+                # replace with a mutated version of a random selected individual
+                random_parent = np.random.choice(selected)
+                population[index] = copy.deepcopy(random_parent) # make a copy
+
+            # mutate
+            population[index].mutate()
+            population[index].selected = False # deselect
+
 def initial_population(config):
     """Create the initial population."""
     population = []
@@ -71,25 +96,7 @@ def next_generation(config, population_data):
     selected = list(filter(lambda x: x.selected, population))
 
     # replace the unselected individuals with new individuals
-    for index, _ in enumerate(population):
-        if not population[index].selected:
-            do_crossover = config.do_crossover and np.random.random() < config.prob_crossover
-            if do_crossover:
-                # crossover two selected individuals
-                parent1 = np.random.choice(selected)
-                parent2 = np.random.choice(selected)
-                population[index] = parent1.crossover(parent2)
-            else:
-                # replace with a mutated version of a random selected individual
-                random_parent = np.random.choice(selected)
-                population[index] = copy.deepcopy(random_parent) # make a copy
-
-            # mutate
-            population[index].mutate()
-            population[index].selected = False # deselect
-
-    # sort by selection status
-    # population.sort(key=lambda x: x.selected, reverse=True)
+    selection_procedure(config, population, selected)
 
     # evaluate population
     json_data = evaluate_population(population, config)
