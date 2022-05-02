@@ -4,7 +4,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
 
-from backend.nextGeneration.graph_util import required_for_output
+from nextGeneration.graph_util import find_node_with_id, required_for_output
 
 
 def draw_nodes(graph, pos, node_labels, node_size):
@@ -34,7 +34,7 @@ def add_edges_to_graph(individual, visualize_disabled, graph, pos, required):
     connections = individual.connection_genome
     max_weight = individual.config.max_weight
     edge_labels = {}
- 
+
     for cx in connections:
         if(not visualize_disabled and (not cx.enabled or np.isclose(cx.weight, 0))):
             continue
@@ -45,17 +45,16 @@ def add_edges_to_graph(individual, visualize_disabled, graph, pos, required):
             style = ('-', 'r', .5+abs(cx.weight)/max_weight)
 
 
-        if cx.from_node in required and cx.to_node in required:
-            graph.add_edge(cx.from_node, cx.to_node,
-                           weight=f"{cx.weight:.4f}", pos=pos, style=style)
-            edge_labels[(cx.from_node, cx.to_node)] = f"{cx.weight:.3f}"
+        if cx.from_node.id in required and cx.to_node.id in required:
+            graph.add_edge(cx.from_node.id, cx.to_node.id,
+                            weight=f"{cx.weight:.4f}", pos=pos, style=style)
+        edge_labels[(cx.from_node.id, cx.to_node.id)] = f"{cx.weight:.3f}"
 
     return edge_labels
 
 
 def draw_edges(graph, pos, show_weights, node_size, edge_labels):
     """Draw edges on the graph"""
-
     edge_styles = set((s[2] for s in graph.edges(data='style')))
     for style in edge_styles:
         edges = [e for e in filter(
@@ -82,7 +81,7 @@ def add_input_nodes(individual, node_labels, graph):
         graph (Graph): graph to add nodes to
     """
     for i, node in enumerate(individual.input_nodes()):
-        graph.add_node(node, color='lightsteelblue',
+        graph.add_node(node.id, color='lightsteelblue',
                        shape='d', layer=(node.layer), subset=node.layer)
         if len(individual.input_nodes()) == 4:
             # includes bias and distance node
@@ -93,13 +92,11 @@ def add_input_nodes(individual, node_labels, graph):
 
         label = f"{node.id}({node.layer})\n{input_labels[i]}:"
         label += f"\n{node.activation.__name__.replace('_activation', '')}"
-        if node.outputs is not None:
-            label += f"\n{node.outputs:.3f}"
 
-        node_labels[node] = label
+        node_labels[node.id] = label
 
 
-def add_hidden_nodes(individual, node_labels, graph, visualize_disabled=False):
+def add_hidden_nodes(individual, node_labels, graph, required, visualize_disabled=False):
     """add input nodes to the graph
 
     Args:
@@ -107,19 +104,15 @@ def add_hidden_nodes(individual, node_labels, graph, visualize_disabled=False):
         node_labels (dictionary): labels of nodes
         graph (Graph): graph to add nodes to
     """
-    required = required_for_output(individual.input_nodes(), individual.output_nodes(),
-                                   [(cx.from_node, cx.to_node) for cx in individual.enabled_connections()])
 
-    print([n in required for n in individual.hidden_nodes()])
     for node in individual.hidden_nodes():
-        if node in required or visualize_disabled:
-            graph.add_node(node, color='lightsteelblue',
+        if node.id in required or visualize_disabled:
+            graph.add_node(node.id, color='lightsteelblue',
                         shape='o', layer=(node.layer), subset=node.layer)
             label = f"{node.id}({node.layer})"
             label += f"\n{node.activation.__name__.replace('_activation', '')}"
-            if node.outputs is not None:
-                label += f"\n{node.outputs:.3f}"
-            node_labels[node] = label
+
+            node_labels[node.id] = label
 
 
 def add_output_nodes(individual, node_labels, graph):
@@ -133,19 +126,18 @@ def add_output_nodes(individual, node_labels, graph):
 
     for i, node in enumerate(individual.output_nodes()):
         title = color_mode[i] if i < len(color_mode) else 'XXX'
-        graph.add_node(node, color='lightsteelblue',
+        graph.add_node(node.id, color='lightsteelblue',
                        shape='s', layer=(node.layer), subset=node.layer)
         label = f"{node.id}({node.layer})\n{title}:"
         label += f"\n{node.activation.__name__.replace('_activation', '')}"
-        if node.outputs is not None:
-            label += f"\n{node.outputs:.3f}"
-        node_labels[node] = label
+
+        node_labels[node.id] = label
 
 
-def add_nodes_to_graph(individual, node_labels, graph, visualize_disabled=False):
+def add_nodes_to_graph(individual, node_labels, graph, required, visualize_disabled=False):
     """Add nodes to the graph"""
     add_input_nodes(individual, node_labels, graph)
-    add_hidden_nodes(individual, node_labels, graph, visualize_disabled)
+    add_hidden_nodes(individual, node_labels, graph, required, visualize_disabled)
     add_output_nodes(individual, node_labels, graph)
 
 
@@ -154,22 +146,26 @@ def visualize_network(individual, visualize_disabled=False, show_weights=False):
     node_labels = {}
     node_size = 2000
     graph = nx.DiGraph()
-    individual = copy.deepcopy(individual)
-    individual.update_node_layers()
+    copied_individual = copy.deepcopy(individual)
+    copied_individual.update_node_layers()
+
     # configure plot
     plt.figure(figsize=(8, 8))
     plt.subplots_adjust(left=0, bottom=0, right=1.25,
                         top=1.25, wspace=0, hspace=0)
 
 
-
-    required = required_for_output(individual.input_nodes(), individual.output_nodes(),
-                [(cx.from_node, cx.to_node) for cx in individual.enabled_connections()])
-    required = required.union(individual.input_nodes())
+    if visualize_disabled:
+        required = [n.id for n in copied_individual.node_genome ]
+    else:
+        input_nodes = [n.id for n in copied_individual.input_nodes()]
+        output = [n.id for n in copied_individual.output_nodes()]
+        required = required_for_output(input_nodes, output,
+                    [(cx.from_node.id, cx.to_node.id) for cx in copied_individual.enabled_connections()])
+        required = required.union(input_nodes)
 
     # nodes:
-    add_nodes_to_graph(individual, node_labels, graph, visualize_disabled)
-
+    add_nodes_to_graph(copied_individual, node_labels, graph, required, visualize_disabled)
     # create the positions
     pos = nx.layout.multipartite_layout(graph)
 
@@ -177,8 +173,9 @@ def visualize_network(individual, visualize_disabled=False, show_weights=False):
     x_pos = list(set([pos[n][0] for n in graph]))
     x_pos.sort()
     for k, v in pos.items():
-        if k.layer <= len(x_pos):
-            pos[k] = [x_pos[k.layer],
+        node = find_node_with_id(copied_individual.node_genome, k)
+        if node.layer < len(x_pos):
+            pos[k] = [x_pos[node.layer],
                       v[1]]
 
     # draw
@@ -186,7 +183,7 @@ def visualize_network(individual, visualize_disabled=False, show_weights=False):
 
     # edges:
     edge_labels = add_edges_to_graph(
-        individual, visualize_disabled, graph, pos, required)
+        copied_individual, visualize_disabled, graph, pos, required)
     draw_edges( graph, pos, show_weights, node_size, edge_labels)
 
     nx.draw_networkx_labels(graph, pos, labels=node_labels)

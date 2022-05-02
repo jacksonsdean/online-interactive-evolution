@@ -9,8 +9,8 @@ from skimage.color import hsv2rgb
 from test import TEST_RESET_EVENT
 from nextGeneration.activation_functions import gauss, identity, sin, tanh
 from nextGeneration.config import Config
-from nextGeneration.cppn import CPPN, Node, NodeType
-from backend.nextGeneration.graph_util import feed_forward_layers
+from nextGeneration.cppn import CPPN, Connection, Node, NodeType
+from nextGeneration.graph_util import feed_forward_layers
 from visualize import visualize_network
 
 def show_images(imgs, color_mode="L", titles=[], height=10):
@@ -130,3 +130,27 @@ for i, layer in enumerate(layers):
     print("Layer", i)
     for node in layer:
         print("\t",node.id, node.type, node.activation)
+#%%
+
+from nextGeneration import cppn
+Connection.innovations = []
+config = Config()
+cppn1 = CPPN(config)
+    
+cppn2 = CPPN(config)
+for i in range(10):
+    print("+"  * 30)
+    cppn1.mutate()
+    print(len(cppn1.connection_genome))
+    # print("2")
+    # cppn2.mutate()
+print(cppn1.connection_genome)
+visualize_network(cppn1, visualize_disabled=True)
+# visualize_network(cppn2, visualize_disabled=True)
+# child = cppn1.crossover(cppn2)
+# visualize_network(child, visualize_disabled=True)
+imgs = []
+imgs.append(cppn1.get_image())
+# imgs.append(cppn2.get_image())
+# imgs.append(child.get_image())
+show_images(imgs, color_mode="RGB")

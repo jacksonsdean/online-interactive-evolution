@@ -131,7 +131,9 @@ class Connection:
         return self.__repr__()
     def __repr__(self):
         return f"([{self.from_node.id}->{self.to_node.id}]"+\
-            f"I:{self.innovation} W:{self.weight:3f} E:{self.enabled} R:{self.is_recurrent})"
+            f"I:{self.innovation})"
+        # return f"([{self.from_node.id}->{self.to_node.id}]"+\
+            # f"I:{self.innovation} W:{self.weight:3f} E:{self.enabled} R:{self.is_recurrent})"
 
 
 class CPPN():
@@ -301,12 +303,16 @@ class CPPN():
         """Mutates the CPPN based on its config."""
         if(np.random.uniform(0,1) < self.config.prob_add_node):
             self.add_node()
+            print("Added node")
         if(np.random.uniform(0,1) < self.config.prob_remove_node):
             self.remove_node()
+            print("removed node")
         if(np.random.uniform(0,1) < self.config.prob_add_connection):
             self.add_connection()
+            print("Added connection")
         if(np.random.uniform(0,1) < self.config.prob_disable_connection):
             self.disable_connection()
+            print("disabled connection")
 
         self.mutate_activations()
         self.mutate_weights()
@@ -314,6 +320,7 @@ class CPPN():
         self.disable_invalid_connections()
 
     def disable_invalid_connections(self):
+        return
         """Disables connections that are not compatible with the current configuration."""
         for connection in self.connection_genome:
             if connection.enabled:
@@ -468,8 +475,8 @@ class CPPN():
     def reset_activations(self):
         """Resets all node activations to zero."""
         for node in self.node_genome:
-            node.sum_inputs = np.zeros((self.config.res_h, self.config.res_w), dtype= CPPN.pixel_inputs.dtype)
-            node.outputs = np.zeros((self.config.res_h, self.config.res_w), dtype= CPPN.pixel_inputs.dtype)
+            node.sum_inputs = np.ones((self.config.res_h, self.config.res_w), dtype= CPPN.pixel_inputs.dtype)
+            node.outputs = np.ones((self.config.res_h, self.config.res_w), dtype= CPPN.pixel_inputs.dtype)
 
     def eval(self, inputs):
         """Evaluates the CPPN."""
@@ -592,6 +599,7 @@ class CPPN():
                 node.outputs = node.activation(node.sum_inputs)  # apply activation
 
         outputs = np.array([np.array(node.outputs) for node in self.output_nodes()])
+        print(outputs)
         if len(self.config.color_mode)>2:
             outputs =  np.array(outputs).transpose(1, 2, 0) # move color axis to end
         else:
@@ -605,12 +613,18 @@ class CPPN():
     
     def normalize_image(self):
         """Normalize from -1 through 1 to 0 through 255 and convert to ints"""
+        self.image = np.clip(self.image, -1, 1)
+        self.image = 1.0 - np.abs(self.image)
         max_value = np.max(self.image)
         min_value = np.min(self.image)
-        self.image-= min_value
-        self.image *=255
-        self.image /= (max_value - min_value)
+        image_range = max_value - min_value
+        if image_range == 0:
+            image_range = 1e-6
+        self.image -= min_value
+        self.image *= 255
+        self.image /= image_range
         self.image = self.image.astype(np.uint8)
+
     def crossover(self, other_parent):
         """Crossover with another CPPN using the method in Stanley and Miikkulainen (2007)."""
         child = CPPN(self.config) # create child
@@ -620,49 +634,49 @@ class CPPN():
         child.connection_genome = copy.deepcopy(self.connection_genome)
 
         # line up by innovation number and find matches
-        child.connection_genome.sort(key=lambda x: x.innovation)
+        # child.connection_genome.sort(key=lambda x: x.innovation)
         matching1, matching2 = get_matching_connections(
             self.connection_genome, other_parent.connection_genome)
-
-        for match_index, _ in enumerate(matching1):
-            if match_index >= len(matching2):
-                continue # skip to avoid out of bounds
+        print("1", self.connection_genome)
+        print()
+        print("2", other_parent.connection_genome)
+        print()
+        print("MATCH1", matching1)
+        print()
+        print("MATCH2", matching2)
+        for match_1, match_2 in zip(matching1, matching2):
             child_cx = child.connection_genome[[x.innovation\
                 for x in child.connection_genome].index(
-                matching1[match_index].innovation)]
+                match_1.innovation)]
 
             # Matching genes are inherited randomly
             inherit_from_parent_1 = np.random.rand() < .5
             if inherit_from_parent_1:
-                child_cx.weight = matching1[match_index].weight
-                new_from = copy.deepcopy(matching1[match_index].from_node)
-                new_to = copy.deepcopy(matching1[match_index].to_node)
+                child_cx.weight = match_1.weight
+                new_from = copy.deepcopy(match_1.from_node)
+                new_to = copy.deepcopy(match_1.to_node)
             else:
-                child_cx.weight = matching2[match_index].weight
-                new_from = copy.deepcopy(matching2[match_index].from_node)
-                new_to = copy.deepcopy(matching2[match_index].to_node)
+                child_cx.weight = match_2.weight
+                new_from = copy.deepcopy(match_2.from_node)
+                new_to = copy.deepcopy(match_2.to_node)
 
             # assign new nodes and connections
             child_cx.from_node = new_from
             child_cx.to_node = new_to
-            try:
-                existing = find_node_with_id(child.node_genome, new_from.id)
-                index_existing = child.node_genome.index(existing)
-                child.node_genome[index_existing] = new_from
-            except ValueError:
-                pass # skip if the node wasn't found
-            
-            try:
-                existing = find_node_with_id(child.node_genome, new_to.id)
-                index_existing = child.node_genome.index(existing)
-                child.node_genome[index_existing] = new_to
-            except ValueError:
-                pass # skip if the node wasn't found
+            existing = find_node_with_id(child.node_genome, new_from.id)
+            index_existing = child.node_genome.index(existing)
+            child.node_genome[index_existing] = new_from
+        
+            existing = find_node_with_id(child.node_genome, new_to.id)
+            index_existing = child.node_genome.index(existing)
+            child.node_genome[index_existing] = new_to
 
-            if(not matching1[match_index].enabled or not matching2[match_index].enabled):
+            if(not match_1.enabled or not match_2.enabled):
                 if np.random.rand() < 0.75:  # 0.75 from Stanley/Miikulainen 2007
-                    child.connection_genome[match_index].enabled = False
+                    child_cx.enabled = False
 
-        child.update_node_layers()
+        # child.update_node_layers()
+        print()
+        print("CHILD", child.connection_genome)
 
         return child

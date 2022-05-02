@@ -42,7 +42,7 @@ class   Config:
 
         # DGNA/SGMA uses 1 or 2 so that patterns in the initial
         # generation would be nontrivial (Stanley, 2007).
-        self.hidden_nodes_at_start=1
+        self.hidden_nodes_at_start = 2
 
         self.allow_input_activation_mutation = False
 

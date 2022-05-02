@@ -8,6 +8,8 @@ import random
 from PIL import Image
 import numpy as np
 
+from visualize import visualize_network
+
 try:
     from config import Config
     from cppn import CPPN
@@ -25,7 +27,6 @@ def evaluate_population(population, config)->str:
     for individual in population:
         # evaluate the CPPN
         individual.get_image()
-
         # convert from numpy to bytes
         individual.image = Image.fromarray(individual.image)
         # convert to RGB if not RGB
