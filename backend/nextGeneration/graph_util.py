@@ -77,6 +77,24 @@ def find_node_with_id(nodes, id):
             return node
     return None
 
+def get_ids_from_individual(individual):
+    """Gets the ids from a given individual
+
+    Args:
+        individual (CPPN): The individual to get the ids from.
+
+    Returns:
+        tuple: (inputs, outputs, connections) the ids of the CPPN's nodes
+    """
+    inputs = [n.id for n in individual.input_nodes()]
+    outputs = [n.id for n in individual.output_nodes()]
+    connections = [(c.from_node.id, c.to_node.id) for c in individual.enabled_connections()]
+    return inputs, outputs, connections
+
+def get_candidate_nodes(s, connections):
+    """Find candidate nodes c for the next layer.  These nodes should connect
+    a node in s to a node not in s."""
+    return set(b for (a, b) in connections if a in s and b not in s)
 
 ###############################################################################################
 # Methods below are from the NEAT-Python package https://github.com/CodeReclaimers/neat-python/
@@ -154,18 +172,15 @@ def feed_forward_layers(individual):
     Modified from: https://neat-python.readthedocs.io/en/latest/_modules/graphs.html
     """
 
-    connections = [(c.from_node.id, c.to_node.id) for c in individual.enabled_connections()]
-    inputs = [n.id for n in individual.input_nodes()]
-    outputs = [n.id for n in individual.output_nodes()]
+    inputs, outputs, connections = get_ids_from_individual(individual)
 
     required = required_for_output(inputs, outputs, connections)
 
     layers = []
     s = set(inputs)
     while 1:
-        # Find candidate nodes c for the next layer.  These nodes should connect
-        # a node in s to a node not in s.
-        c = set(b for (a, b) in connections if a in s and b not in s)
+
+        c = get_candidate_nodes(s, connections)
         # Keep only the used nodes whose entire input set is contained in s.
         t = set()
         for n in c:

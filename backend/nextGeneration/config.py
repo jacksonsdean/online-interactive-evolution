@@ -26,6 +26,7 @@ class   Config:
         self.init_connection_probability = 1
         self.activations = get_all()
         self.seed = None
+        self.prob_crossover = .25
 
         """DGNA: the probability of adding a node is 0.5 and the
         probability of adding a connection is 0.4.

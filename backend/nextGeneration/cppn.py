@@ -303,16 +303,12 @@ class CPPN():
         """Mutates the CPPN based on its config."""
         if(np.random.uniform(0,1) < self.config.prob_add_node):
             self.add_node()
-            print("Added node")
         if(np.random.uniform(0,1) < self.config.prob_remove_node):
             self.remove_node()
-            print("removed node")
         if(np.random.uniform(0,1) < self.config.prob_add_connection):
             self.add_connection()
-            print("Added connection")
         if(np.random.uniform(0,1) < self.config.prob_disable_connection):
             self.disable_connection()
-            print("disabled connection")
 
         self.mutate_activations()
         self.mutate_weights()
@@ -320,7 +316,6 @@ class CPPN():
         self.disable_invalid_connections()
 
     def disable_invalid_connections(self):
-        return
         """Disables connections that are not compatible with the current configuration."""
         for connection in self.connection_genome:
             if connection.enabled:
@@ -599,7 +594,7 @@ class CPPN():
                 node.outputs = node.activation(node.sum_inputs)  # apply activation
 
         outputs = np.array([np.array(node.outputs) for node in self.output_nodes()])
-        print(outputs)
+
         if len(self.config.color_mode)>2:
             outputs =  np.array(outputs).transpose(1, 2, 0) # move color axis to end
         else:
@@ -637,13 +632,7 @@ class CPPN():
         # child.connection_genome.sort(key=lambda x: x.innovation)
         matching1, matching2 = get_matching_connections(
             self.connection_genome, other_parent.connection_genome)
-        print("1", self.connection_genome)
-        print()
-        print("2", other_parent.connection_genome)
-        print()
-        print("MATCH1", matching1)
-        print()
-        print("MATCH2", matching2)
+
         for match_1, match_2 in zip(matching1, matching2):
             child_cx = child.connection_genome[[x.innovation\
                 for x in child.connection_genome].index(
@@ -675,8 +664,6 @@ class CPPN():
                 if np.random.rand() < 0.75:  # 0.75 from Stanley/Miikulainen 2007
                     child_cx.enabled = False
 
-        # child.update_node_layers()
-        print()
-        print("CHILD", child.connection_genome)
+        child.update_node_layers()
 
         return child

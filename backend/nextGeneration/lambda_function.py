@@ -71,7 +71,7 @@ def next_generation(config, population_data):
     # replace the unselected individuals with new individuals
     for index, _ in enumerate(population):
         if not population[index].selected:
-            do_crossover = config.do_crossover and np.random.random() < .15
+            do_crossover = config.do_crossover and np.random.random() < config.prob_crossover
             if do_crossover:
                 # crossover two selected individuals
                 parent1 = np.random.choice(selected)
@@ -113,7 +113,7 @@ def lambda_handler(event, context):
         # use the seed from the config
         random.seed(int(config.seed))
         np.random.seed(int(config.seed))
-        print(config.seed)
+
         if operation == 'reset':
             body = initial_population(config)
         if operation == 'next_gen':
