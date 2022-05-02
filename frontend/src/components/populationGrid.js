@@ -1,5 +1,5 @@
 import React from 'react';
-import { DEFAULT_CONFIG } from '../Constants';
+import { DEFAULT_CONFIG, MAX_HISTORY } from '../Constants';
 import { initialPopulation, nextGeneration } from '../util';
 import Grid from './Grid';
 import styles from "./PopulationGrid.module.css";
@@ -20,7 +20,11 @@ class IndividualButton extends React.Component {
     render() {
         const individual = this.props.individual;
         // create image from individual
-        const parsed = JSON.parse(individual.image)
+        let parsed = JSON.parse(individual.image)
+        if(parsed === null) {
+            console.log(individual.image)
+            parsed = individual.image
+        }
         // create url from base64 string
         const url = "data:image/png;base64," + parsed.join("")
         // choose the style based on whether the individual is selected
@@ -88,30 +92,37 @@ class PopulationGrid extends Grid {
             console.log(data.error)
             return;
         }
-        const pop = data["population"];
-        if (pop === 'undefined' || pop.length === 0) {
-            console.error("No population returned")
+        const current_pop = this.state.population;
+        const next_pop = data["population"];
+        if (next_pop === 'undefined' || next_pop.length === 0) {
+            console.error("No next_population returned")
             return
         }
         
-        // deselect all
-        for (let i = 0; i < pop.length; i++) {
-            pop[i].selected = false;
+        for (let i = 0; i < current_pop.length; i++) {
+            if (current_pop[i].selected) {
+                // keep selected in population
+                next_pop[i] = current_pop[i]
+            }
+            // deselect all
+            next_pop[i].selected = false;
         }
-        this.setState({ population: pop, loading: false });
+        this.config.seed+=1; // increment seed
+        this.setState({ population: next_pop, loading: false });
     }
     
     /* Handles the next generation button */
     nextGenerationClicked() {
+        this.history.push(this.state.population) // put current population in history
+        if(this.history.length > MAX_HISTORY) {
+            this.history.shift() // remove oldest population from history
+        }
+
         this.setState({ loading: true });
         nextGeneration(this.state.population, this.config).then((data) => {
-            this.config.seed+=1 // increase seed for next generation
-            this.history.push(this.state.population) // put current population in history
             this.handleNewData(data)
         }).catch((err) => {
-            // failed, undo state changes
             console.log(err)
-            this.config.seed-=1 // undo increasing the seed
             this.history.pop() // remove last population from history
             this.setState({ population: this.state.population, loading: false });
         })
@@ -122,25 +133,7 @@ class PopulationGrid extends Grid {
         if (this.history.length === 0) {
             return
         }
-        this.setState({ loading: true });
-        this.config.seed-=1 // decrease seed for previous generation
-        
-        const last_pop = this.history.pop() // get last population
-
-        // Select all individuals so we get the same population
-        for (let i = 0; i < last_pop.length; i++) {
-            last_pop[i].selected = true;
-        }
-
-        nextGeneration(last_pop, this.config).then((data) => {
-            this.handleNewData(data)
-        }).catch((err) => {
-            // failed, undo state changes
-            console.log(err)
-            this.config.seed+=1 // undo decreasing the seed
-            this.history.push(last_pop) // put last population back in history
-            this.setState({ loading: false });
-        })
+        this.setState({ loading: false, population: this.history.pop() });
     }
 
     componentDidMount() {

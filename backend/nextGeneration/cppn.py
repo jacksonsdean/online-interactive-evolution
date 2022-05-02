@@ -470,8 +470,8 @@ class CPPN():
     def reset_activations(self):
         """Resets all node activations to zero."""
         for node in self.node_genome:
-            node.sum_inputs = np.ones((self.config.res_h, self.config.res_w), dtype= CPPN.pixel_inputs.dtype)
-            node.outputs = np.ones((self.config.res_h, self.config.res_w), dtype= CPPN.pixel_inputs.dtype)
+            node.sum_inputs = np.ones((self.config.res_h, self.config.res_w))/2.0
+            node.outputs = np.ones((self.config.res_h, self.config.res_w))/2.0
 
     def eval(self, inputs):
         """Evaluates the CPPN."""
@@ -652,13 +652,20 @@ class CPPN():
             # assign new nodes and connections
             child_cx.from_node = new_from
             child_cx.to_node = new_to
-            existing = find_node_with_id(child.node_genome, new_from.id)
-            index_existing = child.node_genome.index(existing)
-            child.node_genome[index_existing] = new_from
-        
-            existing = find_node_with_id(child.node_genome, new_to.id)
-            index_existing = child.node_genome.index(existing)
-            child.node_genome[index_existing] = new_to
+            try:
+                existing = find_node_with_id(child.node_genome, new_from.id)
+                index_existing = child.node_genome.index(existing)
+                child.node_genome[index_existing] = new_from
+            except ValueError:
+                # this node does not exist in the child genome, don't add connection
+                child.connection_genome.remove(child_cx)
+            try:
+                existing = find_node_with_id(child.node_genome, new_to.id)
+                index_existing = child.node_genome.index(existing)
+                child.node_genome[index_existing] = new_to
+            except ValueError:
+                # this node does not exist in the child genome, don't add connection
+                child.connection_genome.remove(child_cx)
 
             if(not match_1.enabled or not match_2.enabled):
                 if np.random.rand() < 0.75:  # 0.75 from Stanley/Miikulainen 2007

@@ -25,6 +25,8 @@ HEADERS = {
 
 def evaluate_population(population, config)->str:
     for individual in population:
+        if individual.selected:
+            continue # frontend already has image data for previous gen
         # evaluate the CPPN
         individual.get_image()
         # convert from numpy to bytes
@@ -87,7 +89,7 @@ def next_generation(config, population_data):
             population[index].selected = False # deselect
 
     # sort by selection status
-    population.sort(key=lambda x: x.selected, reverse=True)
+    # population.sort(key=lambda x: x.selected, reverse=True)
 
     # evaluate population
     json_data = evaluate_population(population, config)

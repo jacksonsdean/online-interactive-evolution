@@ -14,3 +14,5 @@ export const NEXT_GEN_OPERATION = "next_gen"
 export const POST_FORMAT = {
     "operation": RESET_OPERATION, "config": DEFAULT_CONFIG
 }
+
+export const MAX_HISTORY = 20
