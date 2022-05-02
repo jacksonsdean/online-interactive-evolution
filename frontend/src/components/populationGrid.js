@@ -1,6 +1,6 @@
 import React from 'react';
 import { DEFAULT_CONFIG, MAX_HISTORY } from '../Constants';
-import { initialPopulation, nextGeneration } from '../util';
+import { initialPopulation, nextGeneration, getImageUrl, saveIndividuals } from '../util';
 import Grid from './Grid';
 import styles from "./PopulationGrid.module.css";
 
@@ -19,14 +19,7 @@ class IndividualButton extends React.Component {
 
     render() {
         const individual = this.props.individual;
-        // create image from individual
-        let parsed = JSON.parse(individual.image)
-        if(parsed === null) {
-            console.log(individual.image)
-            parsed = individual.image
-        }
-        // create url from base64 string
-        const url = "data:image/png;base64," + parsed.join("")
+        const url = getImageUrl(individual);
         // choose the style based on whether the individual is selected
         const selectionStyle = individual.selected ? styles.selected : styles.unselected
         return (
@@ -66,6 +59,15 @@ class PreviousGenerationButton extends React.Component {
         )
     }
 }
+class SaveImagesButton extends React.Component {
+    render() {
+        return (
+            <button style={this.props.style} className={styles.nextGenButton + " " + (this.props.loading ? styles.loading : "")} onClick={this.props.onClick} disabled={this.props.loading}>
+                {this.props.loading ? "Loading..." : "Save Images \u{0001f4be}"}
+            </button>
+        )
+    }
+}
 
 class PopulationGrid extends Grid {
 
@@ -74,13 +76,14 @@ class PopulationGrid extends Grid {
         this.state = { population: [], loading: true };
         this.history = [];
         this.config = DEFAULT_CONFIG;
-        
+
         // initialize seed to a random value
         this.config.seed = Math.round(Math.random() * 10000);
-        
+
         // bind member functions
         this.nextGenerationClicked = this.nextGenerationClicked.bind(this);
         this.previousGenerationClicked = this.previousGenerationClicked.bind(this);
+        this.saveImagesClicked = this.saveImagesClicked.bind(this);
     }
 
     /* Handles incoming population and image data from the server */
@@ -98,7 +101,7 @@ class PopulationGrid extends Grid {
             console.error("No next_population returned")
             return
         }
-        
+
         for (let i = 0; i < current_pop.length; i++) {
             if (current_pop[i].selected) {
                 // keep selected in population
@@ -110,7 +113,7 @@ class PopulationGrid extends Grid {
         this.config.seed+=1; // increment seed
         this.setState({ population: next_pop, loading: false });
     }
-    
+
     /* Handles the next generation button */
     nextGenerationClicked() {
         this.history.push(this.state.population) // put current population in history
@@ -127,13 +130,51 @@ class PopulationGrid extends Grid {
             this.setState({ population: this.state.population, loading: false });
         })
     }
-    
+
     /* Handles the previous generation button */
     previousGenerationClicked() {
         if (this.history.length === 0) {
             return
         }
         this.setState({ loading: false, population: this.history.pop() });
+    }
+
+    /* Handles the save images button */
+    saveImagesClicked() {
+        this.history.push(this.state.population) // put current population in history
+        if(this.history.length > MAX_HISTORY) {
+            this.history.shift() // remove oldest population from history
+        }
+
+        this.setState({ loading: true });
+        saveIndividuals(this.state.population, this.config).then((data) => {
+            if ("body" in data && typeof data.body !== "object") {
+                data = JSON.parse(data["body"]);
+            }
+            if (data.error) {
+                console.log(data.error)
+                return;
+            }
+            const population = data["population"];
+            for (let i = 0; i < population.length; i++) {
+                const individual = population[i];
+                if (individual.selected){
+                    continue
+                }
+                const url = getImageUrl(individual);
+                // download image
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = "saved_genome_"+ i.toString() + ".png";
+                link.click();
+            }
+            this.setState({ loading: false });
+
+        }).catch((err) => {
+            console.log(err)
+            this.history.pop() // remove last population from history
+            this.setState({ population: this.state.population, loading: false });
+        })
     }
 
     componentDidMount() {
@@ -164,6 +205,7 @@ class PopulationGrid extends Grid {
                 {this.state.loading ? <LoadingSpinner /> : <>
                     <NextGenerationButton style={{ width: gridWidth / 2 }} loading={this.state.loading} onClick={this.nextGenerationClicked} />
                     <PreviousGenerationButton style={{ width: gridWidth / 2 }} loading={this.state.loading} onClick={this.previousGenerationClicked} />
+                    <SaveImagesButton style={{ width: gridWidth / 2 }} loading={this.state.loading} onClick={this.saveImagesClicked} />
                 </>}
             </div>
         </>

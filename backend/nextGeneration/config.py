@@ -14,6 +14,8 @@ class   Config:
         self.population_size = 10
         self.res_w = 28
         self.res_h = 28
+        self.save_w = 512
+        self.save_h = 512
         self.color_mode = "RGB"
         self.do_crossover = True
         self.allow_recurrent = False

@@ -15,6 +15,7 @@
 
 .IECApp-header {
   background-color: #282c34;
+  background-image: linear-gradient(to top right, #282c34, #051d1e);
   min-height: 100vh;
   display: flex;
   flex-direction: column;

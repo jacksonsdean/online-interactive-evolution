@@ -8,8 +8,6 @@ import random
 from PIL import Image
 import numpy as np
 
-from visualize import visualize_network
-
 try:
     from config import Config
     from cppn import CPPN
@@ -39,7 +37,6 @@ def evaluate_population(population, config)->str:
             im_b64 = base64.b64encode(img_byte_arr.getvalue()).decode("utf8")
             individual.image = im_b64
             img_byte_arr.close()
-
     # convert to json
     population_json = [individual.to_json() for individual in population]
     json_data = {"config":config.to_json(), "population": population_json}
@@ -102,6 +99,22 @@ def next_generation(config, population_data):
     json_data = evaluate_population(population, config)
     return json_data
 
+def save_images(config, population_data):
+    """Return the images in the population, generated with save resolution."""# create population
+    population = []
+    for individual in population_data:
+        population.append(CPPN.create_from_json(individual, config))
+
+    for individual in population:
+        if individual.selected:
+            # apply save resolution before evaluating
+            individual.config.res_h = config.save_h
+            individual.config.res_w = config.save_w
+
+        individual.selected = not individual.selected # invert selection
+
+    json_data = evaluate_population(population, config)
+    return json_data
 
 def lambda_handler(event, context):
     """Handle an incoming request from Next Generation."""
@@ -125,9 +138,12 @@ def lambda_handler(event, context):
 
         if operation == 'reset':
             body = initial_population(config)
-        if operation == 'next_gen':
+        elif operation == 'next_gen':
             raw_pop = data['population']
             body = next_generation(config, raw_pop)
+        elif operation == 'save_images':
+            raw_pop = data['population']
+            body = save_images(config, raw_pop)
 
     except Exception as e: # pylint: disable=broad-except
         print("ERROR while handling lambda:", type(e), e)

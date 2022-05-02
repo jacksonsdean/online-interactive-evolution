@@ -10,6 +10,7 @@ export const DEFAULT_CONFIG = {
 
 export const RESET_OPERATION = "reset"
 export const NEXT_GEN_OPERATION = "next_gen"
+export const SAVE_IMAGES_OPERATION = "save_images"
 
 export const POST_FORMAT = {
     "operation": RESET_OPERATION, "config": DEFAULT_CONFIG

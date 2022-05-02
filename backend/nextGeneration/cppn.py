@@ -544,8 +544,14 @@ class CPPN():
 
         return [node.output for node in self.output_nodes()]
 
-    def get_image(self, force_recalculate=False):
+    def get_image(self, force_recalculate=False, override_h=None, override_w=None):
         """Returns an image of the network."""
+        # apply size override
+        if override_h is not None:
+            self.config.res_h = override_h
+        if override_w is not None:
+            self.config.res_w = override_w
+
         # decide if we need to recalculate the image
         recalculate = False
         recalculate = recalculate or force_recalculate
@@ -555,6 +561,8 @@ class CPPN():
         else:
             # no cached image
             recalculate = True
+
+
         if not recalculate:
             # return the cached image
             return self.image
@@ -606,7 +614,6 @@ class CPPN():
             for node_index, node_id in enumerate(layer):
                 # iterate over nodes in layer
                 node = find_node_with_id(self.node_genome, node_id) # the current node
-
 
                 # find incoming connections
                 node_inputs = get_incoming_connections(self, node)
