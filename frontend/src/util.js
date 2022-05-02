@@ -9,6 +9,22 @@ export function post(url, data) {
         body: JSON.stringify(data) });
 }
 
+function receivePostReponse(response) {
+    if (response.status === 200) {
+        // got new population
+        return Promise.resolve(response.json())
+    }
+    else if (response.status === 502) {
+        // got gateway error
+        return Promise.reject(response.json())
+    }
+    else {
+
+        // failed, reject promise
+        return Promise.reject(response.status);
+    }
+}
+
 /* gets a new population from the server, given the current population
  and the configuration */
 export function nextGeneration(currentPopulation, config) {
@@ -43,14 +59,7 @@ export function nextGeneration(currentPopulation, config) {
     // send request
     return new Promise((resolve, reject) => {
         post(API_URL, postData).then((response) => {
-            if (response.status === 200) {
-                // got new population
-                resolve(response.json())
-            }
-            else {
-                // failed, reject promise
-                reject(response.status);
-            }
+            resolve(receivePostReponse(response))
         }
         ).catch((error) => {
             console.log("Error: " + error);
@@ -92,14 +101,7 @@ export function saveIndividuals(currentPopulation, config) {
     // send request
     return new Promise((resolve, reject) => {
         post(API_URL, postData).then((response) => {
-            if (response.status === 200) {
-                // got new population
-                resolve(response.json())
-            }
-            else {
-                // failed, reject promise
-                reject(response.status);
-            }
+            resolve(receivePostReponse(response))
         }
         ).catch((error) => {
             console.log("Error: " + error);

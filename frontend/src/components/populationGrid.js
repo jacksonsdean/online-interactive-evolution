@@ -1,8 +1,21 @@
 import React from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { DEFAULT_CONFIG, MAX_HISTORY } from '../Constants';
 import { initialPopulation, nextGeneration, getImageUrl, saveIndividuals } from '../util';
 import Grid from './Grid';
 import styles from "./PopulationGrid.module.css";
+
+class FailedToast extends React.Component {
+    render() {
+        return (
+            <div>
+               <h3>Failed</h3>
+               <p>{this.props.text}</p>
+            </div>
+        );
+    }
+}
 
 class IndividualButton extends React.Component {
 
@@ -70,6 +83,7 @@ class SaveImagesButton extends React.Component {
 }
 
 class PopulationGrid extends Grid {
+    failedToast = (text) => toast(<FailedToast text={text}/>, { type: "warning", autoClose: 2000, position: "top-right", closeButton: true, hideProgressBar: false, closeOnClick: true, pauseOnHover: true });
 
     constructor(props) {
         super(props);
@@ -172,6 +186,8 @@ class PopulationGrid extends Grid {
 
         }).catch((err) => {
             console.log(err)
+            this.failedToast("Saving images failed. Try selecting fewer at once.")
+
             this.history.pop() // remove last population from history
             this.setState({ population: this.state.population, loading: false });
         })
@@ -208,6 +224,7 @@ class PopulationGrid extends Grid {
                     <SaveImagesButton style={{ width: gridWidth / 2 }} loading={this.state.loading} onClick={this.saveImagesClicked} />
                 </>}
             </div>
+            <ToastContainer />
         </>
         );
     }
