@@ -13,7 +13,7 @@
   /* } */
 }
 
-.IECApp-header {
+.IECApp-background {
   background-color: #282c34;
   background-image: linear-gradient(to top right, #282c34, #051d1e);
   min-height: 100vh;
@@ -36,4 +36,12 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.content{
+  display: inline-block;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  height:65vh;
 }

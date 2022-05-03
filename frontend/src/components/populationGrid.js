@@ -10,7 +10,7 @@ class FailedToast extends React.Component {
     render() {
         return (
             <div>
-               {this.props.text}
+                {this.props.text}
             </div>
         );
     }
@@ -45,7 +45,7 @@ class IndividualButton extends React.Component {
 class LoadingSpinner extends React.Component {
     render() {
         return (
-            <div className="spinner-container">
+            <div className={styles.loadingSpinnerContainer}>
                 <div className={styles.loadingSpinner} data-testid="spinner" />
             </div>
         );
@@ -56,7 +56,13 @@ class NextGenerationButton extends React.Component {
     render() {
         return (
             <button style={this.props.style} className={styles.nextGenButton + " " + (this.props.loading ? styles.loading : "")} onClick={this.props.onClick} disabled={this.props.loading}>
-                {this.props.loading ? "Loading..." : "Next Generation \u21E8"}
+                <div>
+                    Next<br />
+                    generation
+                </div>
+                <div>
+                    {"\u25B6"}
+                </div>
             </button>
         )
     }
@@ -66,7 +72,12 @@ class PreviousGenerationButton extends React.Component {
     render() {
         return (
             <button style={this.props.style} className={styles.nextGenButton + " " + (this.props.loading ? styles.loading : "")} onClick={this.props.onClick} disabled={this.props.loading}>
-                {this.props.loading ? "Loading..." : "Previous Generation \u21E6"}
+                <div>
+                    Previous<br />generation
+                </div>
+                <div>
+                    {"\u25C0"}
+                </div>
             </button>
         )
     }
@@ -75,14 +86,19 @@ class SaveImagesButton extends React.Component {
     render() {
         return (
             <button style={this.props.style} className={styles.nextGenButton + " " + (this.props.loading ? styles.loading : "")} onClick={this.props.onClick} disabled={this.props.loading}>
-                {this.props.loading ? "Loading..." : "Save Images \u{0001f4be}"}
+                <div>
+                    Save images
+                </div>
+                <div>
+                    {"\u{0001f4be}"}
+                </div>
             </button>
         )
     }
 }
 
 class PopulationGrid extends Grid {
-    failedToast = (text) => toast(<FailedToast text={text}/>, { type: "warning", autoClose: 4000});
+    failedToast = (text) => toast(<FailedToast text={text} />, { type: "warning", autoClose: 4000 });
 
     constructor(props) {
         super(props);
@@ -123,14 +139,14 @@ class PopulationGrid extends Grid {
             // deselect all
             next_pop[i].selected = false;
         }
-        this.config.seed+=1; // increment seed
+        this.config.seed += 1; // increment seed
         this.setState({ population: next_pop, loading: false });
     }
 
     /* Handles the next generation button */
     nextGenerationClicked() {
         this.history.push(this.state.population) // put current population in history
-        if(this.history.length > MAX_HISTORY) {
+        if (this.history.length > MAX_HISTORY) {
             this.history.shift() // remove oldest population from history
         }
 
@@ -168,14 +184,14 @@ class PopulationGrid extends Grid {
             const population = data["population"];
             for (let i = 0; i < population.length; i++) {
                 const individual = population[i];
-                if (individual.selected){
+                if (individual.selected) {
                     continue
                 }
                 const url = getImageUrl(individual);
                 // download image
                 const link = document.createElement("a");
                 link.href = url;
-                link.download = "saved_genome_"+ i.toString() + ".png";
+                link.download = "saved_genome_" + i.toString() + ".png";
                 link.click();
             }
             this.setState({ loading: false });
@@ -206,17 +222,21 @@ class PopulationGrid extends Grid {
         const gridWidth = this.config.res_w * (1 + Math.sqrt(this.config.population_size));
         const individualWidth = (100 / (1 + Math.sqrt(this.config.population_size))).toString() + "%";
         // a grid of the population's individuals' images as buttons
-        return (<><div className={styles.populationGrid} style={{ width: gridWidth, maxWidth: "95vw", maxHeight: "60%" }}>
-            <Grid row={true} expanded={true} justify="center">
-                {this.state.population.map(
-                    (obj, index) => <IndividualButton style={{ width: individualWidth, maxHeight: "30vh", maxWidth: "30vh" }} key={index} individual={obj}></IndividualButton>)}
-            </Grid>
-        </div>
+        return (
+        <>
+            <div className={styles.populationGrid} style={{ width: gridWidth, maxWidth: "95vw", maxHeight: "60vh" }}>
+                <Grid row={true} expanded={true} justify="center">
+                    {this.state.population.map(
+                        (obj, index) => <IndividualButton style={{ width: individualWidth, maxHeight: "30vh", maxWidth: "30vh" }} key={index} individual={obj}></IndividualButton>)}
+                </Grid>
+            </div>
             <div className={styles.controlPanel}>
                 {this.state.loading ? <LoadingSpinner /> : <>
-                    <NextGenerationButton style={{ width: gridWidth / 2 }} loading={this.state.loading} onClick={this.nextGenerationClicked} />
-                    <PreviousGenerationButton style={{ width: gridWidth / 2 }} loading={this.state.loading} onClick={this.previousGenerationClicked} />
-                    <SaveImagesButton style={{ width: gridWidth / 2 }} loading={this.state.loading} onClick={this.saveImagesClicked} />
+                    <Grid style={{ maxWidth: gridWidth / 4 }} justify="center">
+                        <PreviousGenerationButton loading={this.state.loading} onClick={this.previousGenerationClicked} />
+                        <NextGenerationButton loading={this.state.loading} onClick={this.nextGenerationClicked} />
+                        <SaveImagesButton loading={this.state.loading} onClick={this.saveImagesClicked} />
+                    </Grid>
                 </>}
             </div>
             <ToastContainer />

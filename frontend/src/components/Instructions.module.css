@@ -1,0 +1,25 @@
+.instructionsButton{
+  background-color: rgba(0,0,0,.3);
+  border-radius: 5px;
+  margin-top: 10px;
+  color: white;
+  border: none;
+  padding: 10px;
+  margin:auto;
+  width: fit-content;
+  display: block;
+  position: relative;
+  left: 40%;
+  top:-50%;
+}
+.instructionsButton:hover{
+  background-color: rgba(150, 127, 255, 100);
+  box-shadow:  rgba(255, 255, 255,100) 1px 1px 2px;
+  cursor: pointer;
+}
+
+.instructions{
+  margin-top:5%;
+  width:100%;
+  height:auto;
+}
