@@ -643,16 +643,14 @@ class CPPN():
 
     def normalize_image(self):
         """Normalize from -1 through 1 to 0 through 255 and convert to ints"""
-        self.image = np.clip(self.image, -1, 1)
         self.image = 1.0 - np.abs(self.image)
         max_value = np.max(self.image)
         min_value = np.min(self.image)
         image_range = max_value - min_value
-        if image_range == 0:
-            image_range = 1e-6
         self.image -= min_value
         self.image *= 255
-        self.image /= image_range
+        if image_range != 0: # prevent divide by 0
+            self.image /= image_range
         self.image = self.image.astype(np.uint8)
 
     def crossover(self, other_parent):
