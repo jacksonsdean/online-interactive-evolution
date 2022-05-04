@@ -17,6 +17,7 @@ white-space: pre;
 
 const StyledMenu = styled(Menu)`
 background-color: rgba(200,200,255,.1);
+border-radius: 1%;
 `;
 
 const StyledDropDown = styled.select`
@@ -30,7 +31,7 @@ function Settings() {
     return (
         <form>
             <StyledProSidebar>
-                <StyledMenu iconShape="square">
+                <StyledMenu iconShape="round">
                     <SubMenu title="Settings">
                         <SubMenu title="General">
                             <MenuItem>
@@ -38,10 +39,10 @@ function Settings() {
                             </MenuItem>
                             <MenuItem>
                                 {"Color mode"}
-                                <StyledDropDown>
+                                <StyledDropDown defaultValue="RGB">
                                     <option value="L">Grayscale</option>
                                     <option value="HSL">HSL</option>
-                                    <option selected value="RGB">RGB</option>
+                                    <option value="RGB">RGB</option>
                                 </StyledDropDown>
                             </MenuItem>
                         </SubMenu>
