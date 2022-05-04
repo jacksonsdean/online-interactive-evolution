@@ -28,6 +28,6 @@ afterEach(() => {
 
 test('renders welcome text', () => {
   render(<IECApp />);
-  const linkElement = screen.getByText(/Interactive Evolutionary Art/i);
-  expect(linkElement).toBeInTheDocument();
+  const titleElements = screen.getAllByText(/Interactive Evolutionary Art/i);
+  expect(titleElements[0]).toBeInTheDocument();
 });

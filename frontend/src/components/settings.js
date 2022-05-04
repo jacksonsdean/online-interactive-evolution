@@ -11,13 +11,16 @@ position: fixed;
 top: 0;
 right:0;
 height:fit-content;
-width: 400px;
+width: 300px;
 white-space: pre;
+transition: width 4s;
 `;
 
 const StyledMenu = styled(Menu)`
 background-color: rgba(200,200,255,.1);
 border-radius: 1%;
+width: fit-ontent;
+
 `;
 
 const StyledDropDown = styled.select`
@@ -44,6 +47,17 @@ function Settings() {
                                     <option value="HSL">HSL</option>
                                     <option value="RGB">RGB</option>
                                 </StyledDropDown>
+                            </MenuItem>
+                            <MenuItem>Offspring crossover ratio
+                                <ReactSlider
+                                    min={0}
+                                    max={1}
+                                    step={.01}
+                                    className={styles.horizontalSlider}
+                                    thumbClassName={styles.thumb}
+                                    trackClassName={styles.track}
+                                    renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                                />
                             </MenuItem>
                         </SubMenu>
 

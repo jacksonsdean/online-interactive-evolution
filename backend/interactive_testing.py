@@ -52,7 +52,7 @@ def show_image(img, color_mode, ax = None):
 #%%
 config = Config()
 cppn = CPPN(config)
-image_data = cppn.get_image_data_fast_method()
+image_data = cppn.get_image()
 print(np.min(image_data), np.max(image_data))
 
 plt.imshow(image_data, cmap='gray', vmin = -1, vmax = 1)
@@ -87,7 +87,7 @@ config = Config()
 config.color_mode = "RGB"
 cppn = CPPN(config, nodes=node_genome)
 print(cppn.connection_genome)
-img = cppn.get_image_data_fast_method()
+img = cppn.get_image()
 show_image(img, color_mode="RGB")
 plt.show()
 #%%
@@ -108,7 +108,7 @@ obj = response.json()["body"]
 config = Config.create_from_json(obj["config"])
 for indiv in obj["population"]:
     cppn = CPPN.create_from_json(indiv, config)
-    img = cppn.get_image_data_fast_method()
+    img = cppn.get_image()
     imgs.append(img)
 show_images(imgs, color_mode="RGB")
 # server_process.terminate()  # kill test server
@@ -121,7 +121,7 @@ cppn = CPPN(config)
 for _ in range(50):
     cppn.mutate()
 visualize_network(cppn, visualize_disabled=True)
-img = cppn.get_image_data_fast_method()
+img = cppn.get_image()
 show_image(img, config.color_mode)
 connections = [(cx.from_node, cx.to_node) for cx in cppn.enabled_connections()]
 
