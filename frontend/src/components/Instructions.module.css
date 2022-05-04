@@ -9,7 +9,7 @@
   width: fit-content;
   display: block;
   position: relative;
-  right: 40%;
+  right: 40vw;
   top:-50%;
 }
 .instructionsButton:hover{
