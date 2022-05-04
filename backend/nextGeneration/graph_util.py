@@ -53,7 +53,8 @@ def get_disjoint_connections(this_cxs, other_innovation):
         connection in other_innovation"""
     if(len(this_cxs) == 0 or len(other_innovation) == 0):
         return []
-    return [t_cx for t_cx in this_cxs if (t_cx.innovation not in other_innovation and t_cx.innovation < other_innovation[-1])]
+    return [t_cx for t_cx in this_cxs if\
+        (t_cx.innovation not in other_innovation and t_cx.innovation < other_innovation[-1])]
 
 
 def get_excess_connections(this_cxs, other_innovation):
@@ -61,21 +62,23 @@ def get_excess_connections(this_cxs, other_innovation):
         connection in other_innovation"""
     if(len(this_cxs) == 0 or len(other_innovation) == 0):
         return []
-    return [t_cx for t_cx in this_cxs if (t_cx.innovation not in other_innovation and t_cx.innovation > other_innovation[-1])]
+    return [t_cx for t_cx in this_cxs if\
+            (t_cx.innovation not in other_innovation and t_cx.innovation > other_innovation[-1])]
 
 
 def get_matching_connections(cxs_1, cxs_2):
     """returns connections in cxs_1 that share an innovation number with a connection in cxs_2
        and     connections in cxs_2 that share an innovation number with a connection in cxs_1"""
-    return sorted([c1 for c1 in cxs_1 if c1.innovation in [c2.innovation for c2 in cxs_2]], key=lambda x: x.innovation),\
-        sorted([c2 for c2 in cxs_2 if c2.innovation in [
-               c1.innovation for c1 in cxs_1]], key=lambda x: x.innovation)
+    return sorted([c1 for c1 in cxs_1 if c1.innovation in [c2.innovation for c2 in cxs_2]],
+                    key=lambda x: x.innovation),\
+                    sorted([c2 for c2 in cxs_2 if c2.innovation in [c1.innovation for c1 in cxs_1]],
+                    key=lambda x: x.innovation)
 
 
-def find_node_with_id(nodes, id):
+def find_node_with_id(nodes, node_id):
     """Returns the node with the given id from the list of nodes"""
     for node in nodes:
-        if node.id == id:
+        if node.id == node_id:
             return node
     return None
 
@@ -114,24 +117,34 @@ def get_incoming_connections(individual, node):
 # Copyright (c) 2007-2011, cesar.gomes and mirrorballu2
 # Copyright (c) 2015-2019, CodeReclaimers, LLC
 #
-# Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
+# Redistribution and use in source and binary forms, with or without modification,
+# are permitted provided that the
 # following conditions are met:
 #
-# 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+# 1. Redistributions of source code must retain the above copyright notice, this list of
+# conditions and the following
 # disclaimer.
 #
-# 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following
+# 2. Redistributions in binary form must reproduce the above copyright notice, this list
+# of conditions and the following
 # disclaimer in the documentation and/or other materials provided with the distribution.
 #
-# 3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products
+# 3. Neither the name of the copyright holder nor the names of its contributors may be
+# used to endorse or promote products
 # derived from this software without specific prior written permission.
 #
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
-# INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+# OR IMPLIED WARRANTIES,
+# INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+# PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+# INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+# LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+# OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################################
 

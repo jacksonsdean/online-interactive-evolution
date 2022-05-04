@@ -22,6 +22,7 @@ HEADERS = {
         }
 
 def evaluate_population(population, config)->str:
+    """Evaluate the population to generate images and return the json data."""
     for individual in population:
         if individual.selected:
             continue # frontend already has image data for previous gen
@@ -118,12 +119,11 @@ def save_images(config, population_data):
 
 def lambda_handler(event, context):
     """Handle an incoming request from Next Generation."""
+    # pylint: disable=unused-argument #(context required by lambda)
+
     body = None
     status = 200
     try:
-        logging.debug("event: %s" % event)
-        logging.debug("context: %s" % context)
-
         data = event['body'] if 'body' in event else event
         if isinstance(data, str):
             # load the data to a json object
@@ -145,11 +145,11 @@ def lambda_handler(event, context):
             raw_pop = data['population']
             body = save_images(config, raw_pop)
 
-    except Exception as e: # pylint: disable=broad-except
-        print("ERROR while handling lambda:", type(e), e)
+    except Exception as exception: # pylint: disable=broad-except
+        print("ERROR while handling lambda:", type(exception), exception)
         status = 500
-        body = json.dumps(f"error in lambda: {type(e)}: {e}")
-        logging.exception(e) # okay to disable broad-except
+        body = json.dumps(f"error in lambda: {type(exception)}: {exception}")
+        logging.exception(exception) # okay to disable broad-except
 
     return {
             'statusCode': status,

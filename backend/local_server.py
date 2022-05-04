@@ -1,7 +1,12 @@
-from nextGeneration.lambda_function import lambda_handler
+"""A server for running the backend locally.
+Essentially a wrapper for the lambda_handler method,
+which is normally called by AWS through a REST API.
+"""
+
 from flask import Flask, request
 from flask_cors import CORS
 
+from nextGeneration.lambda_function import lambda_handler
 
 class LocalServer(Flask):
     """A simple Flask server for testing the lambda_function.py file locally."""

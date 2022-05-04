@@ -1,5 +1,5 @@
 import './IECApp.css';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PopulationGrid from './components/populationGrid';
 import Instructions from 'components/instructions';
 import Settings from 'components/settings';

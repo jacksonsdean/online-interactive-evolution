@@ -1,7 +1,7 @@
 import React from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { DEFAULT_CONFIG, MAX_HISTORY } from '../Constants';
+import { MAX_HISTORY } from '../Constants';
 import { initialPopulation, nextGeneration, getImageUrl, saveIndividuals } from '../util';
 import Grid from './Grid';
 import styles from "./PopulationGrid.module.css";
