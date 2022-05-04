@@ -22,11 +22,11 @@ function Instructions() {
       <h2>Instructions</h2>
       <div className={styles.instructionsBody}>
       <b>Interactive Evolutionary Art</b> is a visual art project inspired
-      by <a target="_blank" href="https://en.wikipedia.org/wiki/Evolutionary_algorithm">Evolutionary Algorithms</a> and <a target="_blank" href="http://eplex.cs.ucf.edu/papers/secretan_ecj11.pdf">Picbreeder</a>.
+      by <a target="_blank" rel="noreferrer" href="https://en.wikipedia.org/wiki/Evolutionary_algorithm">Evolutionary Algorithms</a> and <a target="_blank" rel="noreferrer" href="http://eplex.cs.ucf.edu/papers/secretan_ecj11.pdf">Picbreeder</a>.
       <br /><br />
       The images above each represent an <i>individual</i> in a <i>population</i> of <i>genomes</i>. The population <i>evolves</i> over <i>generations</i> as some individuals survive to reproduce and others do not.
       <br /><br />
-      Genomes are <i>Compositional Pattern Producing Networks (<a target="_blank" href="https://en.wikipedia.org/wiki/Compositional_pattern-producing_network">CPPNs</a>)</i>.
+      Genomes are <i>Compositional Pattern Producing Networks (<a target="_blank" rel="noreferrer" href="https://en.wikipedia.org/wiki/Compositional_pattern-producing_network">CPPNs</a>)</i>.
       A CPPN contains nodes and connections and is evaluated similar to an artificial neural network to produce an image called the <i>phenotype</i>. Nodes contain activation functions, which determine how that node adds to the phenotype.
       Connections connect nodes and have weights, which determine how much the node at the beginning of the connection contributes to the image.
       <br/><br/>
