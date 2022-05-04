@@ -96,23 +96,56 @@ class SaveImagesButton extends React.Component {
         )
     }
 }
+class ResetButton extends React.Component {
+    render() {
+        return (
+            <button style={this.props.style} className={styles.nextGenButton + " " + (this.props.loading ? styles.loading : "")} onClick={this.props.onClick} disabled={this.props.loading}>
+                <div>
+                    Reset
+                </div>
+                <div>
+                    {"⮌"}
+                </div>
+            </button>
+        )
+    }
+}
 
 class PopulationGrid extends Grid {
-    failedToast = (text) => toast(<FailedToast text={text} />, { type: "warning", autoClose: 4000 });
+    failedToast = (text) => toast(<FailedToast text={text} />, { type: "warning", autoClose: 4000, position: toast.POSITION.TOP_LEFT });
 
     constructor(props) {
         super(props);
         this.state = { population: [], loading: true };
         this.history = [];
-        this.config = DEFAULT_CONFIG;
+        this.config = props.settings;
 
         // initialize seed to a random value
-        this.config.seed = Math.round(Math.random() * 10000);
+        if (this.config) {
+            this.config.seed = Math.round(Math.random() * 10000);
+        }
 
         // bind member functions
         this.nextGenerationClicked = this.nextGenerationClicked.bind(this);
         this.previousGenerationClicked = this.previousGenerationClicked.bind(this);
         this.saveImagesClicked = this.saveImagesClicked.bind(this);
+        this.reset = this.reset.bind(this);
+    }
+
+    setSettings(settings) {
+        const seed = this.config.seed;
+        this.config = settings;
+        this.config.seed = seed;
+    }
+    reset(){
+        this.setState({ loading: true });
+         // get an initial population
+         initialPopulation(this.config)
+         .then((data) => {
+             this.handleNewData(data)
+         }).catch((err) => {
+             console.log(err)
+         })
     }
 
     /* Handles incoming population and image data from the server */
@@ -139,6 +172,8 @@ class PopulationGrid extends Grid {
             // deselect all
             next_pop[i].selected = false;
         }
+
+
         this.config.seed += 1; // increment seed
         this.setState({ population: next_pop, loading: false });
     }
@@ -205,13 +240,7 @@ class PopulationGrid extends Grid {
     }
 
     componentDidMount() {
-        // get an initial population
-        initialPopulation(this.config)
-            .then((data) => {
-                this.handleNewData(data)
-            }).catch((err) => {
-                console.log(err)
-            })
+       this.reset(this.props.settings)
     }
 
     render() {
@@ -236,6 +265,7 @@ class PopulationGrid extends Grid {
                         <PreviousGenerationButton loading={this.state.loading} onClick={this.previousGenerationClicked} />
                         <NextGenerationButton loading={this.state.loading} onClick={this.nextGenerationClicked} />
                         <SaveImagesButton loading={this.state.loading} onClick={this.saveImagesClicked} />
+                        <ResetButton loading={this.state.loading} onClick={this.reset} />
                     </Grid>
                 </>}
             </div>

@@ -31,6 +31,7 @@
     Adding nodes/connections increases the complexity of the phenotype image, while removing them reduces complexity. Mutations can also change a node's activation function or the weight of a connection. You can change the rate of the various mutations in the settings.
     <br/><br/>
     If you advance a generation and decide you'd rather go back to try again, press the <b>Previous generation</b> button. Images can be saved to your computer at a higher resolution by selecting the individuals and pressing <b>Save images</b>.
+    Press <b>Reset</b> to start over with a new random population.
 
 
 # CI/CD Pipeline

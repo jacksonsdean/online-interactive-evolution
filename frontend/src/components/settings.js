@@ -3,9 +3,11 @@ import ReactSlider from 'react-slider'
 import styles from "./Settings.module.css"
 import styled from "styled-components";
 import 'react-pro-sidebar/dist/css/styles.css';
-
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 
+import { DEFAULT_CONFIG } from 'Constants';
+
+// Custom styling for the settings menu:
 const StyledProSidebar = styled(ProSidebar)`
 position: fixed;
 top: 0;
@@ -28,9 +30,55 @@ background-color: rgba(200,200,255,.1);
 color:white;
 margin-left:10px;
 `;
+const ResetButton = styled(MenuItem)`
+color:rgba(255,155,155,.8);
+margin-left:10px;
+text-align:right;
+`;
+
+const Note = styled.p`
+    color:rgba(255,255,255,.3);
+    text-align:right;
+    margin:none;
+    padding:none;
+    margin-right:10px;
+    text-decoration:none;
+    font-style: italic;
+`;
+// end custom styling
 
 
-function Settings() {
+function newSetting(settings, setting, value, popGrid, requiresRestart = false) {
+    /*A new setting was chosen, save it and update the population grid if necessary*/
+    let newSetting = { ...settings };
+    newSetting[setting] = value;
+    popGrid.current.setSettings(newSetting)
+    if (requiresRestart) {
+        popGrid.current.reset()
+    }
+    return newSetting;
+}
+
+function ProbabilitySlider(props) {
+    /*A slider for choosing a probability value*/
+    return <ReactSlider
+        min={0}
+        max={1}
+        step={.01}
+        value={props.value}
+        onAfterChange={props.onAfterChange}
+        className={styles.horizontalSlider}
+        thumbClassName={styles.thumb}
+        trackClassName={styles.track}
+        renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+    />
+}
+
+
+function Settings(props) {
+    /*The settings component that allows the user to change settings*/
+    const settings = props.loadedSettings;
+    const popGrid = props.popGrid;
     return (
         <form>
             <StyledProSidebar>
@@ -38,98 +86,70 @@ function Settings() {
                     <SubMenu title="Settings">
                         <SubMenu title="General">
                             <MenuItem>
-                                Radial symmetry bias<input type="checkbox" />
+                                Radial symmetry bias *<input type="checkbox" checked={settings.use_radial_distance} onChange={(event) => props.setSettingsCallback(newSetting(settings, "use_radial_distance", event.target.checked, popGrid, true))} />
                             </MenuItem>
                             <MenuItem>
-                                {"Color mode"}
-                                <StyledDropDown defaultValue="RGB">
+                                {"Color mode *"}
+                                <StyledDropDown value={settings.color_mode} onChange={(event) => props.setSettingsCallback(newSetting(settings, "color_mode", event.target.value, popGrid, true))}>
                                     <option value="L">Grayscale</option>
                                     <option value="HSL">HSL</option>
                                     <option value="RGB">RGB</option>
                                 </StyledDropDown>
                             </MenuItem>
                             <MenuItem>Offspring crossover ratio
-                                <ReactSlider
-                                    min={0}
-                                    max={1}
-                                    step={.01}
-                                    className={styles.horizontalSlider}
-                                    thumbClassName={styles.thumb}
-                                    trackClassName={styles.track}
-                                    renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                                <ProbabilitySlider
+                                    value={settings.prob_crossover}
+                                    onAfterChange={(value) => { props.setSettingsCallback(newSetting(settings, "prob_crossover", value, popGrid)) }}
                                 />
                             </MenuItem>
+                            <Note>{"*requires restart"}</Note>
+
                         </SubMenu>
 
                         <SubMenu title="Mutation rates">
                             <MenuItem>Weights
-                                <ReactSlider
-                                    min={0}
-                                    max={1}
-                                    step={.01}
-                                    className={styles.horizontalSlider}
-                                    thumbClassName={styles.thumb}
-                                    trackClassName={styles.track}
-                                    renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                                <ProbabilitySlider
+                                    value={settings.prob_mutate_weight}
+                                    onAfterChange={(value) => { props.setSettingsCallback(newSetting(settings, "prob_mutate_weight", value, popGrid)) }}
                                 />
                             </MenuItem>
                             <MenuItem>Add nodes
-                                <ReactSlider
-                                    min={0}
-                                    max={1}
-                                    step={.01}
-                                    className={styles.horizontalSlider}
-                                    thumbClassName={styles.thumb}
-                                    trackClassName={styles.track}
-                                    renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                                <ProbabilitySlider
+                                    value={settings.prob_add_node}
+                                    onAfterChange={(value) => { props.setSettingsCallback(newSetting(settings, "prob_add_node", value, popGrid)) }}
                                 />
                             </MenuItem>
                             <MenuItem>Remove nodes
-                                <ReactSlider
-                                    min={0}
-                                    max={1}
-                                    step={.01}
-                                    className={styles.horizontalSlider}
-                                    thumbClassName={styles.thumb}
-                                    trackClassName={styles.track}
-                                    renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                                <ProbabilitySlider
+                                    value={settings.prob_remove_node}
+                                    onAfterChange={(value) => { props.setSettingsCallback(newSetting(settings, "prob_remove_node", value, popGrid)) }}
                                 />
                             </MenuItem>
                             <MenuItem>Add connections
-                                <ReactSlider
-                                    min={0}
-                                    max={1}
-                                    step={.01}
-                                    className={styles.horizontalSlider}
-                                    thumbClassName={styles.thumb}
-                                    trackClassName={styles.track}
-                                    renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                                <ProbabilitySlider
+                                    value={settings.prob_add_connection}
+                                    onAfterChange={(value) => { props.setSettingsCallback(newSetting(settings, "prob_add_connection", value, popGrid)) }}
                                 />
                             </MenuItem>
                             <MenuItem>Remove connections
-                                <ReactSlider
-                                    min={0}
-                                    max={1}
-                                    step={.01}
-                                    className={styles.horizontalSlider}
-                                    thumbClassName={styles.thumb}
-                                    trackClassName={styles.track}
-                                    renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                                <ProbabilitySlider
+                                    value={settings.prob_disable_connection}
+                                    onAfterChange={(value) => { props.setSettingsCallback(newSetting(settings, "prob_disable_connection", value, popGrid)) }}
                                 />
                             </MenuItem>
                             <MenuItem>Change activation function
-                                <ReactSlider
-                                    min={0}
-                                    max={1}
-                                    step={.01}
-                                    className={styles.horizontalSlider}
-                                    thumbClassName={styles.thumb}
-                                    trackClassName={styles.track}
-                                    renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                                <ProbabilitySlider
+                                    value={settings.prob_mutate_activation}
+                                    onAfterChange={(value) => { props.setSettingsCallback(newSetting(settings, "prob_mutate_activation", value, popGrid)) }}
                                 />
                             </MenuItem>
 
                         </SubMenu>
+                        <ResetButton onClick={() => {
+                            popGrid.current.setSettings(DEFAULT_CONFIG)
+                            popGrid.current.reset()
+                            props.setSettingsCallback(DEFAULT_CONFIG);
+                        }}>Reset all to default</ResetButton>
                     </SubMenu>
                 </StyledMenu>
             </StyledProSidebar>

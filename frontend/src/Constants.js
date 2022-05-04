@@ -14,6 +14,7 @@ export const DEFAULT_CONFIG = {
     "prob_mutate_activation": 0.1,
     "prob_add_node": 0.4,
     "prob_remove_node": 0.4,
+    "prob_crossover": .25,
 }
 
 export const RESET_OPERATION = "reset"
