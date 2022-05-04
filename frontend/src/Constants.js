@@ -7,7 +7,13 @@ export const DEFAULT_CONFIG = {
     "population_size": 9,
     "activations": ["identity", "gauss", "sin", "cos", "sawtooth", "tanh", "sigmoid"],
     "output_activation": "",
-    "use_radial_distance": true
+    "use_radial_distance": true,
+    "prob_mutate_weight": 0.35,
+    "prob_add_connection": 0.4,
+    "prob_disable_connection": 0.25,
+    "prob_mutate_activation": 0.1,
+    "prob_add_node": 0.4,
+    "prob_remove_node": 0.4,
 }
 
 export const RESET_OPERATION = "reset"

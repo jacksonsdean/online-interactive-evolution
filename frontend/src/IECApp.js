@@ -1,6 +1,7 @@
 import './IECApp.css';
 import PopulationGrid from './components/populationGrid';
 import Instructions from 'components/instructions';
+import Settings from 'components/settings';
 
 function IECApp() {
   return (
@@ -16,7 +17,7 @@ function IECApp() {
           <PopulationGrid />
         </div>
           <Instructions />
-
+        <Settings/>
       </div>
     </div>
   );

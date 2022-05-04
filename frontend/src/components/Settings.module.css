@@ -1,0 +1,84 @@
+.button{
+  background-color: rgba(0,0,0,.3);
+  border-radius: 5px;
+  margin-top: 10px;
+  color: white;
+  border: none;
+  padding: 10px;
+  margin:auto;
+  width: fit-content;
+  display: block;
+  position: relative;
+  left: 40%;
+  top:-50%;
+}
+.button:hover{
+  background-color: rgba(150, 127, 255, 100);
+  box-shadow:  rgba(255, 255, 255,100) 1px 1px 2px;
+  cursor: pointer;
+}
+
+.horizontalSlider {
+  width: 100%;
+  max-width: 500px;
+  height: 50px;
+  border: none;
+}
+
+.verticalSlider {
+  height: 380px;
+  width: 50px;
+  border: 1px solid grey;
+}
+
+.thumb {
+  font-size: 0.9em;
+  text-align: center;
+  background-color: rgba(.1, .1, .1, .1);
+  color: white;
+  cursor: pointer;
+  border-radius: 100%;
+
+}
+
+.thumb.active {
+  background-color: rgba(152, 0, 129, 0.453);
+}
+
+.track {
+  position: relative;
+  background: rgba(221, 221, 221, 0.373);
+}
+
+.track.track-1 {
+  background: #f00;
+}
+
+.track.track-2 {
+  background: #0f0;
+}
+
+.horizontalSlider .track {
+  top: 20px;
+  height: 5px;
+
+}
+
+.horizontalSlider .thumb {
+  top: 0px;
+  width: 50px;
+  height: 48px;
+  line-height: 20px;
+}
+
+.verticalSlider .thumb {
+  left: 1px;
+  width: 48px;
+  line-height: 40px;
+  height: 50px;
+}
+
+.verticalSlider .track {
+  left: 20px;
+  width: 10px;
+}
