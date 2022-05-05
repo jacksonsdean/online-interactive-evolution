@@ -4,10 +4,11 @@
     Available online at: <a href="https://interactive.evolutionary.gallery">interactive.evolutionary.gallery</a>
     <h2>Instructions to run locally</h2>
     <h3>With Docker</h3>
-    `docker-compose up` in the project directory.
-    <h3>Without Docker</h3> Run the frontend from the "frontend" directory with <br/>`npm run start-local`
+    `docker-compose up` in the project directory
+    <br/>Navigate to <a href="http://localhost:3000">localhost:3000</a>
+    <h3>Without Docker</h3> Run the frontend from the "frontend" directory with <br/>`npm i`<br/>`npm run start-local`
     <br/>
-    amd the backend from the "backend" directory with <br/>`python -m pip install -r requirements.txt` <br/> followed by <br/>`python local_server.py`
+    and the backend from the "backend" directory with <br/>`python -m pip install -r requirements.txt` <br/>`python local_server.py`
     <br/>Once the backend and frontend are running, navigate to <a href="http://localhost:3000">localhost:3000</a>
     <br/><br/>
     <h2>Instructions</h2>
