@@ -3,10 +3,14 @@
 import React from "react";
 import { unmountComponentAtNode } from "react-dom";
 import { render, screen } from '@testing-library/react';
-
-import { act } from "react-dom/test-utils";
 import IECApp  from "./IECApp";
+
 let container = null;
+
+// fix for react-sliders
+import { install } from "resize-observer";
+install();
+
 
 beforeEach(() => {
   // setup a DOM element as a render target
@@ -24,6 +28,6 @@ afterEach(() => {
 
 test('renders welcome text', () => {
   render(<IECApp />);
-  const linkElement = screen.getByText(/Interactive Evolutionary Art/i);
-  expect(linkElement).toBeInTheDocument();
+  const titleElements = screen.getAllByText(/Interactive Evolutionary Art/i);
+  expect(titleElements[0]).toBeInTheDocument();
 });

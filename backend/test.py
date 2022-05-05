@@ -1,17 +1,19 @@
 """Test cases for the lambda_function.py file."""
 import unittest
 import time
-
+import sys
+import json
+from multiprocessing import Process
+import requests
 import numpy as np
+
 from nextGeneration.activation_functions import identity
 from nextGeneration.config import Config
 from nextGeneration.cppn import CPPN, Connection, Node, NodeType
 from nextGeneration.lambda_function import lambda_handler, HEADERS
-from local_test import run_server
-from multiprocessing import Process
-import requests
-import json
-import sys
+from local_server import run_server
+
+# Add the path to the nextGeneration folder to the system path
 sys.path.append('nextGeneration/')
 sys.path.append('./')
 

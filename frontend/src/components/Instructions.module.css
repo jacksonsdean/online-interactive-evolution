@@ -1,0 +1,38 @@
+.instructionsButton{
+  background-color: rgba(0,0,0,.3);
+  border-radius: 5px;
+  margin-top: 10px;
+  color: white;
+  border: none;
+  padding: 10px;
+  margin:auto;
+  width: fit-content;
+  display: block;
+  position: relative;
+  right: 40vw;
+  top:-50%;
+}
+
+.instructionsButton:hover{
+  background-color: rgba(150, 127, 255, 100);
+  box-shadow:  rgba(255, 255, 255,100) 1px 1px 2px;
+  cursor: pointer;
+}
+
+.instructions{
+  margin-bottom: 10%;
+  margin-top:5%;
+  width:100%;
+  height:auto;
+}
+.instructionsBody{
+  text-align: left;
+  margin-left:5%;
+  margin-right:5%;
+  font-size: medium;
+  white-space: wrap;
+}
+.instructionsBody a{
+  white-space: pre;
+  color: rgb(69, 193, 255);
+}

@@ -3,15 +3,18 @@ import json
 from random import random
 
 try:
-    from activation_functions import get_all #,tanh,identity
+    from activation_functions import get_all
     from graph_util import name_to_fn
 except ModuleNotFoundError:
-    from nextGeneration.activation_functions import get_all #,tanh,identity
+    from nextGeneration.activation_functions import get_all
     from nextGeneration.graph_util import name_to_fn
 
 class   Config:
     """Stores configuration parameters for the CPPN."""
+    # pylint: disable=too-many-instance-attributes
     def __init__(self) -> None:
+        # Initialize to default values
+        # These are only used if the frontend client doesn't override them
         self.population_size = 10
         self.res_w = 28
         self.res_h = 28
@@ -66,7 +69,6 @@ class   Config:
     def strings_to_fns(self):
         """Converts the activation functions to functions."""
         self.activations= [name_to_fn(name) for name in self.activations]
-        # self.activations.append(avg_pixel_distance_fitness)
         self.output_activation = name_to_fn(self.output_activation)
 
     def to_json(self):

@@ -25,10 +25,98 @@ def tanh(x):
     return y
 
 
+
+def relu(x):
+    """Returns the rectified linear unit of the input."""
+    return x * (x > 0)
+
+def tanh_sig(x):
+    """Returns the sigmoid of the hyperbolic tangent of the input."""
+    return sigmoid(tanh(x))
+
+def pulse(x):
+    """Return the pulse fn of the input."""
+    return 2*(x % 1 < .5) -1
+
+
+def hat(x):
+    """Returns the hat function of the input."""
+    x = 1.0 - np.abs(x)
+    x= np.clip(x, 0, 1)
+    return x
+
+def round_activation(x):
+    """return round(x)"""
+    return np.round(x) # arrays
+
+def abs_activation(x):
+    """Returns the absolute value of the input."""
+    return np.abs(x)
+
+def sqr(x):
+    """Return the square of the input."""
+    return np.square(x)
+
+def elu(x):
+    """Returns the exponential linear unit of the input."""
+    return np.where(x > 0, x, np.exp(x) - 1)
+
+def sin(x):
+    """Returns the sine of the input."""
+    y =  np.sin(x*math.pi)
+    return y
+
+def cos(x):
+    """Returns the cosine of the input."""
+    y =  np.cos(x*math.pi)
+    return y
+
+def gauss(x):
+    """Returns the gaussian of the input."""
+    y = 2*np.exp(-20.0 * (x) ** 2)-1
+    return y
+
+
+# Methods below are from SciPy #
+
+#LICENSE:
+# Copyright (c) 2001-2002 Enthought, Inc. 2003-2022, SciPy Developers.
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above
+#    copyright notice, this list of conditions and the following
+#    disclaimer in the documentation and/or other materials provided
+#    with the distribution.
+#
+# 3. Neither the name of the copyright holder nor the names of its
+#    contributors may be used to endorse or promote products derived
+#    from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
 def sawtooth(t, width=1):
     """
-    Taken from scipy
-    From https://github.com/scipy/scipy/blob/v1.8.0/scipy/signal/_waveforms.py#L16-L84
+    Taken from SciPy:
+    https://github.com/scipy/scipy/blob/v1.8.0/scipy/signal/_waveforms.py#L16-L84
+
     Return a periodic sawtooth or triangle waveform.
     The sawtooth waveform has a period ``2*pi``, rises from -1 to 1 on the
     interval 0 to ``width*2*pi``, then drops from 1 to -1 on the interval
@@ -60,9 +148,9 @@ def sawtooth(t, width=1):
     w = np.asarray(w + (t - t))
     t = np.asarray(t + (w - w))
     if t.dtype.char in ['fFdD']:
-        ytype = t.dtype.char
+        ytype = t.dtype.char # pylint: disable=unused-variable
     else:
-        ytype = 'd'
+        ytype = 'd' # pylint: disable=unused-variable
     y = np.zeros(t.shape, dtype=t.dtype)
 
     # width must be between 0 and 1 inclusive
@@ -86,59 +174,4 @@ def sawtooth(t, width=1):
     tsub = np.extract(mask3, tmod)
     wsub = np.extract(mask3, w)
     np.place(y, mask3, (math.pi * (wsub + 1) - tsub) / (math.pi * (1 - wsub)))
-    return y
-
-def relu(x):
-    """Returns the rectified linear unit of the input."""
-    return x * (x > 0)
-
-def tanh_sig(x):
-    """Returns the sigmoid of the hyperbolic tangent of the input."""
-    return sigmoid(tanh(x))
-
-def pulse(x):
-    """Return the pulse fn of the input."""
-    return 2*(x % 1 < .5) -1
-
-
-def hat(x):
-    """Returns the hat function of the input."""
-    try:
-        x = 1.0 - np.abs(x)
-        x= np.clip(x, 0, 1)
-        return x
-    except Exception as e:
-        print(e)
-        return max(0.0, 1 - abs(x)) # not arrays
-
-def round_activation(x):
-    """return round(x)"""
-    return np.round(x) # arrays
-
-def abs_activation(x):
-    """Returns the absolute value of the input."""
-    return np.abs(x)
-
-def sqr(x):
-    """Return the square of the input."""
-    return np.square(x)
-
-
-def elu(x):
-    """Returns the exponential linear unit of the input."""
-    return np.where(x > 0, x, np.exp(x) - 1)
-
-def sin(x):
-    """Returns the sine of the input."""
-    y =  np.sin(x*math.pi)
-    return y
-
-def cos(x):
-    """Returns the cosine of the input."""
-    y =  np.cos(x*math.pi)
-    return y
-
-def gauss(x):
-    """Returns the gaussian of the input."""
-    y = 2*np.exp(-20.0 * (x) ** 2)-1
     return y

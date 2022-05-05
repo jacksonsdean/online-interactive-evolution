@@ -161,7 +161,8 @@ def visualize_network(individual, visualize_disabled=False, show_weights=False):
         input_nodes = [n.id for n in copied_individual.input_nodes()]
         output = [n.id for n in copied_individual.output_nodes()]
         required = required_for_output(input_nodes, output,
-                    [(cx.from_node.id, cx.to_node.id) for cx in copied_individual.enabled_connections()])
+                    [(cx.from_node.id, cx.to_node.id) for cx in\
+                        copied_individual.enabled_connections()])
         required = required.union(input_nodes)
 
     # nodes:

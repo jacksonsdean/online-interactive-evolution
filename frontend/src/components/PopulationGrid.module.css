@@ -1,8 +1,11 @@
+
+
 .populationGrid{
-  /* width: 200px; */
   display: block;
   text-align: center;
+  height: fit-content;
 }
+
 
 .individualButton {
   justify-content: center;
@@ -49,13 +52,14 @@
   color: white;
   border: none;
   padding: 10px;
-  width: 60%;
-  max-width: 60vw;
+  margin:10px;
+  width: 30%;
+  display: block;
+  font-size: medium;
 }
 .nextGenButton:hover{
   background-color: rgb(150, 127, 255);
-  box-shadow: #383636 0px 0px 10px;
-  padding-left:20px;
+  box-shadow: #ffffff 1px 1px 2px;
   cursor: pointer;
 }
 
@@ -67,12 +71,14 @@
   margin-top: 10px;
   height:fit-content;
   min-height: 20vh;
+  max-height: 30vh;
 }
 
 .loading{
   background-color: rgb(64, 104, 138);
   box-shadow: 1px 1px 5px #555 inset;
 }
+
 
 @keyframes spinner {
   0% {
@@ -102,4 +108,12 @@
   border-top: 10px solid #383636; /* Black */
   border-radius: 50%;
   animation: spinner 1.5s linear infinite;
+  margin: auto;
+}
+
+.loadingSpinnerContainer{
+  height:20vh;
+  margin: auto;
+  display: flex;
+
 }

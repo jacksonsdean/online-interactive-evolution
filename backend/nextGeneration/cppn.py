@@ -8,13 +8,13 @@ import numpy as np
 try:
     from nextGeneration.activation_functions import identity
     from nextGeneration.graph_util import name_to_fn, choose_random_function, is_valid_connection
-    from nextGeneration.graph_util import get_matching_connections, find_node_with_id, feed_forward_layers
-    from nextGeneration.graph_util import get_incoming_connections
+    from nextGeneration.graph_util import get_matching_connections, find_node_with_id
+    from nextGeneration.graph_util import get_incoming_connections, feed_forward_layers
 except ModuleNotFoundError:
     from activation_functions import identity
-    from graph_util import get_matching_connections, find_node_with_id, feed_forward_layers
+    from graph_util import get_matching_connections, find_node_with_id
     from graph_util import name_to_fn, choose_random_function, is_valid_connection
-    from graph_util import get_incoming_connections
+    from graph_util import get_incoming_connections, feed_forward_layers
 
 class NodeType(IntEnum):
     """Enum for the type of node."""
@@ -247,8 +247,8 @@ class CPPN():
         """Constructs a CPPN from a json dict or string."""
         if isinstance(json_dict, str):
             json_dict = json.loads(json_dict, strict=False)
-        for k, v in json_dict.items():
-            setattr(self, k, v)
+        for key, value in json_dict.items():
+            setattr(self, key, value)
         for i, cx in enumerate(self.connection_genome):
             self.connection_genome[i] = Connection.create_from_json(cx)
         for i, n in enumerate(self.node_genome):
@@ -519,7 +519,8 @@ class CPPN():
                 for node_input in list(filter(lambda x,
                     index=i: x.to_node.id == self.node_genome[index].id,
                     self.enabled_connections())):
-                    self.node_genome[i].sum_input += node_input.from_node.outputs * node_input.weight
+                    self.node_genome[i].sum_input +=\
+                        node_input.from_node.outputs * node_input.weight
 
                 self.node_genome[i].outputs =\
                     self.node_genome[i].activation(self.node_genome[i].sum_input)
@@ -561,7 +562,6 @@ class CPPN():
         else:
             # no cached image
             recalculate = True
-
 
         if not recalculate:
             # return the cached image
@@ -628,8 +628,10 @@ class CPPN():
                 # initialize the sum_inputs for this node
                 node.activate(node_inputs)
 
+        # collect outputs from the last layer
         outputs = np.array([np.array(node.outputs) for node in self.output_nodes()])
 
+        # reshape the outputs to image shape
         if len(self.config.color_mode)>2:
             outputs =  np.array(outputs).transpose(1, 2, 0) # move color axis to end
         else:
@@ -643,16 +645,14 @@ class CPPN():
 
     def normalize_image(self):
         """Normalize from -1 through 1 to 0 through 255 and convert to ints"""
-        self.image = np.clip(self.image, -1, 1)
         self.image = 1.0 - np.abs(self.image)
         max_value = np.max(self.image)
         min_value = np.min(self.image)
         image_range = max_value - min_value
-        if image_range == 0:
-            image_range = 1e-6
         self.image -= min_value
         self.image *= 255
-        self.image /= image_range
+        if image_range != 0: # prevent divide by 0
+            self.image /= image_range
         self.image = self.image.astype(np.uint8)
 
     def crossover(self, other_parent):
