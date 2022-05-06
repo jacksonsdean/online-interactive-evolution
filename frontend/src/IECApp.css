@@ -7,12 +7,6 @@
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  /* .IECApp-logo { */
-    /* animation: IECApp-logo-spin infinite 20s linear; */
-  /* } */
-}
-
 .IECApp-background {
   background-color: #282c34;
   background-image: linear-gradient(to top right, #282c34, #051d1e);
@@ -43,7 +37,6 @@
   justify-content: center;
   align-items: center;
   margin-top: 10px;
-  /* height:650px; */
   height:fit-content;
   min-height: fit-content;
 }
