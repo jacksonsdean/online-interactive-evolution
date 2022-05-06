@@ -26,8 +26,6 @@ width: fit-ontent;
 `;
 
 const StyledDropDown = styled.select`
-background-color: rgba(200,200,255,.1);
-color:white;
 margin-left:10px;
 `;
 const ResetButton = styled(MenuItem)`
