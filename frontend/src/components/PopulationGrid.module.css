@@ -69,9 +69,7 @@
   justify-content: center;
   align-items: center;
   margin-top: 10px;
-  height:fit-content;
-  min-height: 20vh;
-  max-height: 30vh;
+  height:200px;
 }
 
 .loading{

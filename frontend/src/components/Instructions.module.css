@@ -5,13 +5,14 @@
   color: white;
   border: none;
   padding: 10px;
-  margin:auto;
+  /* margin: auto; */
   width: fit-content;
-  display: block;
-  position: relative;
-  right: 40vw;
-  top:-50%;
-  margin-bottom:2%;
+  /* position: absolute; */
+  /* left:120px; */
+  /* bottom:10px; */
+  margin-bottom:5px;
+  /* transform: translateX(-100%); */
+  transition: all 0.5s;
 }
 
 .instructionsButton:hover{
@@ -21,16 +22,18 @@
 }
 
 .instructions{
+  flex-direction: column;
+  align-items: flex-start;
   align-self: flex-end;
-  margin-top:5%;
+  margin-top:10px;
   width:100%;
-  height:auto;
+  height:fit-content;
 }
 .instructionsBody{
   text-align: left;
   margin-left:5%;
   margin-right:5%;
-  margin-bottom:10%;
+  margin-bottom:100px;
   font-size: medium;
   white-space: wrap;
 }

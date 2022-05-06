@@ -43,6 +43,7 @@
   justify-content: center;
   align-items: center;
   margin-top: 10px;
-  height:600px;
+  /* height:650px; */
+  height:fit-content;
   min-height: fit-content;
 }
