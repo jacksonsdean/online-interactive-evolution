@@ -21,7 +21,6 @@ transition: width 4s;
 const StyledMenu = styled(Menu)`
 background-color: rgba(200,200,255,.1);
 border-radius: 1%;
-width: fit-ontent;
 
 `;
 

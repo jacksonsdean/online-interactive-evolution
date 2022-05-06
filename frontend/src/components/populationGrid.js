@@ -136,6 +136,10 @@ class PopulationGrid extends Grid {
         const seed = this.config.seed;
         this.config = settings;
         this.config.seed = seed;
+        // deselect all individuals in the population
+        for (let i = 0; i < this.state.population.length; i++) {
+            this.state.population[i].selected = false;
+        }
     }
     reset(){
         this.setState({ loading: true });
