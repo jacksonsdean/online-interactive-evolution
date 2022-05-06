@@ -136,6 +136,10 @@ class PopulationGrid extends Grid {
         const seed = this.config.seed;
         this.config = settings;
         this.config.seed = seed;
+        // deselect all individuals in the population
+        for (let i = 0; i < this.state.population.length; i++) {
+            this.state.population[i].selected = false;
+        }
     }
     reset(){
         this.setState({ loading: true });
@@ -253,7 +257,7 @@ class PopulationGrid extends Grid {
         // a grid of the population's individuals' images as buttons
         return (
         <>
-            <div className={styles.populationGrid} style={{ width: gridWidth, maxWidth: "95vw", maxHeight: "60vh" }}>
+            <div className={styles.populationGrid} style={{ width: "600px", maxWidth: "100vw", maxHeight: "600px" }}>
                 <Grid row={true} expanded={true} justify="center">
                     {this.state.population.map(
                         (obj, index) => <IndividualButton style={{ width: individualWidth, maxHeight: "30vh", maxWidth: "30vh" }} key={index} individual={obj}></IndividualButton>)}

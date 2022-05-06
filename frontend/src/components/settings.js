@@ -16,18 +16,17 @@ height:fit-content;
 width: 300px;
 white-space: pre;
 transition: width 4s;
+max-height: 100vh;
 `;
 
 const StyledMenu = styled(Menu)`
 background-color: rgba(200,200,255,.1);
 border-radius: 1%;
-width: fit-ontent;
+max-height: 100vh;
 
 `;
 
 const StyledDropDown = styled.select`
-background-color: rgba(200,200,255,.1);
-color:white;
 margin-left:10px;
 `;
 const ResetButton = styled(MenuItem)`

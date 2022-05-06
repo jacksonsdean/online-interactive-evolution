@@ -4,17 +4,18 @@ from enum import IntEnum
 import math
 import json
 import numpy as np
-
 try:
     from nextGeneration.activation_functions import identity
     from nextGeneration.graph_util import name_to_fn, choose_random_function, is_valid_connection
     from nextGeneration.graph_util import get_matching_connections, find_node_with_id
     from nextGeneration.graph_util import get_incoming_connections, feed_forward_layers
+    from nextGeneration.graph_util import hsv2rgb
 except ModuleNotFoundError:
     from activation_functions import identity
     from graph_util import get_matching_connections, find_node_with_id
     from graph_util import name_to_fn, choose_random_function, is_valid_connection
     from graph_util import get_incoming_connections, feed_forward_layers
+    from graph_util import hsv2rgb
 
 class NodeType(IntEnum):
     """Enum for the type of node."""
@@ -650,6 +651,8 @@ class CPPN():
         min_value = np.min(self.image)
         image_range = max_value - min_value
         self.image -= min_value
+        if self.config.color_mode == 'HSL':
+            self.image = hsv2rgb(self.image) # convert to RGB
         self.image *= 255
         if image_range != 0: # prevent divide by 0
             self.image /= image_range
