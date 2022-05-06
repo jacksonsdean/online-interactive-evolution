@@ -4,6 +4,7 @@ from enum import IntEnum
 import math
 import json
 import numpy as np
+from skimage.color import hsv2rgb
 
 try:
     from nextGeneration.activation_functions import identity
@@ -650,6 +651,8 @@ class CPPN():
         min_value = np.min(self.image)
         image_range = max_value - min_value
         self.image -= min_value
+        if self.config.color_mode == 'HSL':
+            self.image = hsv2rgb(self.image) # convert to RGB
         self.image *= 255
         if image_range != 0: # prevent divide by 0
             self.image /= image_range
