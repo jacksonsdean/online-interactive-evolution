@@ -4,18 +4,18 @@ from enum import IntEnum
 import math
 import json
 import numpy as np
-from skimage.color import hsv2rgb
-
 try:
     from nextGeneration.activation_functions import identity
     from nextGeneration.graph_util import name_to_fn, choose_random_function, is_valid_connection
     from nextGeneration.graph_util import get_matching_connections, find_node_with_id
     from nextGeneration.graph_util import get_incoming_connections, feed_forward_layers
+    from nextGeneration.graph_util import hsv2rgb
 except ModuleNotFoundError:
     from activation_functions import identity
     from graph_util import get_matching_connections, find_node_with_id
     from graph_util import name_to_fn, choose_random_function, is_valid_connection
     from graph_util import get_incoming_connections, feed_forward_layers
+    from graph_util import hsv2rgb
 
 class NodeType(IntEnum):
     """Enum for the type of node."""

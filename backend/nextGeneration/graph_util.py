@@ -2,6 +2,8 @@
 import inspect
 import random
 import sys
+
+import numpy as np
 try:
     import nextGeneration.activation_functions as af
 except ModuleNotFoundError:
@@ -110,8 +112,13 @@ def get_incoming_connections(individual, node):
     return list(filter(lambda x, n=node: x.to_node.id == n.id,
                individual.enabled_connections()))  # cxs that end here
 
+
+# Functions below are modified from other packages
+# This is necessary because AWS Lambda has strict space limits,
+# and we only need a few methods, not the entire packages.
+
 ###############################################################################################
-# Methods below are from the NEAT-Python package https://github.com/CodeReclaimers/neat-python/
+# Functions below are from the NEAT-Python package https://github.com/CodeReclaimers/neat-python/
 
 # LICENSE:
 # Copyright (c) 2007-2011, cesar.gomes and mirrorballu2
@@ -217,3 +224,94 @@ def feed_forward_layers(individual):
         s = s.union(t)
 
     return layers
+
+
+
+
+###############################################################################################
+# Functions below are from the Scikit-image package https://scikit-image.org/docs/stable
+
+# Copyright (C) 2019, the scikit-image team
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are
+# met:
+#
+#  1. Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in
+#     the documentation and/or other materials provided with the
+#     distribution.
+#  3. Neither the name of skimage nor the names of its contributors may be
+#     used to endorse or promote products derived from this software without
+#     specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT,
+# INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+# STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+# IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+
+
+def hsv2rgb(hsv):
+    """HSV to RGB color space conversion.
+    Modified  from:
+    https://scikit-image.org/docs/stable/api/skimage.color.html?highlight=hsv2rgb#skimage.color.hsv2rgb
+
+    Parameters
+    ----------
+    hsv : (..., 3) array_like
+        The image in HSV format. Final dimension denotes channels.
+
+    Returns
+    -------
+    out : (..., 3) ndarray
+        The image in RGB format. Same dimensions as input.
+
+    Raises
+    ------
+    ValueError
+        If `hsv` is not at least 2-D with shape (..., 3).
+
+    Notes
+    -----
+    Conversion between RGB and HSV color spaces results in some loss of
+    precision, due to integer arithmetic and rounding [1]_.
+
+    References
+    ----------
+    .. [1] https://en.wikipedia.org/wiki/HSL_and_HSV
+
+    Examples
+    --------
+    >>> from skimage import data
+    >>> img = data.astronaut()
+    >>> img_hsv = rgb2hsv(img)
+    >>> img_rgb = hsv2rgb(img_hsv)
+    """
+    arr = hsv
+    hi = np.floor(arr[..., 0] * 6)
+    f = arr[..., 0] * 6 - hi
+    p = arr[..., 2] * (1 - arr[..., 1])
+    q = arr[..., 2] * (1 - f * arr[..., 1])
+    t = arr[..., 2] * (1 - (1 - f) * arr[..., 1])
+    v = arr[..., 2]
+
+    hi = np.stack([hi, hi, hi], axis=-1).astype(np.uint8) % 6
+    out = np.choose(
+        hi, np.stack([np.stack((v, t, p), axis=-1),
+                      np.stack((q, v, p), axis=-1),
+                      np.stack((p, v, t), axis=-1),
+                      np.stack((p, q, v), axis=-1),
+                      np.stack((t, p, v), axis=-1),
+                      np.stack((v, p, q), axis=-1)]))
+
+    return out
