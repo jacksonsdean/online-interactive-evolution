@@ -1,4 +1,4 @@
-# Online Interactive Evolutionary Art
+# Online Interactive Evolutionary Gallery
 *Project by Jackson Dean for UVM CS 205*
     <br/>
     Available online at: <a href="https://interactive.evolutionary.gallery">interactive.evolutionary.gallery</a>
@@ -12,7 +12,7 @@
     <br/>Once the backend and frontend are running, navigate to <a href="http://localhost:3000">localhost:3000</a>
     <br/><br/>
     <h2>Instructions</h2>
-    <b>Interactive Evolutionary Art</b> is a visual art project inspired
+    <b>Interactive Evolutionary Gallery</b> is a visual art project inspired
     by <a target="_blank" href="https://en.wikipedia.org/wiki/Evolutionary_algorithm">Evolutionary Algorithms</a> and <a target="_blank" href="http://eplex.cs.ucf.edu/papers/secretan_ecj11.pdf">Picbreeder</a>.
     <br /><br />
     The images represent an <i>individual</i> in a <i>population</i> of <i>genomes</i>. The population <i>evolves</i> over <i>generations</i> as some individuals survive to reproduce and others do not.

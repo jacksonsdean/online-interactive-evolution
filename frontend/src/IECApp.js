@@ -54,7 +54,7 @@ function IECApp() {
       <div className="IECApp-background">
         <header>
           <p>
-            Interactive Evolutionary Art
+            Interactive Evolutionary Gallery
           </p>
 
         </header>
