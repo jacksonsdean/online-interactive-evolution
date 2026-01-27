@@ -76,29 +76,42 @@ function ProbabilitySlider(props) {
 
 
 function IntField(props) {
-    return <td><input type="number" step="1" value={props.value} onChange={(event) => props.onAfterChange(parseInt(event.target.value))} /></td>
+    return (
+        <span className={styles.inlineField}>
+            <input
+                type="number"
+                step="1"
+                value={props.value}
+                onChange={(event) => props.onAfterChange(parseInt(event.target.value))}
+            />
+        </span>
+    );
 }
 function FloatField(props) {
-    return (<td>
+    return (
+        <span className={styles.inlineField}>
             <input
-                type='number'
+                type="number"
                 step="0.1"
-                min='0'
-                className='form-control'
+                min="0"
+                className={styles.inlineInput}
                 value={props.value}
                 onChange={(event) => props.onAfterChange(parseFloat(event.target.value))}
             />
-        </td>)
+        </span>
+    );
 }
 function IntListField(props) {
-    return (<td>
+    return (
+        <span className={styles.inlineField}>
             <input
-                className='form-control'
+                className={styles.inlineInput}
                 value={props.value}
                 pattern="(\d+,)*\d+"
-                onChange={(event) => props.onAfterChange(event.target.value.split(",").map((x) => Number.isInteger(parseInt(x))?parseInt(x):0))}
+                onChange={(event) => props.onAfterChange(event.target.value.split(",").map((x) => Number.isInteger(parseInt(x)) ? parseInt(x) : 0))}
             />
-        </td>)
+        </span>
+    );
 }
 
 function Settings(props) {
@@ -142,18 +155,14 @@ function Settings(props) {
                                 />
                             </MenuItem>
                             <MenuItem>
-                            {"Hidden nodes at start *"}
-                            <table><tbody>
-                               <tr>
-                                
-                                 <IntListField
-                                    value={Number.isInteger(settings.hidden_nodes_at_start)?settings.hidden_nodes_at_start:settings.hidden_nodes_at_start.filter(x=>Number.isInteger(x)).join(",")}
-                                    onAfterChange={(value) => { props.setSettingsCallback(newSetting(settings, "hidden_nodes_at_start", value, popGrid)) }}
+                                {"Hidden nodes at start *"}
+                                <div className={styles.inlineRow}>
+                                    <IntListField
+                                        value={Number.isInteger(settings.hidden_nodes_at_start) ? settings.hidden_nodes_at_start : settings.hidden_nodes_at_start.filter(x => Number.isInteger(x)).join(",")}
+                                        onAfterChange={(value) => { props.setSettingsCallback(newSetting(settings, "hidden_nodes_at_start", value, popGrid)) }}
                                     />
-                                <button onClick={() => {popGrid.current.reset()}}>↩</button>
-                                </tr>
-                                </tbody>
-                                    </table>
+                                    <button type="button" className={styles.inlineButton} onClick={() => { popGrid.current.reset() }}>↩</button>
+                                </div>
                             </MenuItem>
 
                             <MenuItem>Image scale

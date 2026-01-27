@@ -1,0 +1,1583 @@
+{
+    "config": "{\n    \"activation_mode\": \"node\",\n    \"activations\": [\n        \"IdentityActivation\",\n        \"GaussActivation\",\n        \"SinActivation\",\n        \"CosActivation\",\n        \"TanhActivation\",\n        \"SigmoidActivation\"\n    ],\n    \"allow_input_activation_mutation\": true,\n    \"allow_recurrent\": false,\n    \"animate\": false,\n    \"batch_lr_mod\": false,\n    \"bias_mutation_std\": 0.0,\n    \"bloat_prune_rate\": 0.0,\n    \"color_mode\": \"RGB\",\n    \"connection_bloat\": 0,\n    \"connection_prune_threshold\": 0.0,\n    \"coord_range\": [\n        -0.5,\n        0.5\n    ],\n    \"device\": \"cuda\",\n    \"dirty\": true,\n    \"do_crossover\": true,\n    \"dry_run\": false,\n    \"dtype\": \"torch.float32\",\n    \"experiment_condition\": \"_default\",\n    \"extra_bloat\": 0,\n    \"file\": null,\n    \"force_init_path_inputs_outputs\": true,\n    \"fourier_feature_scale\": 2.0,\n    \"fourier_mult_percent\": 0.05,\n    \"fourier_seed\": 0,\n    \"fourier_sin_and_cos\": true,\n    \"genome_type\": null,\n    \"hidden_nodes_at_start\": 0,\n    \"init_connection_probability\": 0.5,\n    \"init_connection_probability_fourier\": 0.1,\n    \"max_weight\": 10.0,\n    \"mutate_sgd_lr_sigma\": 0.02,\n    \"n_fourier_features\": 0,\n    \"no_param_mutations\": false,\n    \"node_agg\": \"sum\",\n    \"normalize_outputs\": false,\n    \"num_conv\": 0,\n    \"num_inputs\": 3,\n    \"num_outputs\": 3,\n    \"num_post_conv\": 0,\n    \"num_upsamples\": 0,\n    \"output_activation\": \"\",\n    \"output_dir\": null,\n    \"population_size\": 20,\n    \"prob_add_connection\": 0.4,\n    \"prob_add_node\": 0.4,\n    \"prob_crossover\": 0.25,\n    \"prob_disable_connection\": 0.25,\n    \"prob_mutate_activation\": 0.1,\n    \"prob_mutate_bias\": 0.0,\n    \"prob_mutate_response\": 0.0,\n    \"prob_mutate_weight\": 0.35,\n    \"prob_random_restart\": 0.001,\n    \"prob_reenable_connection\": 0.95,\n    \"prob_remove_node\": 0.4,\n    \"prob_sgd_weight\": 1.0,\n    \"prob_weight_reinit\": 0.0,\n    \"res_h\": 128,\n    \"res_w\": 128,\n    \"resume\": null,\n    \"seed\": 3575,\n    \"sgd_clamp_grad\": false,\n    \"sgd_early_stop\": 0,\n    \"sgd_early_stop_delta\": -0.0005,\n    \"sgd_every\": 1,\n    \"sgd_l2_reg\": 0.0,\n    \"sgd_learning_rate\": 2.0,\n    \"sgd_steps\": 10,\n    \"single_structural_mutation\": false,\n    \"target_resize\": null,\n    \"topology_mutation_iters\": 1,\n    \"use_fourier_features\": true,\n    \"use_input_bias\": false,\n    \"use_radial_distance\": true,\n    \"version\": [\n        \"2\",\n        \"0\",\n        \"0\"\n    ],\n    \"weight_init_std\": 3.0,\n    \"weight_mutation_std\": 0.0,\n    \"weight_threshold\": 0,\n    \"with_grad\": true\n}",
+    "population": [
+        {
+            "id": 11,
+            "parents": [
+                -1,
+                -1
+            ],
+            "nodes": {
+                "-1": {
+                    "id": "-1",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-2": {
+                    "id": "-2",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-3": {
+                    "id": "-3",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-4": {
+                    "id": "-4",
+                    "activation": "SigmoidActivation",
+                    "bias": 7.609118938446045,
+                    "layer": 1
+                },
+                "-5": {
+                    "id": "-5",
+                    "activation": "GaussActivation",
+                    "bias": 10.0,
+                    "layer": 1
+                },
+                "-6": {
+                    "id": "-6",
+                    "activation": "TanhActivation",
+                    "bias": -7.890608787536621,
+                    "layer": 1
+                }
+            },
+            "connections": {
+                "-1,-4": {
+                    "weight": -4.12407922744751,
+                    "enabled": true
+                },
+                "-3,-4": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-1,-5": {
+                    "weight": -7.879848480224609,
+                    "enabled": true
+                },
+                "-3,-5": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-3,-6": {
+                    "weight": -8.066588401794434,
+                    "enabled": true
+                },
+                "-2,-4": {
+                    "weight": 3.8664755821228027,
+                    "enabled": true
+                }
+            },
+            "lineage": [],
+            "age": 0,
+            "cell_lineage": [],
+            "sgd_lr": 2.019721055869013,
+            "image": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDWooor8zP0IKKKKACiiigAooooAKKKKACiiigApaSigBaKKKAEooooAKKKKACiiigAooooAKKKKACiiigAooooAKWkooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooA//9k=",
+            "selected": false
+        },
+        {
+            "id": 11,
+            "parents": [
+                -1,
+                -1
+            ],
+            "nodes": {
+                "-1": {
+                    "id": "-1",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-2": {
+                    "id": "-2",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-3": {
+                    "id": "-3",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-4": {
+                    "id": "-4",
+                    "activation": "SigmoidActivation",
+                    "bias": 9.338818550109863,
+                    "layer": 2
+                },
+                "-5": {
+                    "id": "-5",
+                    "activation": "GaussActivation",
+                    "bias": -1.804778814315796,
+                    "layer": 1
+                },
+                "-6": {
+                    "id": "-6",
+                    "activation": "TanhActivation",
+                    "bias": -9.317761421203613,
+                    "layer": 1
+                },
+                "0": {
+                    "id": "0",
+                    "activation": "TanhActivation",
+                    "bias": -9.917756080627441,
+                    "layer": 1
+                }
+            },
+            "connections": {
+                "-3,-4": {
+                    "weight": 3.7895185947418213,
+                    "enabled": false
+                },
+                "-1,-5": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-3,-5": {
+                    "weight": -0.3345046937465668,
+                    "enabled": true
+                },
+                "-3,-6": {
+                    "weight": -6.663455486297607,
+                    "enabled": true
+                },
+                "-1,0": {
+                    "weight": 1.2442597150802612,
+                    "enabled": true
+                },
+                "0,-4": {
+                    "weight": -10.0,
+                    "enabled": true
+                }
+            },
+            "lineage": [],
+            "age": 0,
+            "cell_lineage": [],
+            "sgd_lr": 2.034367532469332,
+            "image": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDXooor8zP0IKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAoooxQAUUYpcUAJRS4oxQAlFLijFACUUuKMUAJRS4oxQAlFLikxQAUUYooAm8s0eWa1fsR9KX7EfSuf2yOT6wjJ8s0vlGtYWR9KX7EfSl7dC+sIyPKPpR5RrY+xH0p32E+lL26D6yjG8o+lHkn0rZ+wn0pfsPtR7dC+soxfJPpR5R9K2vsPtSfYT6Ue3QfWUYvlGjyj6VtfYT6U37EfSj26H9ZRj+UaTyzWx9iPpSGyPpT9ug+sIyPLNHlmtb7EfSk+xH0p+2Q/rCOj+yD0pfsg9Km89fWk+0L6143NM8DmmR/ZB6Uv2VfSn/AGhaT7QtF5heYn2VfSj7MvpS/aV9aT7SvrR74e+L9mWj7OvoKT7SvrSfaR60e+Hvjvs6+go+zLTftI9aX7SvrR74e+H2ZfSj7KvpR9pX1pftK+tHvh7437KvpSfZB6U/7QtL9oWi8wvMi+yD0pPsg9Km+0L60vnr60c0w5pnP/bj60n273rE84+tHnH1r1vq6Pc+qo2vtx9aT7cfWsbzj60nnH1p+wQfVkbP20+tH20+tY3mn1o800ewQ/qyNj7afWj7afWsbzTR5po9gg+rI2ftp9aPtp9axvNNHmmj2CD6sja+2n1o+2n1rG800eafWj2CD6sja+3H1pftx9axPOPrS+cfWj2CF9Wibf273pftx9aw/OPrR5x9aX1dC+qor5ozSUV1neLmjNJRQAuaM0lFAC5ozSUUALmjNJRQAuaM0lFAC5ozSUUALmjNJRQB/9k=",
+            "selected": false
+        },
+        {
+            "id": 21,
+            "parents": [
+                11,
+                11
+            ],
+            "nodes": {
+                "-1": {
+                    "id": "-1",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-2": {
+                    "id": "-2",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-3": {
+                    "id": "-3",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-4": {
+                    "id": "-4",
+                    "activation": "SigmoidActivation",
+                    "bias": 9.493464469909668,
+                    "layer": 1
+                },
+                "-5": {
+                    "id": "-5",
+                    "activation": "GaussActivation",
+                    "bias": -10.0,
+                    "layer": 1
+                },
+                "-6": {
+                    "id": "-6",
+                    "activation": "TanhActivation",
+                    "bias": -10.0,
+                    "layer": 1
+                }
+            },
+            "connections": {
+                "-1,-4": {
+                    "weight": 5.884848594665527,
+                    "enabled": true
+                },
+                "-3,-4": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-1,-5": {
+                    "weight": 4.820316314697266,
+                    "enabled": true
+                },
+                "-3,-5": {
+                    "weight": -8.491628646850586,
+                    "enabled": true
+                },
+                "-3,-6": {
+                    "weight": -9.207621574401855,
+                    "enabled": true
+                },
+                "-2,-6": {
+                    "weight": -1.4663472175598145,
+                    "enabled": true
+                }
+            },
+            "lineage": [
+                11
+            ],
+            "age": 0,
+            "cell_lineage": [],
+            "sgd_lr": 2.0332198720425367,
+            "image": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDWooor8zP0IKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigBaSlooASiiigAooooAKKKKACiiigAooooAKKKKACloooAKKKKACiiigBMUUtFACUUtFACUUtFACUYpaKACiiigAooooA//9k=",
+            "selected": false
+        },
+        {
+            "id": 22,
+            "parents": [
+                11,
+                11
+            ],
+            "nodes": {
+                "-1": {
+                    "id": "-1",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-2": {
+                    "id": "-2",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-3": {
+                    "id": "-3",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-4": {
+                    "id": "-4",
+                    "activation": "SigmoidActivation",
+                    "bias": 10.0,
+                    "layer": 1
+                },
+                "-5": {
+                    "id": "-5",
+                    "activation": "GaussActivation",
+                    "bias": 10.0,
+                    "layer": 2
+                },
+                "-6": {
+                    "id": "-6",
+                    "activation": "TanhActivation",
+                    "bias": -8.510931015014648,
+                    "layer": 1
+                },
+                "1": {
+                    "id": "1",
+                    "activation": "GaussActivation",
+                    "bias": 4.376347541809082,
+                    "layer": 1
+                }
+            },
+            "connections": {
+                "-1,-4": {
+                    "weight": 8.380971908569336,
+                    "enabled": true
+                },
+                "-3,-4": {
+                    "weight": 6.63357400894165,
+                    "enabled": true
+                },
+                "-3,-5": {
+                    "weight": 8.979321479797363,
+                    "enabled": true
+                },
+                "-3,-6": {
+                    "weight": -8.377534866333008,
+                    "enabled": true
+                },
+                "-1,1": {
+                    "weight": -7.50028657913208,
+                    "enabled": true
+                },
+                "1,-5": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-2,-4": {
+                    "weight": 8.296440124511719,
+                    "enabled": true
+                }
+            },
+            "lineage": [
+                11
+            ],
+            "age": 0,
+            "cell_lineage": [],
+            "sgd_lr": 2.0336979934945703,
+            "image": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDWooor8zP0IKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKWgBKKKKACiiigAooooAKKKKACiiigAooooAKKKKACloooASiiigAooooAKKKKACiiigAooooAKKKKAClpKWgAooooASiiigAooooAKKKKACiiigAooooAKKWigAooooAKKKKAEooooAKKKKACiiigAoopaAEpaKKACiiigAooooAKKKKAP/Z",
+            "selected": false
+        },
+        {
+            "id": 11,
+            "parents": [
+                -1,
+                -1
+            ],
+            "nodes": {
+                "-1": {
+                    "id": "-1",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-2": {
+                    "id": "-2",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-3": {
+                    "id": "-3",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-4": {
+                    "id": "-4",
+                    "activation": "SigmoidActivation",
+                    "bias": 10.0,
+                    "layer": 2
+                },
+                "-5": {
+                    "id": "-5",
+                    "activation": "GaussActivation",
+                    "bias": -5.7902445793151855,
+                    "layer": 1
+                },
+                "-6": {
+                    "id": "-6",
+                    "activation": "TanhActivation",
+                    "bias": -10.0,
+                    "layer": 1
+                },
+                "2": {
+                    "id": "2",
+                    "activation": "GaussActivation",
+                    "bias": 2.3555798530578613,
+                    "layer": 1
+                }
+            },
+            "connections": {
+                "-3,-4": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-1,-5": {
+                    "weight": 8.70925521850586,
+                    "enabled": true
+                },
+                "-3,-5": {
+                    "weight": 3.486349582672119,
+                    "enabled": true
+                },
+                "-3,-6": {
+                    "weight": -10.0,
+                    "enabled": true
+                },
+                "-1,2": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "2,-4": {
+                    "weight": 7.837951183319092,
+                    "enabled": true
+                },
+                "-2,-6": {
+                    "weight": -3.963822841644287,
+                    "enabled": true
+                }
+            },
+            "lineage": [],
+            "age": 0,
+            "cell_lineage": [],
+            "sgd_lr": 1.9854609835892916,
+            "image": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDXpKWkr8zP0IKKKKACiiigAooooAKKKKACiiigAooooAKWkpaACiiigAoxRRQAmKMUtFACUUtFACUUtFACYoxS0UAGKKKKACiiigAooooAKKKKACijNJmgBaKTNGaAFopM0ZoAWikzS5oAKKKKACiiigBKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACinYpMUCEooxRQMKKKKACiiigAooooAKKKKACiijFABRS4pcUCLTW5HaozER2rpZNP8AaqklgfSuOOITOCGLizCKEU3aa13sSO1QNaEdq2VVM6FXizOxSYq6bYjtTDbn0q1NFqoirijFWDAfSk8k+lPmRXOiDFGKn8k+lKID6UcyDnRXxS4qyLc+lPFsT2pOaJdRFTaacEJq8toT2qdLEntUOqkQ68UZoiJ7VItuT2rWjsD6Vbj0/wBqxliEjnni4o29qNTGgU9qy01D3qwl+D3rzXSmjyHRnEnazU9qhawB7VMt4p71ILlD3pXmhc1SJntpw9KibTvatgSoaXch9KpVpopYiojCOm+1N/s0+lb/AMh9KMJT+sSK+tTMD+zT6U4ab7Vu4Sj5B6UfWJB9amYy6d7VKunD0rU3IPSkMqCk602S8RUZSWwA7VMtmo7VIblB3qNrxR3qbzZPNUkSrAo7U/ai1Qe/A71XfUPemqU2NUZyP//Z",
+            "selected": false
+        },
+        {
+            "id": 11,
+            "parents": [
+                -1,
+                -1
+            ],
+            "nodes": {
+                "-1": {
+                    "id": "-1",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-2": {
+                    "id": "-2",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-3": {
+                    "id": "-3",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-4": {
+                    "id": "-4",
+                    "activation": "SigmoidActivation",
+                    "bias": 9.277087211608887,
+                    "layer": 1
+                },
+                "-5": {
+                    "id": "-5",
+                    "activation": "GaussActivation",
+                    "bias": -6.327819347381592,
+                    "layer": 1
+                },
+                "-6": {
+                    "id": "-6",
+                    "activation": "TanhActivation",
+                    "bias": -8.606878280639648,
+                    "layer": 1
+                }
+            },
+            "connections": {
+                "-1,-4": {
+                    "weight": 9.952589988708496,
+                    "enabled": true
+                },
+                "-3,-4": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-1,-5": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-3,-5": {
+                    "weight": 4.785401344299316,
+                    "enabled": true
+                },
+                "-3,-6": {
+                    "weight": -7.211714744567871,
+                    "enabled": true
+                }
+            },
+            "lineage": [],
+            "age": 0,
+            "cell_lineage": [],
+            "sgd_lr": 2.0107696522027254,
+            "image": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDWooor8zP0IKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAXFJU7REdqjKEUk0SpJjKKXFGKYxKKKKBhRRRQAUUUUAFFFFABRS4oxQISlxTghNSLET2pNoTkjfm04+lUZLAjtXXlUf0qJ7RG7V5EMU1ueFDGyW5xj2jDtUDQEdq7CTTge1VJNL9q6YYtM7IY6L3OXMZHamlDXQPph9KgbTWHat1iIs6I4qDMXbRtrVOnt6U37A3pV+2iWq8TM20ba0/sDelOGnt6Ue2iHt4mWENOEZPatddNY9qnTTD6VDxEURLFQRiLAT2qdLRj2rej0v2q3HpwHasJYtI5546K2OfjsCe1XodOPpW4loi9qlConpXNPFN7HHPGyexhxan71cj1IHvXILMR3qZbph3rqnhEztngYs7JL1G71MJ429K41L5h3qwmosO9c8sG+hyywD6HV/u29KQwxn0rnU1Q+tTLqvvWTw01sYvCVFsbRtYz2FN+xx+grLGq+9O/tX3peyqE+wrI0vscfoKcLWMdhWX/avvTTqvvR7KoHsKzNgQxj0pf3a+lYTar71C+qH1prDTZSwlR7nRGeNfSoXvUXvXNvqLHvVd75j3rWODfU2jgG9zo5NSA71Tl1P3rCa6Y96haYnvXRDCJHVDAxR/9k=",
+            "selected": false
+        },
+        {
+            "id": 11,
+            "parents": [
+                -1,
+                -1
+            ],
+            "nodes": {
+                "-1": {
+                    "id": "-1",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-2": {
+                    "id": "-2",
+                    "activation": "CosActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-3": {
+                    "id": "-3",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-4": {
+                    "id": "-4",
+                    "activation": "SigmoidActivation",
+                    "bias": 2.812037467956543,
+                    "layer": 2
+                },
+                "-5": {
+                    "id": "-5",
+                    "activation": "GaussActivation",
+                    "bias": 10.0,
+                    "layer": 1
+                },
+                "-6": {
+                    "id": "-6",
+                    "activation": "TanhActivation",
+                    "bias": -10.0,
+                    "layer": 1
+                },
+                "3": {
+                    "id": "3",
+                    "activation": "TanhActivation",
+                    "bias": -10.0,
+                    "layer": 1
+                }
+            },
+            "connections": {
+                "-3,-4": {
+                    "weight": -0.47759902477264404,
+                    "enabled": true
+                },
+                "-1,-5": {
+                    "weight": -5.942907333374023,
+                    "enabled": true
+                },
+                "-3,-5": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-3,-6": {
+                    "weight": -7.53573751449585,
+                    "enabled": true
+                },
+                "-1,3": {
+                    "weight": 3.922969102859497,
+                    "enabled": true
+                },
+                "3,-4": {
+                    "weight": 8.997864723205566,
+                    "enabled": true
+                },
+                "-6,-4": {
+                    "weight": 10.0,
+                    "enabled": true
+                }
+            },
+            "lineage": [],
+            "age": 0,
+            "cell_lineage": [],
+            "sgd_lr": 2.0141800395213068,
+            "image": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD2Giiivw49MKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooA//Z",
+            "selected": false
+        },
+        {
+            "id": 11,
+            "parents": [
+                -1,
+                -1
+            ],
+            "nodes": {
+                "-1": {
+                    "id": "-1",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-2": {
+                    "id": "-2",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-3": {
+                    "id": "-3",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-4": {
+                    "id": "-4",
+                    "activation": "SigmoidActivation",
+                    "bias": 10.0,
+                    "layer": 1
+                },
+                "-5": {
+                    "id": "-5",
+                    "activation": "GaussActivation",
+                    "bias": 1.7983622550964355,
+                    "layer": 2
+                },
+                "-6": {
+                    "id": "-6",
+                    "activation": "TanhActivation",
+                    "bias": -8.428973197937012,
+                    "layer": 1
+                },
+                "4": {
+                    "id": "4",
+                    "activation": "GaussActivation",
+                    "bias": 8.791250228881836,
+                    "layer": 1
+                }
+            },
+            "connections": {
+                "-1,-4": {
+                    "weight": 7.5690226554870605,
+                    "enabled": true
+                },
+                "-3,-4": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-1,-5": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-3,-6": {
+                    "weight": -6.7376708984375,
+                    "enabled": true
+                },
+                "-3,4": {
+                    "weight": 9.280991554260254,
+                    "enabled": true
+                },
+                "4,-5": {
+                    "weight": -5.777125358581543,
+                    "enabled": true
+                }
+            },
+            "lineage": [],
+            "age": 0,
+            "cell_lineage": [],
+            "sgd_lr": 1.9840709436684847,
+            "image": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDWopcUYr8zP0ISilxRigBKKXFGKAEopcUYoASilxRigBKKXFGKAEopcUYoASilxRigCXy6PLrV+xn0o+xn0rD2yOX6wjK8ujy61fsZ9KPsZ9KPbIPrCMry6PLrV+xn0o+xn0o9sg+sIyvLo8utX7GfSj7GfSj2yD6wjK8ujy61fsZ9KPsZ9KPbIPrCMry6PLrV+xn0o+xn0o9sg+sIyvLo8utX7GfSj7GfSj2yD6wjK8ujy61fsZ9KPsZ9KPbIPrCOk+xj0o+xj0qfz19aPPX1rxuaZ8/zTIPsY9KPsY9Kn89fWjz19aOaYc0yD7GPSj7GPSp/PX1o89fWjmmHNMg+xj0o+xj0qfz19aPPX1o5phzTIPsY9KPsY9Kn89fWjz19aOaYc0yD7GPSj7GPSp/PX1o89fWjmmHNMg+xj0o+xj0qfz19aPPX1o5phzTIPsY9KPsY9Kn89fWjz19aOaYc0znvtx9aPtx9axPOPrR5x9a9X6uj2/qqNv7cfWj7cfWsTzj60ecfWj6ug+qo2/tx9aPtx9axPOPrR5x9aPq6D6qjb+3H1o+3H1rE84+tHnH1o+roPqqNv7cfWj7cfWsTzj60ecfWj6ug+qo2/tx9aPtx9axPOPrR5x9aPq6D6qjb+3H1o+3H1rE84+tHnH1o+roPqqNv7cfWj7cfWsTzj60ecfWj6ug+qor5ozTaK6zuHZozTaKAHZozTaKAHZozTaKAHZozTaKAHZozTaKAHZozTaKAHZozTaKACilpKBhRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRS0AFFFFABikpaKAEopcUmKACiiigAooooAKKMUuKAEpcUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAf/Z",
+            "selected": false
+        },
+        {
+            "id": 11,
+            "parents": [
+                -1,
+                -1
+            ],
+            "nodes": {
+                "-1": {
+                    "id": "-1",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-2": {
+                    "id": "-2",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-3": {
+                    "id": "-3",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-4": {
+                    "id": "-4",
+                    "activation": "SigmoidActivation",
+                    "bias": 9.204184532165527,
+                    "layer": 1
+                },
+                "-5": {
+                    "id": "-5",
+                    "activation": "GaussActivation",
+                    "bias": -6.826181888580322,
+                    "layer": 1
+                },
+                "-6": {
+                    "id": "-6",
+                    "activation": "TanhActivation",
+                    "bias": -8.515388488769531,
+                    "layer": 1
+                }
+            },
+            "connections": {
+                "-1,-4": {
+                    "weight": 9.283554077148438,
+                    "enabled": true
+                },
+                "-3,-4": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-1,-5": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-3,-5": {
+                    "weight": 5.354140758514404,
+                    "enabled": true
+                },
+                "-3,-6": {
+                    "weight": -7.08675479888916,
+                    "enabled": true
+                }
+            },
+            "lineage": [],
+            "age": 0,
+            "cell_lineage": [],
+            "sgd_lr": 1.9854967538267374,
+            "image": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDWooor8zP0IKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKkKEU0ii4rjaKXFJQMKKKKACiiigAooooAKKKKACiilxQAlFOApwQmi4rmxLp5Haqclow7V2j2yOOgqrLpyt0FeXDF9zxqeO7nGtAR2qMoRXUS6X7VTk0wjtXVHExZ2QxcWYO2kxWq+nsO1QtZMO1aqrFm6rRZQxRirZtWHam/Zm9KvnRftIlbFGKs/Zm9KcLVj2o50HtIlTFLtq8tkx7VMmnse1S6sUQ60UZoQmpFgJ7VsR6YT2q5FpftWMsTFGE8XFGHHaMe1XItPJ7VvRacq9RVpLZEHQVyTxnY46mO7GdFqYPU1cjvkbvXFrcsO9WEvWHetJ4NdDSeAT2OyE0b+lKUjf0rlY9RYd6tR6ofWueWFktjllgpx2N1rSNuwqJtPQ9hVBNV96nXVB61Hs6qM/ZVokh0xT2pn9lr6U8amvrTv7ST1FF6qC9ZEX9lr6U8aYo7U7+0k9RTTqa+tF6rC9dki6eg7CpVtI17CqTaoPWoH1X3o9nVYeyrSNcJGnpSGaNPSsCTVD61Vk1Fj3q44WT3NI4Kb3OjkvkXvVOXUwOhrn3vWPeq7XLHvXRDBrqdVPAJbn//2Q==",
+            "selected": false
+        },
+        {
+            "id": 11,
+            "parents": [
+                -1,
+                -1
+            ],
+            "nodes": {
+                "-1": {
+                    "id": "-1",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-2": {
+                    "id": "-2",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-3": {
+                    "id": "-3",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-4": {
+                    "id": "-4",
+                    "activation": "SigmoidActivation",
+                    "bias": 7.780979156494141,
+                    "layer": 1
+                },
+                "-5": {
+                    "id": "-5",
+                    "activation": "GaussActivation",
+                    "bias": 10.0,
+                    "layer": 1
+                },
+                "-6": {
+                    "id": "-6",
+                    "activation": "TanhActivation",
+                    "bias": 9.319269180297852,
+                    "layer": 1
+                }
+            },
+            "connections": {
+                "-1,-4": {
+                    "weight": 7.68050479888916,
+                    "enabled": true
+                },
+                "-3,-4": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-1,-5": {
+                    "weight": -7.102422714233398,
+                    "enabled": true
+                },
+                "-3,-5": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-3,-6": {
+                    "weight": 9.752599716186523,
+                    "enabled": true
+                },
+                "-1,-6": {
+                    "weight": -7.05656099319458,
+                    "enabled": true
+                }
+            },
+            "lineage": [],
+            "age": 0,
+            "cell_lineage": [],
+            "sgd_lr": 2.053239921107888,
+            "image": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDIooor9MP14KKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiikMKKKKACiiigQUUUUwCiiigAooopAFFFFAwooooA//2Q==",
+            "selected": false
+        },
+        {
+            "id": 11,
+            "parents": [
+                -1,
+                -1
+            ],
+            "nodes": {
+                "-1": {
+                    "id": "-1",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-2": {
+                    "id": "-2",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-3": {
+                    "id": "-3",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-4": {
+                    "id": "-4",
+                    "activation": "SigmoidActivation",
+                    "bias": 9.259589195251465,
+                    "layer": 1
+                },
+                "-5": {
+                    "id": "-5",
+                    "activation": "GaussActivation",
+                    "bias": -0.7826491594314575,
+                    "layer": 1
+                },
+                "-6": {
+                    "id": "-6",
+                    "activation": "TanhActivation",
+                    "bias": -8.664480209350586,
+                    "layer": 1
+                }
+            },
+            "connections": {
+                "-1,-4": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-3,-4": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-1,-5": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-3,-5": {
+                    "weight": 7.213458061218262,
+                    "enabled": true
+                },
+                "-3,-6": {
+                    "weight": -7.251345157623291,
+                    "enabled": true
+                }
+            },
+            "lineage": [],
+            "age": 0,
+            "cell_lineage": [],
+            "sgd_lr": 2.020130166783929,
+            "image": null,
+            "selected": true
+        },
+        {
+            "id": 23,
+            "parents": [
+                11,
+                11
+            ],
+            "nodes": {
+                "-1": {
+                    "id": "-1",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-2": {
+                    "id": "-2",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-3": {
+                    "id": "-3",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-4": {
+                    "id": "-4",
+                    "activation": "SigmoidActivation",
+                    "bias": 10.0,
+                    "layer": 1
+                },
+                "-5": {
+                    "id": "-5",
+                    "activation": "GaussActivation",
+                    "bias": -8.018145561218262,
+                    "layer": 2
+                },
+                "-6": {
+                    "id": "-6",
+                    "activation": "TanhActivation",
+                    "bias": -8.498525619506836,
+                    "layer": 1
+                },
+                "5": {
+                    "id": "5",
+                    "activation": "CosActivation",
+                    "bias": -4.976840972900391,
+                    "layer": 1
+                }
+            },
+            "connections": {
+                "-1,-4": {
+                    "weight": 8.23794174194336,
+                    "enabled": true
+                },
+                "-3,-4": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-1,-5": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-3,-6": {
+                    "weight": -6.4679951667785645,
+                    "enabled": true
+                },
+                "-3,5": {
+                    "weight": -2.0200304985046387,
+                    "enabled": true
+                },
+                "5,-5": {
+                    "weight": 1.4273632764816284,
+                    "enabled": true
+                },
+                "-2,-4": {
+                    "weight": 4.883956432342529,
+                    "enabled": true
+                }
+            },
+            "lineage": [
+                11
+            ],
+            "age": 0,
+            "cell_lineage": [],
+            "sgd_lr": 2.0165542329195887,
+            "image": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDWooor8zP0IKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKWgBKKKKACiiigAooooAKKKKACiiigAooooAKKKKACloooASiiigAooooAKKKKACiiigAooooAKKKKACloooAKKKKAEooooAKKKKACiiigAooooAKKMUtACUtFFABRRRQAUUUUAFFO20baLiuNop232o20XC42inbaNtFwuNop22jbRcLjaKdto20XC42inbaNtFwuNop22jb7UXC42inbaNtFwuf/9k=",
+            "selected": false
+        },
+        {
+            "id": 24,
+            "parents": [
+                11,
+                11
+            ],
+            "nodes": {
+                "-1": {
+                    "id": "-1",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-2": {
+                    "id": "-2",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-3": {
+                    "id": "-3",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-4": {
+                    "id": "-4",
+                    "activation": "SigmoidActivation",
+                    "bias": 8.732625007629395,
+                    "layer": 1
+                },
+                "-5": {
+                    "id": "-5",
+                    "activation": "GaussActivation",
+                    "bias": -9.461962699890137,
+                    "layer": 2
+                },
+                "-6": {
+                    "id": "-6",
+                    "activation": "TanhActivation",
+                    "bias": -8.689044952392578,
+                    "layer": 1
+                },
+                "6": {
+                    "id": "6",
+                    "activation": "IdentityActivation",
+                    "bias": -7.977900505065918,
+                    "layer": 1
+                }
+            },
+            "connections": {
+                "-1,-4": {
+                    "weight": 4.019180774688721,
+                    "enabled": true
+                },
+                "-3,-4": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-3,-5": {
+                    "weight": 6.498398780822754,
+                    "enabled": true
+                },
+                "-3,-6": {
+                    "weight": -6.952178955078125,
+                    "enabled": true
+                },
+                "-1,6": {
+                    "weight": 0.7070192694664001,
+                    "enabled": true
+                },
+                "6,-5": {
+                    "weight": 6.222921371459961,
+                    "enabled": true
+                }
+            },
+            "lineage": [
+                11
+            ],
+            "age": 0,
+            "cell_lineage": [],
+            "sgd_lr": 2.01402526255697,
+            "image": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDWooor8zP0IKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAFpKWigBKKKKACiiigAooooAKKKKACiiigAooooAKWiigD/2Q==",
+            "selected": false
+        },
+        {
+            "id": 11,
+            "parents": [
+                -1,
+                -1
+            ],
+            "nodes": {
+                "-1": {
+                    "id": "-1",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-2": {
+                    "id": "-2",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-3": {
+                    "id": "-3",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-4": {
+                    "id": "-4",
+                    "activation": "SigmoidActivation",
+                    "bias": 8.44942569732666,
+                    "layer": 2
+                },
+                "-5": {
+                    "id": "-5",
+                    "activation": "GaussActivation",
+                    "bias": 8.550050735473633,
+                    "layer": 1
+                },
+                "-6": {
+                    "id": "-6",
+                    "activation": "TanhActivation",
+                    "bias": -8.578740119934082,
+                    "layer": 1
+                },
+                "7": {
+                    "id": "7",
+                    "activation": "SigmoidActivation",
+                    "bias": 8.437384605407715,
+                    "layer": 1
+                }
+            },
+            "connections": {
+                "-1,-4": {
+                    "weight": 7.632926940917969,
+                    "enabled": true
+                },
+                "-1,-5": {
+                    "weight": 9.890000343322754,
+                    "enabled": true
+                },
+                "-3,-5": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-3,-6": {
+                    "weight": -7.1437153816223145,
+                    "enabled": true
+                },
+                "-3,7": {
+                    "weight": 9.442553520202637,
+                    "enabled": true
+                },
+                "7,-4": {
+                    "weight": 10.0,
+                    "enabled": true
+                }
+            },
+            "lineage": [],
+            "age": 0,
+            "cell_lineage": [],
+            "sgd_lr": 2.0151924462988973,
+            "image": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDWooor8zP0IKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAWiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAP/Z",
+            "selected": false
+        },
+        {
+            "id": 11,
+            "parents": [
+                -1,
+                -1
+            ],
+            "nodes": {
+                "-1": {
+                    "id": "-1",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-2": {
+                    "id": "-2",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-3": {
+                    "id": "-3",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-4": {
+                    "id": "-4",
+                    "activation": "SigmoidActivation",
+                    "bias": 9.23486042022705,
+                    "layer": 1
+                },
+                "-5": {
+                    "id": "-5",
+                    "activation": "GaussActivation",
+                    "bias": -4.958359718322754,
+                    "layer": 1
+                },
+                "-6": {
+                    "id": "-6",
+                    "activation": "TanhActivation",
+                    "bias": -8.580906867980957,
+                    "layer": 1
+                }
+            },
+            "connections": {
+                "-1,-4": {
+                    "weight": 9.814077377319336,
+                    "enabled": true
+                },
+                "-3,-4": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-1,-5": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-3,-5": {
+                    "weight": 7.446218490600586,
+                    "enabled": true
+                },
+                "-3,-6": {
+                    "weight": -7.14231014251709,
+                    "enabled": true
+                }
+            },
+            "lineage": [],
+            "age": 0,
+            "cell_lineage": [],
+            "sgd_lr": 1.999722545966506,
+            "image": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDWooor8zP0IKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigBSKSpWQioyKExJiUUUUDCiiigAooooAKKKKACiiigAooooAKUCgCpFQmhsTdjTuLMqTxWfJEVPSu1uLIODgVjXWnkZwK4KOJT3PMoYxPRnOlcU2r81qVPSqrRkV2xmmehGaZFRSkUlUaBRRRQAUUUUAFFFKBQAlOC5p6xk1ahtSx6VMppGcpqJBHEWPStC3syxHFXLXTycZFbNvZBAMiuKtiUtjz6+MS0Q+G8WQcmpnjSUdq5GC+Kkc1q22p9MmuWphpRd0cdXCSg7xLNxpwbOBWTcaaRniuhivEkHJqQpHKO1TCvOnuRDEVKbsziZbRlPSqzQkdq7abTkfoKz5tJ9BXZDGRe5308fF7nLFD6Um01vSaSw/hqE6W/92uhYiDOpYqD6mPtNKEPpWuNLf8Au1NHpLH+Gh4iC6g8VBdTFWEntVmK0Zj0rdh0n1FaEOnInUVzzxkVsctTHxWxh2+mk44rWt9OC4yKvhI4h2qOW8SMcGuOVac9jgniKlR2RKkaRDtUM14sY4NZlzqfXBrKnvixPNVTw0pO8i6WElN3kZQYipknZe9V6K9hxTPecUzThvmXHNaMGqkdTXOBiKeJCO9YzoRkc9TDQkdjFqinqatJfRt1IriFuGHep0vnHeuWWCXQ4p5euh2nmwt6Uv7k+lcgupOO9SDVH9ayeDl0Zi8BNbM6v9yPSk82FfSuVOqP61G2pOe9CwcurBYCb3Z1T30a9CKqy6oo6GuZe+c96ga4Y961jgl1NoZeupuT6qT0NZ018zZ5qgZCe9MLE11QoRidtPDQiTvOzd6hLE02itlFI6FFIKKKKZQUUUUAFGaKKAFyaMmkooAXJoyaSigAzRRRQAUUUUAFFFFAH//Z",
+            "selected": false
+        },
+        {
+            "id": 11,
+            "parents": [
+                -1,
+                -1
+            ],
+            "nodes": {
+                "-1": {
+                    "id": "-1",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-2": {
+                    "id": "-2",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-3": {
+                    "id": "-3",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-4": {
+                    "id": "-4",
+                    "activation": "SigmoidActivation",
+                    "bias": 10.0,
+                    "layer": 1
+                },
+                "-5": {
+                    "id": "-5",
+                    "activation": "GaussActivation",
+                    "bias": -10.0,
+                    "layer": 1
+                },
+                "-6": {
+                    "id": "-6",
+                    "activation": "TanhActivation",
+                    "bias": 8.57465934753418,
+                    "layer": 1
+                }
+            },
+            "connections": {
+                "-1,-4": {
+                    "weight": -2.219672679901123,
+                    "enabled": true
+                },
+                "-3,-4": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-1,-5": {
+                    "weight": 3.334561824798584,
+                    "enabled": true
+                },
+                "-3,-5": {
+                    "weight": 0.2767283022403717,
+                    "enabled": true
+                },
+                "-3,-6": {
+                    "weight": 9.750452995300293,
+                    "enabled": true
+                },
+                "-1,-6": {
+                    "weight": 6.653339862823486,
+                    "enabled": true
+                }
+            },
+            "lineage": [],
+            "age": 0,
+            "cell_lineage": [],
+            "sgd_lr": 2.0307214185595512,
+            "image": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDIooor9LP18KKKKACiiimIKKKKACiiigAooooAKKKKQwooooAKKKKBBRRRTAKKKKACiiigAooooAKKKKACiiigAooopAFFFFMAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKQBRRRQAUUUUwCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD/2Q==",
+            "selected": false
+        },
+        {
+            "id": 25,
+            "parents": [
+                11,
+                11
+            ],
+            "nodes": {
+                "-1": {
+                    "id": "-1",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-2": {
+                    "id": "-2",
+                    "activation": "TanhActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-3": {
+                    "id": "-3",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-4": {
+                    "id": "-4",
+                    "activation": "SigmoidActivation",
+                    "bias": 9.428376197814941,
+                    "layer": 1
+                },
+                "-5": {
+                    "id": "-5",
+                    "activation": "GaussActivation",
+                    "bias": -6.139564037322998,
+                    "layer": 1
+                },
+                "-6": {
+                    "id": "-6",
+                    "activation": "TanhActivation",
+                    "bias": -8.682080268859863,
+                    "layer": 1
+                }
+            },
+            "connections": {
+                "-3,-4": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-1,-5": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-3,-5": {
+                    "weight": 2.9851574897766113,
+                    "enabled": true
+                },
+                "-3,-6": {
+                    "weight": -7.293492794036865,
+                    "enabled": true
+                }
+            },
+            "lineage": [
+                11
+            ],
+            "age": 0,
+            "cell_lineage": [],
+            "sgd_lr": 2.026566345244646,
+            "image": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDWooor8zP0IKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKXFJQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUuKAJTER2ppQ1uvp59KgexI7VzqvFnJHExZkbaTFaLWZHao2tSO1aKomaqrFlHFGKtG3PpTTAfSq50Upor4oxU/kn0pPJPpT5kPmRDijFTeSfSl8k+lHMg5kQYoxVgQH0pwtz6UudC50VsUu2ri2pPapFsye1S6iJdWKKAQ04RE9q1EsSe1Tpp59KzdeKMpYmKOlMCGo2tFPaqSaiPWp1v1PevJ5Jo8P2dSINYKe1Qtpw9KtreIe9PFyh70c9RBz1YmY2m+1RHTPatoTIaXfGfSmq80UsRURgnTPam/wBmH0roMx+1H7v2qvrMyvrczn/7MPpThpntW9+79qMx+1H1mYfW5mINM9qlXTfatbfGPSkMyCpdebJeIqMz104elTLYKO1WDcoO9Ma8Qd6XPUZPPVYq2ijtUggQVVa/Ud6gfUR60ck2Hs6kj//Z",
+            "selected": false
+        },
+        {
+            "id": 11,
+            "parents": [
+                -1,
+                -1
+            ],
+            "nodes": {
+                "-1": {
+                    "id": "-1",
+                    "activation": "CosActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-2": {
+                    "id": "-2",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-3": {
+                    "id": "-3",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-4": {
+                    "id": "-4",
+                    "activation": "SigmoidActivation",
+                    "bias": 9.403563499450684,
+                    "layer": 1
+                },
+                "-5": {
+                    "id": "-5",
+                    "activation": "GaussActivation",
+                    "bias": -7.916193962097168,
+                    "layer": 1
+                },
+                "-6": {
+                    "id": "-6",
+                    "activation": "TanhActivation",
+                    "bias": -8.659516334533691,
+                    "layer": 1
+                }
+            },
+            "connections": {
+                "-1,-4": {
+                    "weight": 9.708722114562988,
+                    "enabled": true
+                },
+                "-3,-4": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-1,-5": {
+                    "weight": 9.215267181396484,
+                    "enabled": true
+                },
+                "-3,-5": {
+                    "weight": 4.879866123199463,
+                    "enabled": true
+                },
+                "-3,-6": {
+                    "weight": -7.253383159637451,
+                    "enabled": true
+                }
+            },
+            "lineage": [],
+            "age": 0,
+            "cell_lineage": [],
+            "sgd_lr": 2.020431917917449,
+            "image": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDWooor8zP0IKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKWkoAKKKKACiiigAooooAKKKKACiiigAooooAKKKWgAop5Qim4ouK4mKSlooGJRS0mKACiiigAooooAKKMUtACUuKKKACilxTghNFxXNWSxI7VWe0Ydq7J7RG7VWk05T2ry4YzuePDHdzkGgI7VGYiO1dRJpntVZ9MPpXRHFRZ1RxkWc8UPpSbTW0+nN6VE1g3pWqrxZssRFmTtNGK0jYt6Un2JvSq9rEv20TOxRtNaP2JvSlFi3pR7WIe2iZ200oQ+lai2DelSppzelS68UQ8RFGQIie1SLAT2rbTTD6VZj0z2rKWKijGWMijBS0Y9qsx2JPaugj05R2qyloi9q554vscs8d2P//Z",
+            "selected": false
+        },
+        {
+            "id": 11,
+            "parents": [
+                -1,
+                -1
+            ],
+            "nodes": {
+                "-1": {
+                    "id": "-1",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-2": {
+                    "id": "-2",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-3": {
+                    "id": "-3",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-4": {
+                    "id": "-4",
+                    "activation": "SigmoidActivation",
+                    "bias": 9.267054557800293,
+                    "layer": 1
+                },
+                "-5": {
+                    "id": "-5",
+                    "activation": "GaussActivation",
+                    "bias": -6.3016133308410645,
+                    "layer": 1
+                },
+                "-6": {
+                    "id": "-6",
+                    "activation": "TanhActivation",
+                    "bias": -8.622732162475586,
+                    "layer": 1
+                }
+            },
+            "connections": {
+                "-1,-4": {
+                    "weight": 9.410414695739746,
+                    "enabled": true
+                },
+                "-3,-4": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-1,-5": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-3,-5": {
+                    "weight": 5.1026787757873535,
+                    "enabled": true
+                },
+                "-3,-6": {
+                    "weight": -7.224465847015381,
+                    "enabled": true
+                }
+            },
+            "lineage": [],
+            "age": 0,
+            "cell_lineage": [],
+            "sgd_lr": 2.013197736814618,
+            "image": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDWooor8zP0IKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAXFJirj25HaoGjIqVJMhTTIqKcVpMVRVxKKMUUDCiiigAooooAKKKMUAFFLilC0CuNxS4qRYyanS3J7VLkkS5pHSzabnoKoTacR2rpFmjf0pTHG/pXjRxE47nz8MVOG5xsliw7VWe2Ydq7R7JG7Cq0mmA9q6YYxdTrhj11OPMJHamGMjtXUSaX7VXfSz6VvHFRZ1RxkGc9sPpRtNbbaY3pTDprelaKvE0WJh3MfaaNh9K2BprelPXTG9KHXiDxMDFEZPaniEntW6mln0qxHpftWcsVFGcsZBHPpbMe1WY7Fj2roo9MA7VZSyRewrCeMXQ5Z49dDBh04ntV+HTcdRWsI409KRpo09K5pYictjknipz2OYi1EjvV2LU/euXEhHepFmI716MsNFnrTwkZHYR6kp6mrCXyN3rjFumHepkvmHeueWDXQ5J4BdDshPG3pS7om9K5NdRYd6mXUz61i8JJbGDwMlsdNsiPpR5UXtXOjVD608aqfWp+rTI+qVDf8AKi9qNkQ9KwDqp9aYdUPrR9WmP6pUOi3RL6UhnjX0rmm1M+tQtqLHvVLCSe5SwMnudM98i96ryako6Guae+Y96ha6Y962jg11N4YBdTfl1P3qlLqJPeshpie9RmQnvXRHDRR1wwkYn//Z",
+            "selected": false
+        },
+        {
+            "id": 11,
+            "parents": [
+                -1,
+                -1
+            ],
+            "nodes": {
+                "-1": {
+                    "id": "-1",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-2": {
+                    "id": "-2",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-3": {
+                    "id": "-3",
+                    "activation": "IdentityActivation",
+                    "bias": 0.0,
+                    "layer": 0
+                },
+                "-4": {
+                    "id": "-4",
+                    "activation": "SigmoidActivation",
+                    "bias": 9.3815336227417,
+                    "layer": 1
+                },
+                "-5": {
+                    "id": "-5",
+                    "activation": "GaussActivation",
+                    "bias": -3.335679292678833,
+                    "layer": 1
+                },
+                "-6": {
+                    "id": "-6",
+                    "activation": "TanhActivation",
+                    "bias": -8.641119003295898,
+                    "layer": 1
+                }
+            },
+            "connections": {
+                "-1,-4": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-3,-4": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-1,-5": {
+                    "weight": 10.0,
+                    "enabled": true
+                },
+                "-3,-5": {
+                    "weight": 7.974381923675537,
+                    "enabled": true
+                },
+                "-3,-6": {
+                    "weight": -7.257847309112549,
+                    "enabled": true
+                }
+            },
+            "lineage": [],
+            "age": 0,
+            "cell_lineage": [],
+            "sgd_lr": 2.0192752458970062,
+            "image": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDWooor8zP0IKKKKACiiigAooooAKKKKACiiigAooooAKKKKAFIpKkZcUwihMSYlFFFAwooooAKKKKACiiigAooooAKKKKAClAoAp6rmhsTZZliwTVZhity6tcE8VlyxEHpWFOomjmpVVJFQikp7LimkVudKYlFFFAwooooAKKKKACiiigApQKAKcq5oE2KozVmKLJpIoiT0rUtbXJHFYVKiSOarVUUbtzahgeKw7q0IzxXTJIsi1XuLUODgV5VKs4OzPFo13B2ZxksJU9KrMuK6G7siM8VkTQFSeK9WlVUke1RrKSKZFJT2XFNIrc6UxKKKKBhRRRQAUoFAFOVc0CbBVzVmKEselLDAWI4rXtLInHFYVaqijmrVlFDLW0JxxW5bWoUDinW9qEAyKsPIsa15VWs5uyPFrV3N2Rh2l/0ya2IbhZB1rh4rgqetatrflSOa6q2GvqjsxGDvqjpJrdZFrHu7DrgVetr9WABNXPklXtXJGU6T1OGM50XqcZcWhUniqLxkGu1uNPVwSBWPc6YRnArvpYpPc9ShjIy3OeIpK0JbJlPSoDbMOxrrVRM7o1YsrUoFWBbMexqeKyZj0odRIJVIoqJGSavW9oWI4q/baYTjIrYt9PVACRXJVxSWxw18ZGOxRtLDpkVsQ26xrTvkiXtVO5v1UEA1wSlOq9Dy5TnWehZmuFjHWse7v8Arg1Uur8sTzWVLcFj1rro4bqzuw+DtqyqDUiSFajpK9Jq567VzRgvGQjmta21PGMmuaDYqRZSvesKlCMjmq4aMzt4dQRwMmrGYpR2riYrxl71ei1Rl71wzwbXwnm1MA07xOjexifsKgbSkPYVnx6x71YGsD1rL2daOxj7KvHYsLpSDsKnSxiTsKoHWB61Xk1j3o9nWluP2VeW5uZiiHaq82oIgODXPy6ozd6oy3jN3rWGDb+I1p4BvWRsXOp5zg1kz3jOTzVRpS3eoy2a7qdCMT0qWGjAe8haoyaSlrdKx0pWCiiigYYpKWigAzShjSUYoFYeJCO9L5zetRYopWQuVEvnN60hkJ71HRiiyDlQ4saTNGKKY7CUuKKKBhRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAH//2Q==",
+            "selected": false
+        }
+    ]
+}

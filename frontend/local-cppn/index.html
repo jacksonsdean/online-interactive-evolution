@@ -32,13 +32,15 @@
       <button id="newBtn">New CPPN</button>
       <p class="output">Output: <span id="outputDisplay">---</span></p>
     </div>
+    <canvas id="imageCanvas" width="1049" height="1049"></canvas>
+    <br/>
     <canvas id="cppnCanvas" width="600" height="400"></canvas>
-    <canvas id="imageCanvas" width="1024" height="1024"></canvas>
-    <!-- <img id="imageCanvas" src="" alt="CPPN Image" width="1024" height="1024"> -->
-    <label for="targetPrompt">Target Prompt:</label>
-<input type="text" id="targetPrompt" value="A vibrant fractal pattern">
-<br>
-<button id="compareBtn">Compare Image</button>
+    <br/>
+    <label for="targetPrompt"><br/>Target Prompt:</label>
+    <input type="text" id="targetPrompt" value="A vibrant fractal pattern">
+    <br>
+    <button id="compareBtn">Compare Image</button>
+    <button id="backpropBtn">Backprop</button>
 <p id="similarityScore">Similarity: ---</p>
 
   </div>
@@ -49,36 +51,36 @@
     console.log(tf.getBackend());
     
 
-    import { renderCPPNImage, setupGridRenderer, generateGrid, initializeCanvasControls } from './renderer.js';
+    import { renderCPPNImages, setupGridRenderer, generateGrid, initializeCanvasControls } from './renderer.js';
     import { initializeCPPN, evaluate } from './cppn.js';
     // import {loadCLIPModels, evaluateImageSimilarity} from './clip.js';
 
     const gridResolutionValue = document.getElementById('gridResolutionValue');
     const gridResolutionInput = document.getElementById('gridResolution');
     const newBtn = document.getElementById('newBtn');
+    const backpropBtn = document.getElementById('backpropBtn');
+    const compareBtn = document.getElementById('compareBtn');
 
-    import { computeSimilarities } from './clip.js';
-
-      
+    import { computeSimilaritiesFromImages, computeSimilarities } from './clip.js';
+    import { backprop } from './backprop.js';
     
-    
-const prompt = "A futuristic cityscape with neon lights";
 
-
+    let imageData;
+    let cppns;
     function update(){
         // Initialize the CPPN
-        const cppn = initializeCPPN(3, [3, 2], 3);
+        cppns = Array.from({ length: 10 }, () => initializeCPPN(3, [3, 2], 3));
 
         // Initialize canvas interactions
         initializeCanvasControls();
         
         // Set up image renderer with the initialized CPPN
-        setupGridRenderer(gridResolutionInput, gridResolutionValue, newBtn, cppn);
+        setupGridRenderer(gridResolutionInput, gridResolutionValue, newBtn, cppns);
         
         
         const res = parseInt(gridResolutionValue.textContent);
         // Render the initial image
-        renderCPPNImage(cppn, res);
+        imageData = renderCPPNImages(cppns, res);
         
         
         // Evaluate the CPPN on the initial input
@@ -92,36 +94,39 @@ const prompt = "A futuristic cityscape with neon lights";
         // Create input tensors for the CPPN (stacked inputs)
         const inputTensors = [X.flatten(), Y.flatten(), R.flatten()];
     
-        // Evaluate the CPPN to get outputs
-        const outputs = evaluate(cppn, inputTensors);
-
-        
-        outputDisplay.textContent = outputs;
+        backpropBtn.disabled = true;
         
     }
     update();
 
-    // get pixel data from canvas
-    const canvas = document.getElementById('imageCanvas');
-    const ctx = canvas.getContext('2d');
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-    console.log(imageData);
-    // to tensor
-    //const imageTensor = tf.browser.fromPixels(imageData);
-
     function updateSim(){
         (async () => {
-            const similarities = await computeSimilarities(prompt, [imageData]);
-            console.log(similarities);
-            document.getElementById('similarityScore').textContent = `Similarity: ${similarities[0]}`;
+            const prompt = document.getElementById('targetPrompt').value;
+            const res = parseInt(gridResolutionValue.textContent);
+            //const similarities = await computeSimilaritiesFromImages(prompt, imageData);
+            const similarities = await computeSimilarities(prompt, cppns, res);
+            document.getElementById('similarityScore').textContent = `Similarity: ${similarities.map(s => s.toFixed(2)).join(', ')}`;
         })();
     }
-
+    
     updateSim();
+    
+    backpropBtn.disabled = false;
+    function backpropClicked(){
+        backpropBtn.disabled = true;
+        const prompt = document.getElementById('targetPrompt').value;
+        const res = parseInt(gridResolutionValue.textContent);
+        console.log("starting backprop with prompt: \"", prompt, "\" and res: ", res);
+        backprop(prompt, cppns, res);
+        backpropBtn.disabled = false;
+
+    }
 
     newBtn.addEventListener('click', update);
 
-   document.getElementById("compareBtn").addEventListener("click", updateSim);
+    backpropBtn.addEventListener('click', backpropClicked);
+
+    compareBtn.addEventListener("click", updateSim);
     
   </script>
   

@@ -16,7 +16,7 @@ function ClipText() {
     // JSX
     return (
         <div className={styles.container}>
-            <p>Guide evolution with text:</p>
+            <h5>What do you see?</h5>
             <textarea
                 id="clip-text"
                 rows="1"

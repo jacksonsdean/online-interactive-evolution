@@ -82,3 +82,32 @@
   left: 20px;
   width: 10px;
 }
+
+.inlineRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.inlineField input {
+  max-width: 120px;
+}
+
+.inlineInput {
+  max-width: 160px;
+}
+
+.inlineButton {
+  background-color: rgba(0,0,0,.3);
+  border-radius: 4px;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.inlineButton:hover {
+  background-color: rgba(150, 127, 255, 100);
+  box-shadow: rgba(255, 255, 255, 100) 1px 1px 2px;
+}

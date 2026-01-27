@@ -1,4 +1,4 @@
-FROM node:12
+FROM node:18-bullseye
 WORKDIR /frontend
 COPY . .
 ENV REACT_APP_NODE_ENV="local"

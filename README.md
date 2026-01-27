@@ -4,10 +4,13 @@
     Available online at: <a href="https://interactive.evolutionary.gallery">interactive.evolutionary.gallery</a>
     <h2>Instructions to run locally</h2>
     <h3>With Docker</h3>
-    `docker-compose up` in the project directory
-    <br/><br/>
-    or with newer versions of Docker: `docker compose up -d`
-    <br/><br/>
+    In the project directory:
+    <ul>
+    <li>build: `docker compose up -d --build`</li>
+    <li>run:   `docker compose up -d`</li>
+    </ul>
+    or with older versions of Docker: <br/>
+    <ul><li>`docker-compose up`</l></ul>
     <br/>Then navigate to <a href="http://localhost:3000">localhost:3000</a>
     <h3>Without Docker</h3> Run the frontend from the "frontend" directory with <br/>`npm i`<br/>`npm run start-local`
     <br/>
